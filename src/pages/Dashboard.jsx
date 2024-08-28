@@ -1,4 +1,5 @@
-import { Box, Container, Grid, Paper, Toolbar, Typography } from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2"
 import { Link } from "react-router-dom";
 
 function Copyright(props) {
@@ -32,7 +33,7 @@ export default function Dashboard() {
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8} lg={9}>
+          <Grid size={{ xs:12, md:8, lg:9 }}>
             <Paper
               sx={{
                 p: 2,
@@ -46,7 +47,7 @@ export default function Dashboard() {
           </Grid>
 
           {/* Recent Deposits */}
-          <Grid item xs={12} md={4} lg={3}>
+          <Grid size={{ xs:12, md:4, lg:3 }}>
             <Paper
             sx={{
               p: 2,
@@ -59,7 +60,7 @@ export default function Dashboard() {
             </Paper>
           </Grid>
           {/* Recent Orders */}
-            <Grid item xs={12}>
+            <Grid size={{ xs:12 }}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                 {/* <Orders /> */}
               </Paper>

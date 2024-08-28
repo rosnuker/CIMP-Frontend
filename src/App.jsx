@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './css/App.css'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import SignIn from './pages/SignIn';
-import EncoderLayout from './layout/EncoderLayout';
+import AppLayout from './layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Receive';
 
@@ -20,7 +20,7 @@ export default function App() {
     },
     {
       path: '/app',
-      element: <RequireAuth> <EncoderLayout user={ user } setUser={ setUser } /> </RequireAuth>,
+      element: <RequireAuth> <AppLayout user={ user } setUser={ setUser } /> </RequireAuth>,
       children: [
         {
           index: true,
