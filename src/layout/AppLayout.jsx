@@ -161,7 +161,7 @@ export default function Dashboard({ user, setUser }) {
               fontWeight="bold"
               sx={{ flexGrow: 1 }}
             >
-              Fixed Asset Inventory Management
+              Fixed Asset Inventory Management Portal
             </Typography>
             <Tooltip title={ user !== null ? `${user.fname} ${user.lname}` : 'User'}>
               <IconButton color="inherit" onClick={handleOpenUserMenu}>
