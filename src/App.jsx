@@ -6,6 +6,7 @@ import AppLayout from './layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Receive';
 import Request from './pages/Request';
+import LogsHistory from './pages/Logs';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -34,6 +35,10 @@ export default function App() {
         {
           path: '/app/request',
           element: <Request />,
+        },
+        {
+          path: '/app/logs',
+          element: <LogsHistory />,
         },
       ],
     },
