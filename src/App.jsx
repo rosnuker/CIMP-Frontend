@@ -5,6 +5,7 @@ import SignIn from './pages/SignIn';
 import AppLayout from './layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Receive';
+import Request from './pages/Request';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -29,6 +30,10 @@ export default function App() {
         {
           path: '/app/receive',
           element: <Receive />,
+        },
+        {
+          path: '/app/request',
+          element: <Request />,
         },
       ],
     },
