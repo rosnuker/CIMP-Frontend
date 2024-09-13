@@ -8,6 +8,7 @@ import Receive from './pages/Receive';
 import Request from './pages/Request';
 import LogsHistory from './pages/Logs';
 import Search from './pages/Search';
+import Inventory from './pages/Inventory';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -45,6 +46,10 @@ export default function App() {
           path: '/app/search',
           element: <Search />
         },
+        {
+          path: '/app/inventory',
+          element: <Inventory user={ user } setUser={ setUser } />
+      },
       ],
     },
   ]);
