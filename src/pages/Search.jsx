@@ -6,6 +6,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import { Container, Box, Toolbar, TextField, InputAdornment, IconButton, TableContainer, TableHead, TableRow, Paper, Table, TableBody, TableCell, } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Overlay from '../page-overlay/Overlay';
+import * as XLSX from 'xlsx';
 
 function Copyright(props) {
   return (
@@ -75,6 +76,87 @@ export default function Search( {user, setUser} ) {
         fetchItemsData();
       }, []);
 
+      const handleExportToExcel = () => {
+        const exportData = generateExportDataForExcel();
+        const filename = 'test_export.xlsx';
+        
+        const userConfirmed = window.confirm("Do you want to download the Excel file?");
+        
+        if (userConfirmed) {
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.aoa_to_sheet([]);
+            
+            const headerRows = generateHeaderRows();
+            XLSX.utils.sheet_add_aoa(worksheet, headerRows, { origin: { r: 0, c: 0 } });
+            
+            const startRow = headerRows.length;
+            
+            XLSX.utils.sheet_add_aoa(worksheet, [columnHeaders], { origin: { r: startRow, c: 0 } });
+            
+            XLSX.utils.sheet_add_json(worksheet, exportData, { header: columnHeaders, skipHeader: true, origin: { r: startRow + 1, c: 0 } });
+            
+            const columnWidths = calculateColumnWidths(exportData);
+            applyColumnWidths(worksheet, columnWidths);
+            
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        
+            XLSX.writeFile(workbook, filename);
+            
+            console.log("Export successful");
+        } else {
+            console.log("Export canceled by user");
+        }
+    };
+    
+    const generateExportDataForExcel = () => {
+        return queryResults
+            .filter(item => !item.deleted)
+            .map(item => ({
+                "Property Tag": item.iid || '', 
+                "Invoice Number": item.invoiceNumber || '',
+                "Issue Order Number": item.issueOrder || '',
+                "Serial Number": item.description ? item.description.serialNumber : 'None'
+            }));
+    };
+    
+    const calculateColumnWidths = (data) => {
+        const widths = {};
+        
+        columnHeaders.forEach(header => {
+            widths[header] = header.length;
+        });
+        
+        data.forEach(row => {
+            columnHeaders.forEach(header => {
+                const value = row[header] ? row[header].toString() : '';
+                widths[header] = Math.max(widths[header] || 0, value.length);
+            });
+        });
+        
+        return widths;
+    };
+    
+    const applyColumnWidths = (worksheet, widths) => {
+        worksheet['!cols'] = columnHeaders.map(header => ({
+            wch: (widths[header] || 10) + 2 
+        }));
+    };
+    
+    const generateHeaderRows = () => {
+        return [
+            ['CIT U PROPERTY REPORT MARINADO'],
+            ['2024'],
+            []
+        ];
+    };
+      
+    const columnHeaders = [
+      'Property Tag',
+      'Invoice Number',
+      'Issue Order Number',
+      'Serial Number'
+    ];
+
     const handlePrintTable = () => {
         const printableContent = generatePrintableTable();
         const printWindow = window.open('', '_blank');
@@ -127,13 +209,6 @@ export default function Search( {user, setUser} ) {
         `;
         return printableContent;
     }
-
-    const columnHeaders = [
-        'Property Tag',
-        'Invoice Number',
-        'Issue Order Number',
-        'Serial Number'
-      ];
 
       const renderTableHeader = () => (
         <TableRow style={{ position: 'sticky', top: 0 }}>
@@ -214,6 +289,9 @@ export default function Search( {user, setUser} ) {
           },
         }}
       />
+      <Button onClick={handleExportToExcel}> 
+        Export to Excel
+      </Button>
     <Button
         variant="contained"
         sx={{
