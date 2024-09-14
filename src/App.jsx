@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './css/App.css'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+
 import SignIn from './pages/SignIn';
 import AppLayout from './layout/AppLayout';
 import Dashboard from './pages/Dashboard';
@@ -9,6 +10,7 @@ import Request from './pages/Request';
 import LogsHistory from './pages/Logs';
 import Search from './pages/Search';
 import Inventory from './pages/Inventory';
+import Filter from "./pages/Filter"
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -48,7 +50,11 @@ export default function App() {
         },
         {
           path: '/app/inventory',
-          element: <Inventory user={ user } setUser={ setUser } />
+          element: <RequireAuth> <Inventory user={ user } setUser={ setUser } /> </RequireAuth>
+      },
+      {
+        path: 'filter',
+        element: <RequireAuth> <Filter user={user} setUser={setUser} /> </RequireAuth>
       },
       ],
     },
