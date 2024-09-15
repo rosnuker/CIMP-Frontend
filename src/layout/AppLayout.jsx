@@ -219,24 +219,6 @@ export default function Dashboard({ user, setUser }) {
               </ListItemIcon>
               <ListItemText primary="Inventory" />
             </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("search")}>
-              <ListItemIcon>
-                <SearchIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Search" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("filter")}>
-              <ListItemIcon>
-                <FilterAltIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Filter" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("logs")}>
-              <ListItemIcon>
-                <HistoryIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Logs History" />
-            </ListItemButton>
             <ListItemButton onClick={() => handleNavigate("request")}>
               <ListItemIcon>
                 <BookmarkAddIcon style={{color: 'white'}} />
@@ -248,6 +230,24 @@ export default function Dashboard({ user, setUser }) {
                 <BookmarkAddedIcon style={{color: 'white'}} />
               </ListItemIcon>
               <ListItemText primary="Receive" />
+            </ListItemButton>
+            <ListItemButton onClick={() => handleNavigate("logs")}>
+              <ListItemIcon>
+                <HistoryIcon style={{color: 'white'}} />
+              </ListItemIcon>
+              <ListItemText primary="Logs History" />
+            </ListItemButton>
+            <ListItemButton onClick={() => handleNavigate("search")}>
+              <ListItemIcon>
+                <SearchIcon style={{color: 'white'}} />
+              </ListItemIcon>
+              <ListItemText primary="Search" />
+            </ListItemButton>
+            <ListItemButton onClick={() => handleNavigate("filter")}>
+              <ListItemIcon>
+                <FilterAltIcon style={{color: 'white'}} />
+              </ListItemIcon>
+              <ListItemText primary="Filter" />
             </ListItemButton>
             <Divider sx={{ my: 1 }} />
           </List>

@@ -154,21 +154,21 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
                     })
                     .then(result => {
                         // alert("Request Successful!")
-                        setSnackbarMessage(`Reqested ${number}x of: [${result.data.iid}] - ${result.data.description.name} successfully!`);
-                        setSnackbarGreenOpen(true);
+                        // setSnackbarMessage(`Reqested ${number}x of: [${result.data.iid}] - ${result.data.description.name} successfully!`);
+                        // setSnackbarGreenOpen(true);
                         console.log(result.data);
                         handleLog(result.data);
                     })
                     .catch(error => {
                         console.log(error);
                         // alert("No Data found!");
-                        setSnackbarMessage("No data found!");
-                        setSnackbarRedOpen(true);
+                        // setSnackbarMessage("No data found!");
+                        // setSnackbarRedOpen(true);
                     });
                 }else{
                     // alert("Not available")
-                    setSnackbarMessage("Not available!");
-                    setSnackbarRedOpen(true);
+                    // setSnackbarMessage("Not available!");
+                    // setSnackbarRedOpen(true);
                 }
         })
     }
@@ -193,35 +193,35 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
                 .then(result => {
                     // alert("Request Successful!")
                     console.log(result.data);
-                    if(type === "BORROW") {
-                        setSnackbarMessage(`Successfully borrowed [${result.data.iid}] - ${result.data.description.name}.`);
-                    } else if(type === "REPAIR") {
-                        setSnackbarMessage(`[${result.data.iid}] - ${result.data.description.name} sent for repairs successfully!`);
-                    } else if(type === "DISPOSAL") {
-                        setSnackbarMessage(`[${result.data.iid}] - ${result.data.description.name} sent for disposal successfully!`);
-                    } else {
-                        setSnackbarMessage(`Requested [${result.data.iid}] - ${result.data.description.name} sucessfully!`);
-                    }
-                    setSnackbarGreenOpen(true);
-                    handleLog(result.data);
+                    // if(type === "BORROW") {
+                    //     setSnackbarMessage(`Successfully borrowed [${result.data.iid}] - ${result.data.description.name}.`);
+                    // } else if(type === "REPAIR") {
+                    //     setSnackbarMessage(`[${result.data.iid}] - ${result.data.description.name} sent for repairs successfully!`);
+                    // } else if(type === "DISPOSAL") {
+                    //     setSnackbarMessage(`[${result.data.iid}] - ${result.data.description.name} sent for disposal successfully!`);
+                    // } else {
+                    //     setSnackbarMessage(`Requested [${result.data.iid}] - ${result.data.description.name} sucessfully!`);
+                    // }
+                    // setSnackbarGreenOpen(true);
+                    // handleLog(result.data);
                 })
                 .catch(error => {
                     console.log(error);
                     // alert("No Data found!");
-                    setSnackbarMessage("No data found!");
-                    setSnackbarRedOpen(true);
+                    // setSnackbarMessage("No data found!");
+                    // setSnackbarRedOpen(true);
                 });
             } else {
                 // alert("Item not available!");
-                setSnackbarMessage("Item not available!");
-                setSnackbarRedOpen(true);
+                // setSnackbarMessage("Item not available!");
+                // setSnackbarRedOpen(true);
             }
         })
         .catch(error => {
             console.log(error);
             // alert("No Data found!");
-            setSnackbarMessage("No data found!");
-            setSnackbarRedOpen(true);
+            // setSnackbarMessage("No data found!");
+            // setSnackbarRedOpen(true);
         });
     }
 
