@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Toolbar, Typography } from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -22,6 +22,7 @@ export default function Dashboard() {
   const [department, setDepartments] = useState([]);
   const [depItem, setDepItem] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false); // State for dialog
 
   const fetchDepartment = async () => {
     try {
@@ -46,15 +47,20 @@ export default function Dashboard() {
         }
       });
 
-      setDepItem(result.data);
-      console.log(result.data); 
-      alert(JSON.stringify(result.data)); 
+      console.log("Fetched Data: ", result.data); // Log the data structure for debugging
+      setDepItem(result.data); 
+      setOpenDialog(true); // Open the dialog with fetched data
+      //alert(JSON.stringify(result.data)); 
     } catch (error) {
       console.error(error);
       alert("Service error");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false); // Close the dialog
   };
 
   return (
@@ -98,7 +104,7 @@ export default function Dashboard() {
                       style={{ margin: '8px' }}
                       onClick={() => handleDepItems(item)}
                       aria-label={`Button for ${item}`}
-                      disabled={loading} 
+                      disabled={loading}
                     >
                       {item}
                     </Button>
@@ -131,6 +137,63 @@ export default function Dashboard() {
           <Copyright sx={{ pt: 4 }} />
         </Container>
       </Box>
+
+    {/* Dialog for displaying department items */}
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>Department Items</DialogTitle>
+        <DialogContent>
+  {depItem && depItem.length > 0 ? (
+    depItem.map((selectedItem, index) => (
+      <div key={index} style={{ marginBottom: '16px' }}>
+        {[
+          { label: 'Property Tag', value: selectedItem.iid },
+          { label: 'Account Person', value: selectedItem.accPerson },
+          { label: 'Department', value: selectedItem.department },
+          { label: 'Designation', value: selectedItem.designation },
+          { label: 'Invoice Date', value: selectedItem.invoiceDate },
+          { label: 'Invoice Number', value: selectedItem.invoiceNumber },
+          { label: 'Issue Order', value: selectedItem.issueOrder },
+          { label: 'Supplier', value: selectedItem.supplier },
+          { label: 'Lifespan', value: selectedItem.lifespan },
+          { label: 'Unit of Measurement', value: selectedItem.unitOfMeasurement },
+          { label: 'Quantity', value: selectedItem.quantity },
+          { label: 'Unit Cost', value: `₱ ${selectedItem.unitCost.toLocaleString()}` },
+          { label: 'Total Cost', value: `₱ ${selectedItem.totalCost.toLocaleString()}` },
+          { label: 'Status', value: selectedItem.status },
+          { label: 'Remarks', value: selectedItem.remarks },
+          { label: 'Building', value: selectedItem.location?.building },
+          { label: 'Room', value: selectedItem.location?.room },
+          { label: 'Description Name', value: selectedItem.description?.name },
+          { label: 'Model', value: selectedItem.description?.model },
+          { label: 'Type', value: selectedItem.description?.type },
+          { label: 'Serial Number', value: selectedItem.description?.serialNumber },
+          { label: 'Other', value: selectedItem.description?.other },
+        ].map((field, fieldIndex) => (
+          <TextField
+            key={fieldIndex}
+            label={field.label}
+            value={field.value || 'N/A'}
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+            variant="outlined"
+            margin="dense"
+            style={{ marginBottom: '8px' }}
+          />
+        ))}
+      </div>
+    ))
+  ) : (
+    <Typography>No items available</Typography>
+  )}
+</DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
