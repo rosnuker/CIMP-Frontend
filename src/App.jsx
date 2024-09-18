@@ -34,19 +34,19 @@ export default function App() {
         },
         {
           path: '/app/receive',
-          element: <Receive />,
+          element: <RequireAuth> <Receive user={ user } setUser={ setUser } /> </RequireAuth>
         },
         {
           path: '/app/request',
-          element: <Request />,
+          element: <RequireAuth> <Request user={ user } setUser={ setUser } /> </RequireAuth>
         },
         {
           path: '/app/logs',
-          element: <LogsHistory />,
+          element: <RequireAuth> <LogsHistory user={ user } setUser={ setUser } /> </RequireAuth>
         },
         {
           path: '/app/search',
-          element: <Search />
+          element: <RequireAuth> <Search user={ user } setUser={ setUser } /> </RequireAuth>
         },
         {
           path: '/app/inventory',

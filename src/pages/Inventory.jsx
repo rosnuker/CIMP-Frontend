@@ -23,7 +23,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
   const [id, setId] = useState("");
 	const [queryResults, setQueryResults] = useState([]);
 	const [LqueryResults, setLQueryResults] = useState([]);
-	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DEPARTMENT", "DESIGNATION", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "LIFESPAN", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE"];
+	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN"];
 	
 	const [openDialog, setOpenDialog] = useState(false);
 	const handleOpenDialog = () => {
@@ -147,7 +147,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			.then(response => {
 				setLQueryResults(response.data);
 				setShowAddItemModal(false);
-				// setLoader(Math.random()*1000);
+				setLoader(Math.random()*1000);
 			})
 			.catch(error => {
 				console.error("Error adding log:", error);
@@ -266,7 +266,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			// alert("Item Deleted");
 			// setSnackbarMessage("Item deleted!");
 			// setSnackbarGreenOpen(true);
-			// setLoader(Math.random()*1000);
+			setLoader(Math.random()*1000);
 			handleCloseDialog();
 			handleCloseOverlay();
 			
@@ -431,12 +431,11 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
             >
               <TableCell>{item.iid}</TableCell>
               <TableCell>{item.accPerson}</TableCell>
-              <TableCell>{item.department}</TableCell>
               <TableCell>{item.designation}</TableCell>
+              <TableCell>{item.department}</TableCell>
               <TableCell>{item.invoiceNumber}</TableCell>
               <TableCell>{item.invoiceDate}</TableCell>
               <TableCell>{item.issueOrder}</TableCell>
-              <TableCell>{item.lifespan}</TableCell>
               <TableCell>{item.quantity}</TableCell>
               <TableCell>{item.remarks}</TableCell>
               <TableCell>{item.status}</TableCell>
@@ -444,6 +443,8 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
               <TableCell>₱{item.totalCost.toLocaleString()}</TableCell>
               <TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
               <TableCell>{item.unitOfMeasurement}</TableCell>
+			  <TableCell>{item.lifespan}</TableCell>
+
             </TableRow>
           )
         ))}

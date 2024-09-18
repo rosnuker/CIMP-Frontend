@@ -59,16 +59,16 @@ export default function Receive( {user, setUser, setSnackbarGreenOpen, setSnackb
         })
         .then(result => {
             // alert("Item Received");
-            setSnackbarMessage(`"[${result.data.iid}] - ${result.data.description.name}" received from ` + remarks);
-            setSnackbarGreenOpen(true);
+            // setSnackbarMessage(`"[${result.data.iid}] - ${result.data.description.name}" received from ` + remarks);
+            // setSnackbarGreenOpen(true);
             console.log(result.data);
             handleLog(result.data);
         })
         .catch(error => {
             console.log(error);
             // alert("No Data found!");
-            setSnackbarMessage("No data found.");
-            setSnackbarRedOpen(true);
+            // setSnackbarMessage("No data found.");
+            // setSnackbarRedOpen(true);
         });
     }
 

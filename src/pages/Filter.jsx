@@ -682,7 +682,10 @@ export default function Filter( {user, setUser} ) {
           {/* Accountable Person */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Accountable Person</InputLabel>
-            <Select onChange={handleaccPer} label="Accountable Person"
+            <Select
+            value={acc_per}
+            onChange={handleaccPer} 
+            label="Accountable Person"
             MenuProps={{
                 PaperProps: {
                   style: {
@@ -703,7 +706,10 @@ export default function Filter( {user, setUser} ) {
           {/* Department */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Department</InputLabel>
-            <Select onChange={handleDep} label="Department">
+            <Select
+            value={department} 
+            onChange={handleDep} 
+            label="Department">
               <MenuItem value="">Department</MenuItem>
               {O_dep.map((O_deps, index) => (
                 <MenuItem key={index} value={O_deps}>
@@ -716,7 +722,10 @@ export default function Filter( {user, setUser} ) {
           {/* Designation */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Designation</InputLabel>
-            <Select onChange={handleDes} label="Designation">
+            <Select 
+            value={designation}
+            onChange={handleDes} 
+            label="Designation">
               <MenuItem value="">Designation</MenuItem>
               {O_des.map((O_dess, index) => (
                 <MenuItem key={index} value={O_dess}>
@@ -729,7 +738,10 @@ export default function Filter( {user, setUser} ) {
           {/* UOM */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Uom</InputLabel>
-            <Select onChange={handleUom} label="Uom">
+            <Select
+            value={uom}
+            onChange={handleUom} 
+            label="Uom">
               <MenuItem value="">Uom</MenuItem>
               {O_uom.map((O_uoms, index) => (
                 <MenuItem key={index} value={O_uoms}>
@@ -742,7 +754,10 @@ export default function Filter( {user, setUser} ) {
           {/* Status */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Status</InputLabel>
-            <Select onChange={handleStat} label="Status">
+            <Select 
+            value={status}
+            onChange={handleStat} 
+            label="Status">
               <MenuItem value="">Status</MenuItem>
               {O_status.map((O_statuss, index) => (
                 <MenuItem key={index} value={O_statuss}>
@@ -755,7 +770,10 @@ export default function Filter( {user, setUser} ) {
           {/* Supplier */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Supplier</InputLabel>
-            <Select onChange={handleSupp} label="Supplier">
+            <Select 
+            value={supplier}
+            onChange={handleSupp} 
+            label="Supplier">
               <MenuItem value="">Supplier</MenuItem>
               {O_supp.map((O_supps, index) => (
                 <MenuItem key={index} value={O_supps}>
@@ -768,7 +786,10 @@ export default function Filter( {user, setUser} ) {
           {/* Location Building */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Location Building</InputLabel>
-            <Select onChange={handleBuilding} label="Location Building">
+            <Select 
+            value={building}
+            onChange={handleBuilding} 
+            label="Location Building">
               <MenuItem value="">Location Building</MenuItem>
               {O_building.map((O_buildings, index) => (
                 <MenuItem key={index} value={O_buildings}>
@@ -781,7 +802,10 @@ export default function Filter( {user, setUser} ) {
           {/* Location Room */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Location Room</InputLabel>
-            <Select onChange={handleRoom} label="Location Room">
+            <Select 
+            value={room}
+            onChange={handleRoom} 
+            label="Location Room">
               <MenuItem value="">Location Room</MenuItem>
               {O_room.map((O_rooms, index) => (
                 <MenuItem key={index} value={O_rooms}>
@@ -794,7 +818,10 @@ export default function Filter( {user, setUser} ) {
           {/* Description Name */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Description Name</InputLabel>
-            <Select onChange={handleName} label="Description Name">
+            <Select
+            value={name} 
+            onChange={handleName} 
+            label="Description Name">
               <MenuItem value="">Description Name</MenuItem>
               {O_name.map((O_names, index) => (
                 <MenuItem key={index} value={O_names}>
@@ -807,7 +834,10 @@ export default function Filter( {user, setUser} ) {
           {/* Description Model */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Description Model</InputLabel>
-            <Select onChange={handleModel} label="Description Model">
+            <Select 
+            value={model}
+            onChange={handleModel} 
+            label="Description Model">
               <MenuItem value="">Description Model</MenuItem>
               {O_model.map((O_models, index) => (
                 <MenuItem key={index} value={O_models}>
@@ -820,7 +850,10 @@ export default function Filter( {user, setUser} ) {
           {/* Description Type */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Description Type</InputLabel>
-            <Select onChange={handleType} label="Description Type">
+            <Select 
+            value={type}
+            onChange={handleType} 
+            label="Description Type">
               <MenuItem value="">Description Type</MenuItem>
               {O_type.map((O_types, index) => (
                 <MenuItem key={index} value={O_types}>
@@ -833,7 +866,10 @@ export default function Filter( {user, setUser} ) {
           {/* Invoice Date */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Invoice Date</InputLabel>
-            <Select onChange={handleInvoice} label="Invoice Date">
+            <Select 
+            value={invoicedate}
+            onChange={handleInvoice} 
+            label="Invoice Date">
               <MenuItem value="">Invoice Date</MenuItem>
               {O_invoicedate
                 .sort((a, b) => new Date(a) - new Date(b)) // Sort the dates in ascending order
@@ -848,7 +884,10 @@ export default function Filter( {user, setUser} ) {
           {/* Lifespan */}
           <FormControl sx={{ minWidth: 190 }}>
             <InputLabel>Lifespan</InputLabel>
-            <Select onChange={handleLifespan} label="Lifespan">
+            <Select 
+            value={lifespan}
+            onChange={handleLifespan} 
+            label="Lifespan">
               <MenuItem value="">Lifespan</MenuItem>
               {O_lifespan.map((O_lifespans, index) => (
                 <MenuItem key={index} value={O_lifespans}>
