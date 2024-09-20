@@ -709,7 +709,15 @@ export default function Filter( {user, setUser} ) {
             <Select
             value={department} 
             onChange={handleDep} 
-            label="Department">
+            label="Department"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Department</MenuItem>
               {O_dep.map((O_deps, index) => (
                 <MenuItem key={index} value={O_deps}>
@@ -725,7 +733,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={designation}
             onChange={handleDes} 
-            label="Designation">
+            label="Designation"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Designation</MenuItem>
               {O_des.map((O_dess, index) => (
                 <MenuItem key={index} value={O_dess}>
@@ -741,7 +757,15 @@ export default function Filter( {user, setUser} ) {
             <Select
             value={uom}
             onChange={handleUom} 
-            label="Uom">
+            label="Uom"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Uom</MenuItem>
               {O_uom.map((O_uoms, index) => (
                 <MenuItem key={index} value={O_uoms}>
@@ -757,7 +781,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={status}
             onChange={handleStat} 
-            label="Status">
+            label="Status"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Status</MenuItem>
               {O_status.map((O_statuss, index) => (
                 <MenuItem key={index} value={O_statuss}>
@@ -773,7 +805,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={supplier}
             onChange={handleSupp} 
-            label="Supplier">
+            label="Supplier"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Supplier</MenuItem>
               {O_supp.map((O_supps, index) => (
                 <MenuItem key={index} value={O_supps}>
@@ -785,12 +825,20 @@ export default function Filter( {user, setUser} ) {
   
           {/* Location Building */}
           <FormControl sx={{ minWidth: 190 }}>
-            <InputLabel>Location Building</InputLabel>
+            <InputLabel>Inventory Location</InputLabel>
             <Select 
             value={building}
             onChange={handleBuilding} 
-            label="Location Building">
-              <MenuItem value="">Location Building</MenuItem>
+            label="Location Building"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
+              <MenuItem value="">Inventory Location</MenuItem>
               {O_building.map((O_buildings, index) => (
                 <MenuItem key={index} value={O_buildings}>
                   {O_buildings}
@@ -805,7 +853,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={room}
             onChange={handleRoom} 
-            label="Location Room">
+            label="Location Room"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Location Room</MenuItem>
               {O_room.map((O_rooms, index) => (
                 <MenuItem key={index} value={O_rooms}>
@@ -821,7 +877,15 @@ export default function Filter( {user, setUser} ) {
             <Select
             value={name} 
             onChange={handleName} 
-            label="Description Name">
+            label="Description Name"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Description Name</MenuItem>
               {O_name.map((O_names, index) => (
                 <MenuItem key={index} value={O_names}>
@@ -837,7 +901,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={model}
             onChange={handleModel} 
-            label="Description Model">
+            label="Description Model"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Description Model</MenuItem>
               {O_model.map((O_models, index) => (
                 <MenuItem key={index} value={O_models}>
@@ -853,7 +925,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={type}
             onChange={handleType} 
-            label="Description Type">
+            label="Description Type"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Description Type</MenuItem>
               {O_type.map((O_types, index) => (
                 <MenuItem key={index} value={O_types}>
@@ -869,7 +949,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={invoicedate}
             onChange={handleInvoice} 
-            label="Invoice Date">
+            label="Invoice Date"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Invoice Date</MenuItem>
               {O_invoicedate
                 .sort((a, b) => new Date(a) - new Date(b)) // Sort the dates in ascending order
@@ -887,7 +975,15 @@ export default function Filter( {user, setUser} ) {
             <Select 
             value={lifespan}
             onChange={handleLifespan} 
-            label="Lifespan">
+            label="Lifespan"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
               <MenuItem value="">Lifespan</MenuItem>
               {O_lifespan.map((O_lifespans, index) => (
                 <MenuItem key={index} value={O_lifespans}>

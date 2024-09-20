@@ -421,7 +421,7 @@ const AddItemModal = ({
               onChange={handleChange}
               placeholder="Required*"
               required
-              label="Location Building"
+              label="Inventory Location"
               variant="outlined"
             />
           </Grid>
