@@ -142,7 +142,7 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                 <Grid size={2.6}>
                   <TextField
                     fullWidth
-                    label="Location Building"
+                    label="Inventory Location"
                     value={selectedItem.location?.building || ""}
                     onChange={(e) =>
                       handleInputChange("location.building", e.target.value)
