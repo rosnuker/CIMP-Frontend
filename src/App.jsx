@@ -11,6 +11,9 @@ import LogsHistory from './pages/Logs';
 import Search from './pages/Search';
 import Inventory from './pages/Inventory';
 import Filter from "./pages/Filter"
+import Pending from "./pages/Pending"
+import Approved from "./pages/Approved"
+
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -56,6 +59,14 @@ export default function App() {
         path: 'filter',
         element: <RequireAuth> <Filter user={user} setUser={setUser} /> </RequireAuth>
       },
+      {
+        path: 'pending',
+        element: <Pending />
+      },
+      {
+        path: 'approved',
+        element: <Approved />
+      }
       ],
     },
   ]);

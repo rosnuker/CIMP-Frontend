@@ -249,6 +249,18 @@ export default function Dashboard({ user, setUser }) {
               </ListItemIcon>
               <ListItemText primary="Filter" />
             </ListItemButton>
+            <ListItemButton onClick={() => handleNavigate("pending")}>
+              <ListItemIcon>
+                <FilterAltIcon style={{color: 'white'}} />
+              </ListItemIcon>
+              <ListItemText primary="Pending" />
+            </ListItemButton>
+            <ListItemButton onClick={() => handleNavigate("approved")}>
+              <ListItemIcon>
+                <FilterAltIcon style={{color: 'white'}} />
+              </ListItemIcon>
+              <ListItemText primary="Approved" />
+            </ListItemButton>
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
