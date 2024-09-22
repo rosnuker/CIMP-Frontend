@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, Container, TableHead, TableRow, Paper, Typography, Button, Box, Toolbar } from '@mui/material';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 export default function Pending() {
   const [pends, setPends] = useState([]);
@@ -35,6 +36,21 @@ const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID"];
   };
 
   return (
+    <>
+    <Box
+    component="main"
+    sx={{
+      backgroundColor: (theme) =>
+        theme.palette.mode === 'light'
+          ? theme.palette.grey[100]
+          : theme.palette.grey[900],
+      flexGrow: 1,
+      height: '100vh',
+      overflow: 'auto',
+    }}
+  >
+    <Toolbar />
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -71,22 +87,48 @@ const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID"];
                     <div>None</div>
                   )}
                 </TableCell>
-                <TableCell>{pend.status}</TableCell>
+                <TableCell>
+                {pend.status === 'pending' ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '5px 10px',
+                    border: '2px solid orange',
+                    borderRadius: '50px',
+                    color: 'orange',
+                    width: '100px', 
+                    height: '30px',
+                    textAlign: 'center',
+                  }}
+                > < HourglassBottomIcon /> Pending
+                </div>
+              ) : (
+                <div>{pend.status}</div>
+              )}    
+              </TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={() => handleApproving(pend.rid)}
                     disabled={pend.status !== 'pending'}
+                    style={{ 
+                      backgroundColor: 'green', 
+                      color: 'white' }}
                   >
                     Approve
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Container>
+      </Box>
+    </>
   );
 }
