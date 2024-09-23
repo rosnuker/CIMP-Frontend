@@ -37,7 +37,7 @@ export default function SignIn({ user, setUser }) {
 	});
 
   useEffect(() => {
-    if (loginData.username !== '' || loginData.password !== '') {
+    if (loginData.username !== '' && loginData.password !== '') {
       login();
     }
   }, [loginData]);
@@ -67,20 +67,27 @@ export default function SignIn({ user, setUser }) {
         throw new Error('There is a problem with the request');
       }
       
-      setUser({
-        uid: response.data.uid,
-        fname: response.data.fname,
-        lname: response.data.lname,
-        username: response.data.username,
-        type: response.data.type,
-      });
-
-      setLoginData({
-        username: '',
-        password: '',
-      });
-
-      navigate('/app');
+      if(response.data !== '') {
+        setUser({
+          uid: response.data.uid,
+          fname: response.data.fname,
+          lname: response.data.lname,
+          username: response.data.username,
+          type: response.data.type,
+        });
+  
+        setLoginData({
+          username: '',
+          password: '',
+        });
+  
+        navigate('/app');
+      } else {
+        document.getElementById("username").value="";
+				document.getElementById("password").value="";
+				document.getElementById("username").focus();
+      }
+      console.log(response);
     }).catch(error => {
       console.log('There was a problem with the fetch operation:', error);
     })

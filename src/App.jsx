@@ -2,8 +2,9 @@ import { useState } from 'react'
 import './css/App.css'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import SignIn from './pages/SignIn';
 import AppLayout from './layout/AppLayout';
+
+import SignIn from './pages/SignIn';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Receive';
 import Request from './pages/Request2';
@@ -14,12 +15,11 @@ import Filter from "./pages/Filter"
 import Pending from "./pages/Pending"
 import Approved from "./pages/Approved"
 
-
 export default function App() {
   const [ user, setUser ] = useState(null);
 
   function RequireAuth({ children }) {
-    return user !== null ? children : <Navigate to="/" replace />;
+    return (user !== null && user !== undefined) ? children : <Navigate to="/" replace />;
   }
 
   const router = createBrowserRouter([
@@ -33,40 +33,40 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <Dashboard />,
+          element: <Dashboard user={ user } setUser={ setUser } />,
         },
         {
           path: '/app/receive',
-          element: <RequireAuth> <Receive user={ user } setUser={ setUser } /> </RequireAuth>
+          element: <Receive user={ user } setUser={ setUser } />
         },
         {
           path: '/app/request',
-          element: <RequireAuth> <Request user={ user } setUser={ setUser } /> </RequireAuth>
+          element: <Request user={ user } setUser={ setUser } />
         },
         {
           path: '/app/logs',
-          element: <RequireAuth> <LogsHistory user={ user } setUser={ setUser } /> </RequireAuth>
+          element: <LogsHistory user={ user } setUser={ setUser } />
         },
         {
           path: '/app/search',
-          element: <RequireAuth> <Search user={ user } setUser={ setUser } /> </RequireAuth>
+          element: <Search user={ user } setUser={ setUser } />
         },
         {
           path: '/app/inventory',
-          element: <RequireAuth> <Inventory user={ user } setUser={ setUser } /> </RequireAuth>
-      },
-      {
-        path: 'filter',
-        element: <RequireAuth> <Filter user={user} setUser={setUser} /> </RequireAuth>
-      },
-      {
-        path: 'pending',
-        element: <Pending />
-      },
-      {
-        path: 'approved',
-        element: <Approved />
-      }
+          element: <Inventory user={ user } setUser={ setUser } />
+        },
+        {
+          path: '/app/filter',
+          element: <Filter user={user} setUser={setUser} />
+        },
+        {
+          path: '/app/pending',
+          element: <Pending user={user} setUser={setUser} />
+        },
+        {
+          path: '/app/approved',
+          element: <Approved user={user} setUser={setUser} />
+        }
       ],
     },
   ]);
