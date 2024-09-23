@@ -23,7 +23,7 @@ function Copyright(props) {
   );
 }
 
-export default function Dashboard() {
+export default function Dashboard({ user, setUser }) {
   const [department, setDepartments] = useState([]);
   const [depItem, setDepItem] = useState([]);
   const [loading, setLoading] = useState(false);
