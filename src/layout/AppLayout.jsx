@@ -22,6 +22,9 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import HistoryIcon from '@mui/icons-material/History';
 import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material';
 
 const drawerWidth = 240;
@@ -76,40 +79,42 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const defaultTheme = createTheme();
 
-function stringToColor(string) {
-  let hash = 0;
-  let i;
+// function stringToColor(string) {
+//   let hash = 0;
+//   let i;
 
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
+//   /* eslint-disable no-bitwise */
+//   for (i = 0; i < string.length; i += 1) {
+//     hash = string.charCodeAt(i) + ((hash << 5) - hash);
+//   }
 
-  let color = '#';
+//   let color = '#';
 
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
+//   for (i = 0; i < 3; i += 1) {
+//     const value = (hash >> (i * 8)) & 0xff;
+//     color += `00${value.toString(16)}`.slice(-2);
+//   }
+//   /* eslint-enable no-bitwise */
 
-  return color;
-}
+//   return color;
+// }
 
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
-}
+// function stringAvatar(name) {
+//   return {
+//     sx: {
+//       bgcolor: stringToColor(name),
+//     },
+//     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+//   };
+// }
 
 export default function Dashboard({ user, setUser }) {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const [open, setOpen] = React.useState(true);
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0); // State for nav
+  
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -121,8 +126,9 @@ export default function Dashboard({ user, setUser }) {
     setAnchorElUser(null);
   };
 
-  const handleNavigate = (destination) => {
+  const handleNavigate = (destination, index) => {
     navigate(destination);
+    setSelectedIndex(index);  // Set the selected index on nav
   };
 
   const logout = () => {
@@ -165,10 +171,10 @@ export default function Dashboard({ user, setUser }) {
             </Typography>
             <Tooltip title={ user !== null ? `${user.fname} ${user.lname}` : 'User'}>
               <IconButton color="inherit" onClick={handleOpenUserMenu}>
-                <Avatar {...stringAvatar(`${user.fname} ${user.lname}`)} alt={ user !== null ? `${user.fname} ${user.lname}` : 'User' } />
+                <Avatar alt={ user !== null ? `${user.fname} ${user.lname}` : 'User' } /> 
               </IconButton>
-            </Tooltip>
-            
+            </Tooltip> 
+            {/* {...stringAvatar(`${user.fname} ${user.lname}`)} */}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -207,60 +213,35 @@ export default function Dashboard({ user, setUser }) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <ListItemButton onClick={() => handleNavigate("")}>
-              <ListItemIcon>
-                <DashboardIcon style={{color: 'white'}}/>
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("inventory")}>
-              <ListItemIcon>
-                <InventoryIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Inventory" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("request")}>
-              <ListItemIcon>
-                <BookmarkAddIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Request" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("receive")}>
-              <ListItemIcon>
-                <BookmarkAddedIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Receive" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("logs")}>
-              <ListItemIcon>
-                <HistoryIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Logs History" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("search")}>
-              <ListItemIcon>
-                <SearchIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Search" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("filter")}>
-              <ListItemIcon>
-                <FilterAltIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Filter" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("pending")}>
-              <ListItemIcon>
-                <FilterAltIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Pending" />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleNavigate("approved")}>
-              <ListItemIcon>
-                <FilterAltIcon style={{color: 'white'}} />
-              </ListItemIcon>
-              <ListItemText primary="Approved" />
-            </ListItemButton>
+            {[
+              { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "" },
+              { text: 'Inventory', icon: <InventoryIcon style={{ color: 'white' }} />, destination: "inventory" },
+              { text: 'Request', icon: <BookmarkAddIcon style={{ color: 'white' }} />, destination: "request" },
+              { text: 'Receive', icon: <BookmarkAddedIcon style={{ color: 'white' }} />, destination: "receive" },
+              { text: 'Logs History', icon: <HistoryIcon style={{ color: 'white' }} />, destination: "logs" },
+              { text: 'Search', icon: <SearchIcon style={{ color: 'white' }} />, destination: "search" },
+              { text: 'Filter', icon: <FilterAltIcon style={{ color: 'white' }} />, destination: "filter" },
+              { text: 'Pending', icon: <HourglassTopIcon style={{ color: 'white' }} />, destination: "pending" },
+              { text: 'Approved', icon: <CheckCircleIcon style={{ color: 'white' }} />, destination: "approved" },
+            ].map((item, index) => (
+              <ListItemButton
+                key={item.text}
+                onClick={() => handleNavigate(item.destination, index)}
+                sx={{
+                  backgroundColor: selectedIndex === index ? '#F4C522' : 'transparent',
+                  color: selectedIndex === index ? '#8A252C' : 'white',
+                  '&:hover': {
+                    backgroundColor: '#F4C522',
+                    color: '#8A252C',
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ color: selectedIndex === index ? '#8A252C' : 'white' }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            ))}
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>

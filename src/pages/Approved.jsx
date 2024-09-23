@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Toolbar, Container } from '@mui/material';
 
 export default function Approved() {
   const [appr, setAppr] = useState([]);
@@ -20,6 +20,21 @@ export default function Approved() {
   }, []);
 
   return (
+    <>
+    <Box
+    component="main"
+    sx={{
+      backgroundColor: (theme) =>
+        theme.palette.mode === 'light'
+          ? theme.palette.grey[100]
+          : theme.palette.grey[900],
+      flexGrow: 1,
+      height: '100vh',
+      overflow: 'auto',
+    }}
+  >
+    <Toolbar />
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -48,5 +63,8 @@ export default function Approved() {
         </TableBody>
       </Table>
     </TableContainer>
+    </Container>
+</Box>
+    </>
   );
 }
