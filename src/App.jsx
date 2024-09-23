@@ -6,7 +6,7 @@ import SignIn from './pages/SignIn';
 import AppLayout from './layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Receive';
-import Request from './pages/Request';
+import Request from './pages/Request2';
 import LogsHistory from './pages/Logs';
 import Search from './pages/Search';
 import Inventory from './pages/Inventory';
