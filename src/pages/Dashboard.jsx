@@ -1,9 +1,14 @@
-import { Box, Container, Paper, Toolbar, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
+import { Bar } from 'react-chartjs-2';
+import { Chart, registerables } from 'chart.js';
+
+// Register chart.js components
+Chart.register(...registerables);
 
 function Copyright(props) {
   return (
@@ -22,15 +27,33 @@ export default function Dashboard() {
   const [department, setDepartments] = useState([]);
   const [depItem, setDepItem] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false); // State for dialog
+  const [openDialog, setOpenDialog] = useState(false);
+  const [stat1, setStat1] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
+
+  const fetchStats = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/request/getStats`);
+      setStat1(response.data);
+      if (response.data.length > 0) {
+        setSelectedYear(response.data[0][0]); // Set initial selected year
+      }
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
 
   const fetchDepartment = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/item/dep`);
-      const uniqueOptions_department = [...new Set(response.data)]; // Remove duplicates
+      const uniqueOptions_department = [...new Set(response.data)];
       setDepartments(uniqueOptions_department);
     } catch (error) {
-      console.error("Error fetching options:", error);
+      console.error("Error fetching departments:", error);
     }
   };
 
@@ -46,11 +69,8 @@ export default function Dashboard() {
           depa: item
         }
       });
-
-      console.log("Fetched Data: ", result.data); // Log the data structure for debugging
-      setDepItem(result.data); 
-      setOpenDialog(true); // Open the dialog with fetched data
-      //alert(JSON.stringify(result.data)); 
+      setDepItem(result.data);
+      setOpenDialog(true);
     } catch (error) {
       console.error(error);
       alert("Service error");
@@ -60,7 +80,80 @@ export default function Dashboard() {
   };
 
   const handleCloseDialog = () => {
-    setOpenDialog(false); // Close the dialog
+    setOpenDialog(false);
+  };
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const calculateAverages = (data) => {
+    const monthTotals = {};
+    const monthCounts = {};
+
+    data.forEach(([year, month, days]) => {
+      const key = `${year}-${month}`;
+      if (!monthTotals[key]) {
+        monthTotals[key] = 0;
+        monthCounts[key] = 0;
+      }
+      monthTotals[key] += days;
+      monthCounts[key] += 1;
+    });
+
+    // Add all months, even if no data
+    const allMonthsData = monthNames.map((month, index) => {
+      const key = `${selectedYear}-${index + 1}`;
+      const average = monthTotals[key] ? (monthTotals[key] / monthCounts[key]).toFixed(2) : 0;
+      return [month, average];
+    });
+
+    return allMonthsData;
+  };
+
+  const uniqueYears = [...new Set(stat1.map(item => item[0]))];
+  const filteredData = stat1.filter(item => item[0] === selectedYear);
+  const averageData = calculateAverages(filteredData);
+
+  const chartData = {
+    labels: averageData.map(stat => stat[0]),
+    datasets: [
+      {
+        label: 'Average Days to Get Approved',
+        data: averageData.map(stat => stat[1]),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        ticks: {
+          autoSkip: false,
+        },
+        grid: {
+          display: true,
+        },
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+    elements: {
+      bar: {
+        barPercentage: 0.5,
+        categoryPercentage: 0.8,
+      },
+    },
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
   };
 
   return (
@@ -80,7 +173,24 @@ export default function Dashboard() {
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: 8, lg: 9 }}>
+            <Grid item xs={12}>
+              <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
+                <InputLabel id="year-select-label">Select Year</InputLabel>
+                <Select
+                  labelId="year-select-label"
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                >
+                  {uniqueYears.map((year, index) => (
+                    <MenuItem key={index} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
               <Paper
                 sx={{
                   p: 2,
@@ -89,7 +199,7 @@ export default function Dashboard() {
                   height: 240,
                 }}
               >
-                {/* Additional content can be added here */}
+                <Bar data={chartData} options={chartOptions} />
               </Paper>
             </Grid>
 
@@ -113,24 +223,9 @@ export default function Dashboard() {
               </Grid>
             </Grid>
 
-            {/* Recent Deposits */}
-            <Grid size={{ xs: 12, md: 4, lg: 3 }}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: 240,
-                }}
-              >
-                {/* <Deposits /> */}
-              </Paper>
-            </Grid>
-
-            {/* Recent Orders */}
-            <Grid size={{ xs: 12 }}>
+            <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                {/* <Orders /> */}
+                {/* Additional content can go here */}
               </Paper>
             </Grid>
           </Grid>
@@ -138,56 +233,56 @@ export default function Dashboard() {
         </Container>
       </Box>
 
-    {/* Dialog for displaying department items */}
+      {/* Dialog for displaying department items */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle>Department Items</DialogTitle>
         <DialogContent>
-  {depItem && depItem.length > 0 ? (
-    depItem.map((selectedItem, index) => (
-      <div key={index} style={{ marginBottom: '16px' }}>
-        {[
-          { label: 'Property Tag', value: selectedItem.iid },
-          { label: 'Account Person', value: selectedItem.accPerson },
-          { label: 'Department', value: selectedItem.department },
-          { label: 'Designation', value: selectedItem.designation },
-          { label: 'Invoice Date', value: selectedItem.invoiceDate },
-          { label: 'Invoice Number', value: selectedItem.invoiceNumber },
-          { label: 'Issue Order', value: selectedItem.issueOrder },
-          { label: 'Supplier', value: selectedItem.supplier },
-          { label: 'Lifespan', value: selectedItem.lifespan },
-          { label: 'Unit of Measurement', value: selectedItem.unitOfMeasurement },
-          { label: 'Quantity', value: selectedItem.quantity },
-          { label: 'Unit Cost', value: `₱ ${selectedItem.unitCost.toLocaleString()}` },
-          { label: 'Total Cost', value: `₱ ${selectedItem.totalCost.toLocaleString()}` },
-          { label: 'Status', value: selectedItem.status },
-          { label: 'Remarks', value: selectedItem.remarks },
-          { label: 'Building', value: selectedItem.location?.building },
-          { label: 'Room', value: selectedItem.location?.room },
-          { label: 'Description Name', value: selectedItem.description?.name },
-          { label: 'Model', value: selectedItem.description?.model },
-          { label: 'Type', value: selectedItem.description?.type },
-          { label: 'Serial Number', value: selectedItem.description?.serialNumber },
-          { label: 'Other', value: selectedItem.description?.other },
-        ].map((field, fieldIndex) => (
-          <TextField
-            key={fieldIndex}
-            label={field.label}
-            value={field.value || 'N/A'}
-            fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
-            variant="outlined"
-            margin="dense"
-            style={{ marginBottom: '8px' }}
-          />
-        ))}
-      </div>
-    ))
-  ) : (
-    <Typography>No items available</Typography>
-  )}
-</DialogContent>
+          {depItem && depItem.length > 0 ? (
+            depItem.map((selectedItem, index) => (
+              <div key={index} style={{ marginBottom: '16px' }}>
+                {[ 
+                  { label: 'Property Tag', value: selectedItem.iid },
+                  { label: 'Account Person', value: selectedItem.accPerson },
+                  { label: 'Department', value: selectedItem.department },
+                  { label: 'Designation', value: selectedItem.designation },
+                  { label: 'Invoice Date', value: selectedItem.invoiceDate },
+                  { label: 'Invoice Number', value: selectedItem.invoiceNumber },
+                  { label: 'Issue Order', value: selectedItem.issueOrder },
+                  { label: 'Supplier', value: selectedItem.supplier },
+                  { label: 'Lifespan', value: selectedItem.lifespan },
+                  { label: 'Unit of Measurement', value: selectedItem.unitOfMeasurement },
+                  { label: 'Quantity', value: selectedItem.quantity },
+                  { label: 'Unit Cost', value: `₱ ${selectedItem.unitCost.toLocaleString()}` },
+                  { label: 'Total Cost', value: `₱ ${selectedItem.totalCost.toLocaleString()}` },
+                  { label: 'Status', value: selectedItem.status },
+                  { label: 'Remarks', value: selectedItem.remarks },
+                  { label: 'Building', value: selectedItem.location?.building },
+                  { label: 'Room', value: selectedItem.location?.room },
+                  { label: 'Description Name', value: selectedItem.description?.name },
+                  { label: 'Model', value: selectedItem.description?.model },
+                  { label: 'Type', value: selectedItem.description?.type },
+                  { label: 'Serial Number', value: selectedItem.description?.serialNumber },
+                  { label: 'Other', value: selectedItem.description?.other },
+                ].map((field, fieldIndex) => (
+                  <TextField
+                    key={fieldIndex}
+                    label={field.label}
+                    value={field.value || 'N/A'}
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="outlined"
+                    margin="dense"
+                    style={{ marginBottom: '8px' }}
+                  />
+                ))}
+              </div>
+            ))
+          ) : (
+            <Typography>No items available</Typography>
+          )}
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
             Close
