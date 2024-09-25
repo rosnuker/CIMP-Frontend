@@ -1,5 +1,5 @@
-import { Box, Container, Paper, Toolbar, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Container, Paper, Toolbar, Typography, Dialog, Divider, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem, FormControl, InputLabel, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import Grid from "@mui/material/Grid2"; 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -30,6 +30,10 @@ export default function Dashboard({ user, setUser }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [stat1, setStat1] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
+
+  const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", 
+    "ISSUE ORDER NUMBER", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN", 
+    "LOCATION BUILDING", "LOCATION ROOM", "DESCRIPTION NAME", "DESCRIPTION MODEL", "DESCRIPTION TYPE", "SERIAL NUMBER", "DECRIPTION OTHER" ];
 
   const fetchStats = async () => {
     try {
@@ -122,8 +126,34 @@ export default function Dashboard({ user, setUser }) {
       {
         label: 'Average Days to Get Approved',
         data: averageData.map(stat => stat[1]),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: [
+          'rgba(75, 192, 192, 0.6)', 
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+        ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)', 
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
         borderWidth: 1,
       },
     ],
@@ -171,15 +201,17 @@ export default function Dashboard({ user, setUser }) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
-                <InputLabel id="year-select-label">Select Year</InputLabel>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>     
+            {/* Select Year Dropdown */}
+            <FormControl sx={{ m: 1, minWidth: 160, }}>
+                <InputLabel>Select Year</InputLabel>
                 <Select
-                  labelId="year-select-label"
+                  id="year-select-label"
+                  name="select-year"
+                  label="Select Year"
                   value={selectedYear}
                   onChange={handleYearChange}
+                  sx={{ bgcolor: 'gray.800', color: 'black' }}
                 >
                   {uniqueYears.map((year, index) => (
                     <MenuItem key={index} value={year}>
@@ -188,44 +220,101 @@ export default function Dashboard({ user, setUser }) {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-
-            <Grid item xs={12}>
+              
+         {/* statistics */}
+            <Grid container spacing={2}>
+            <Grid size={8}>
               <Paper
                 sx={{
                   p: 2,
                   display: 'flex',
                   flexDirection: 'column',
-                  height: 240,
+                  height: { xs: 240, sm: 400, md: 400 }, // Adjustable height
+                  width: { xs: '100%', sm: '90%', md: '762px' }, // Adjustable width
                 }}
               >
                 <Bar data={chartData} options={chartOptions} />
               </Paper>
             </Grid>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Paper elevation={3} style={{ padding: '16px' }}>
+            {/* Department  */}
+            <Grid size={4}
+            sx={{
+              maxWidth: '350px',
+              maxHeight: '2px',           
+            }}>
+                <Paper sx={{ p: 1, overflowY: 'auto', height: 658, }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  textAlign: "center",
+                  fontWeight: "Bold",
+                  color: "maroon",
+                  backgroundColor: "",
+                  paddingY: 1,
+                  marginBottom: 1,
+          }}  
+        >
+          DEPARTMENT
+        </Typography>
+        <Divider sx={{ marginBottom: 2 }} />
                   {department.map((item, index) => (
                     <Button
-                      key={index}
-                      variant="contained"
-                      color="primary"
-                      style={{ margin: '8px' }}
-                      onClick={() => handleDepItems(item)}
-                      aria-label={`Button for ${item}`}
-                      disabled={loading}
-                    >
-                      {item}
-                    </Button>
+                    key={index}
+                    variant="contained"
+                    color="primary"
+                    sx={{ 
+                      margin: '8px',
+                      minWidth: '300px', 
+                      minHeight: '40px',  
+                      width: 'auto',     
+                      height: 'auto',    
+                      padding: '8px 16px' 
+                    }}
+                    onClick={() => handleDepItems(item)}
+                    aria-label={`Button for ${item}`}
+                    disabled={loading}
+                  >
+                    {item}
+                  </Button>
                   ))}
                 </Paper>
               </Grid>
+            
+
+             {/* Recent wako kahibaw */}
+             <Grid size={4}>
+              <Paper
+                sx={{
+                  p: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: 240,
+                  marginBottom: 1,
+                }}
+              >
+                 <Typography
+                variant="h6"
+                sx={{
+                  textAlign: "center",
+                  fontWeight: "Bold",
+                  color: "maroon",
+                  backgroundColor: "",
+                  paddingY: 1,
+                  marginBottom: 1,
+          }}  
+        >
+          ss
+        </Typography>
+          
+              </Paper>
             </Grid>
 
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                {/* Additional content can go here */}
+            {/* Recent Orders */}
+
+            <Grid size={4}>
+              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240, }}>
+                {/* <Orders /> */}
               </Paper>
             </Grid>
           </Grid>
@@ -234,55 +323,68 @@ export default function Dashboard({ user, setUser }) {
       </Box>
 
       {/* Dialog for displaying department items */}
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>Department Items</DialogTitle>
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="lg" fullWidth>
+      <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', color: 'black' }}>
+        Departmental Information
+      </DialogTitle>
         <DialogContent>
-          {depItem && depItem.length > 0 ? (
-            depItem.map((selectedItem, index) => (
-              <div key={index} style={{ marginBottom: '16px' }}>
-                {[ 
-                  { label: 'Property Tag', value: selectedItem.iid },
-                  { label: 'Account Person', value: selectedItem.accPerson },
-                  { label: 'Department', value: selectedItem.department },
-                  { label: 'Designation', value: selectedItem.designation },
-                  { label: 'Invoice Date', value: selectedItem.invoiceDate },
-                  { label: 'Invoice Number', value: selectedItem.invoiceNumber },
-                  { label: 'Issue Order', value: selectedItem.issueOrder },
-                  { label: 'Supplier', value: selectedItem.supplier },
-                  { label: 'Lifespan', value: selectedItem.lifespan },
-                  { label: 'Unit of Measurement', value: selectedItem.unitOfMeasurement },
-                  { label: 'Quantity', value: selectedItem.quantity },
-                  { label: 'Unit Cost', value: `₱ ${selectedItem.unitCost.toLocaleString()}` },
-                  { label: 'Total Cost', value: `₱ ${selectedItem.totalCost.toLocaleString()}` },
-                  { label: 'Status', value: selectedItem.status },
-                  { label: 'Remarks', value: selectedItem.remarks },
-                  { label: 'Building', value: selectedItem.location?.building },
-                  { label: 'Room', value: selectedItem.location?.room },
-                  { label: 'Description Name', value: selectedItem.description?.name },
-                  { label: 'Model', value: selectedItem.description?.model },
-                  { label: 'Type', value: selectedItem.description?.type },
-                  { label: 'Serial Number', value: selectedItem.description?.serialNumber },
-                  { label: 'Other', value: selectedItem.description?.other },
-                ].map((field, fieldIndex) => (
-                  <TextField
-                    key={fieldIndex}
-                    label={field.label}
-                    value={field.value || 'N/A'}
-                    fullWidth
-                    InputProps={{
-                      readOnly: true,
+        {depItem && depItem.length > 0 ? (
+          <TableContainer component={Paper}>
+            <Table size="small" stickyHeader aria-label="Departmental table">
+              <TableHead>
+              <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#1976d2', color: '#ffffff', zIndex: 1 }}>
+              {columns.map((column, index) => (
+                    <TableCell 
+                    key={index} 
+                    style={{ color: 'black', fontWeight: 'bold', backgroundColor: '#eeeeee' }}
+                    >
+                      {column}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {depItem.map((selectedItem, index) => (
+                  <TableRow
+                    key={index}
+                    style={{
+                      backgroundColor: 'white',
+                      transition: 'background-color 0.3s ease',
                     }}
-                    variant="outlined"
-                    margin="dense"
-                    style={{ marginBottom: '8px' }}
-                  />
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                  >
+                    <TableCell>{selectedItem.iid || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.accPerson || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.designation || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.department || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.invoiceNumber || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.invoiceDate || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.issueOrder || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.quantity || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.remarks || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.status || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.supplier || 'N/A'}</TableCell>
+                    <TableCell>{`₱ ${selectedItem.unitCost?.toLocaleString() || 'N/A'}`}</TableCell>
+                    <TableCell>{`₱ ${selectedItem.totalCost?.toLocaleString() || 'N/A'}`}</TableCell>
+                    <TableCell>{selectedItem.unitOfMeasurement || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.lifespan || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.location?.building || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.location?.room || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.description?.name || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.description?.model || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.description?.type || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.description?.serialNumber || 'N/A'}</TableCell>
+                    <TableCell>{selectedItem.description?.other || 'N/A'}</TableCell>
+                  </TableRow>
                 ))}
-              </div>
-            ))
-          ) : (
-            <Typography>No items available</Typography>
-          )}
-        </DialogContent>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography>No items available</Typography>
+        )}
+      </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
             Close

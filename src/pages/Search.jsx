@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
 import PrintIcon from '@mui/icons-material/Print';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Container, Box, Toolbar, TextField, InputAdornment, IconButton, TableContainer, TableHead, TableRow, Paper, Table, TableBody, TableCell, } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Overlay from '../page-overlay/Overlay';
@@ -289,8 +290,18 @@ export default function Search( {user, setUser} ) {
           },
         }}
       />
-      <Button onClick={handleExportToExcel}> 
-        Export to Excel
+      <Button 
+        variant="contained"
+        sx={{
+            bgcolor: '#ffc107',
+            color: 'black', // Set text color to black
+            '&:hover': { bgcolor: '#ffb300' },
+            fontWeight: 'normal',
+            ml: 2,
+            }}
+      onClick={handleExportToExcel}
+      > 
+        Export to Excel <FileDownloadIcon />
       </Button>
     <Button
         variant="contained"
@@ -303,7 +314,7 @@ export default function Search( {user, setUser} ) {
             }}
         onClick={handlePrintTable}
         >
-            Print <PrintIcon />
+          Print <PrintIcon />
         </Button>
         
     <TableContainer component={Paper} style={{ maxHeight: '340px', marginLeft: '1px', marginRight: '4px', marginTop: '30px' }}>
