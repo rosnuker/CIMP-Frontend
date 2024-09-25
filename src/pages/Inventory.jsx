@@ -183,6 +183,8 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 		})
 		.catch(error => {
 			console.error("Error inserting data:", error);
+			console.log(formData.invoiceDate);
+			console.log(typeof formData.invoiceDate);
 		});
 	};
 

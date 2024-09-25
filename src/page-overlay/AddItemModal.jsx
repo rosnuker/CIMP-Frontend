@@ -464,6 +464,12 @@ const AddItemModal = ({
             <TextField
               fullWidth
               id="invoiceDate"
+              type="date"
+              slotProps={{
+                inputLabel: {
+                  shrink: true
+                }
+              }}
               name="invoiceDate"
               value={formData.invoiceDate}
               onChange={handleChange}
@@ -472,7 +478,7 @@ const AddItemModal = ({
               title="Please input valid year, e.g., 2024"
               required
               label="Invoice Date"
-              variant="outlined"
+              //variant="outlined"
             />
           </Grid>
           <Grid size={2.6}>
