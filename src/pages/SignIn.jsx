@@ -42,6 +42,12 @@ export default function SignIn({ user, setUser }) {
     }
   }, [loginData]);
 
+  useEffect(() => {
+    if (user) {
+      navigate('/app');
+    }
+  }, [user, navigate]);
+
   const handleSubmit = (event) => {
     
     event.preventDefault();
@@ -80,8 +86,6 @@ export default function SignIn({ user, setUser }) {
           username: '',
           password: '',
         });
-  
-        navigate('/app');
       } else {
         document.getElementById("username").value="";
 				document.getElementById("password").value="";
