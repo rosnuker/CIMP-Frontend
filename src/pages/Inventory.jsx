@@ -44,7 +44,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 		lifespan: "",
 		quantity: "",
 		remarks: "",
-		status: "AVAILABLE",
+		status: "",
 		supplier: "",
 		totalCost: "",
 		unitCost: "",
@@ -105,7 +105,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			lifespan: formData.lifespan,
 			quantity: formData.quantity,
 			remarks: formData.remarks,
-			status: formData.status,
+			status: (formData.accPerson && formData.department && formData.designation) ? "ASSIGNED" : "TO BE ASSIGNED",
 			supplier: formData.supplier,
 			totalCost: totalCost,
 			unitCost: formData.unitCost,
@@ -289,8 +289,18 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 	
 		try {
 			if (selectedItem) {
+
+				const status = (selectedItem.accPerson && selectedItem.department && selectedItem.designation) 
+                ? "ASSIGNED" 
+                : "TO BE ASSIGNED";
+
+				const updatedItem = {
+					...selectedItem,
+					status: status,
+				};
+
 				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}`;
-				await axios.put(url, selectedItem);
+				await axios.put(url, updatedItem);
 				// alert("Data updated");
 				// setSnackbarMessage("Data updated!");
 				// setSnackbarGreenOpen(true);

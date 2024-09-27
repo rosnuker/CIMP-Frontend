@@ -96,7 +96,7 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                       handleInputChange("accPerson", e.target.value)
                     }
                     variant="outlined"
-                    required
+                    //required
                   />
                 </Grid>
                 <Grid size={2.6}>
@@ -108,7 +108,7 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                       handleInputChange("department", e.target.value)
                     }
                     variant="outlined"
-                    required
+                    //required
                   />
                 </Grid>
                 <Grid size={2.6}>
@@ -120,7 +120,7 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                       handleInputChange("designation", e.target.value)
                     }
                     variant="outlined"
-                    required
+                    //required
                   />
                 </Grid>
               </Grid>
