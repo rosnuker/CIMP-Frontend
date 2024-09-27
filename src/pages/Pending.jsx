@@ -5,7 +5,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 export default function Pending() {
   const [pends, setPends] = useState([]);
-const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID"];
+const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID" ];
   const fetchPending = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/request/getPending`);
@@ -51,7 +51,7 @@ const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID"];
   >
     <Toolbar />
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={{ maxHeight: '550px', overflowY: 'auto' }}>
       <Table>
         <TableHead>
         <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>

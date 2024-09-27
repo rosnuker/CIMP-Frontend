@@ -500,60 +500,6 @@ const AddItemModal = ({
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Cost Information Section */}
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
-          Cost Information
-        </Typography>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid size={2.6}>
-            <TextField
-              fullWidth
-              name="unitCost"
-              id="unitCost"
-              value={formData.unitCost}
-              onChange={handleChange}
-              placeholder="Required*"
-              pattern="[0-9]+([.][0-9]+)?"
-              title="Please enter a valid number, e.g., 12.34"
-              required
-              label="Unit Cost"
-              variant="outlined"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">₱</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={2.6}>
-            <TextField
-              fullWidth
-              name="totalCost"
-              id="totalCost"
-              value={formData.totalCost}
-              onChange={handleChange}
-              placeholder="Required*"
-              pattern="[0-9]+([.][0-9]+)?"
-              title="Please enter a valid number, e.g., 12.34"
-              required
-              label="Total Cost"
-              variant="outlined"
-              disabled
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">₱</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Grid>
-        </Grid>
-
-        <Divider sx={{ my: 3 }} />
-
         {/* Item Information Section */}
         <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
           Item Information
@@ -645,6 +591,61 @@ const AddItemModal = ({
 
         <Divider sx={{ my: 3 }} />
 
+        {/* Cost Information Section */}
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
+          Cost Information
+        </Typography>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid size={2.6}>
+            <TextField
+              fullWidth
+              name="unitCost"
+              id="unitCost"
+              value={formData.unitCost}
+              onChange={handleChange}
+              placeholder="Required*"
+              pattern="[0-9]+([.][0-9]+)?"
+              title="Please enter a valid number, e.g., 12.34"
+              required
+              label="Unit Cost"
+              variant="outlined"
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">₱</InputAdornment>
+                  ),
+                },
+              }}
+            />
+          </Grid>
+          <Grid size={2.6}>
+            <TextField
+              fullWidth
+              name="totalCost"
+              id="totalCost"
+              value={new Intl.NumberFormat('en-PH', {
+              }).format(formData.totalCost)}
+              onChange={handleChange}
+              placeholder="Required*"
+              pattern="[0-9]+([.][0-9]+)?"
+              title="Please enter a valid number, e.g., 12.34"
+              required
+              label="Total Cost"
+              variant="outlined"
+              disabled
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">₱</InputAdornment>
+                  ),
+                },
+              }}
+            />
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ my: 3 }} />
+
         {/* Description Information Section */}
         <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
           Description Information
@@ -706,6 +707,23 @@ const AddItemModal = ({
 
         <Grid container spacing={2} sx={{ mt: 5 }}>
           <Grid item xs={12} sm={6} md={4} offset={{ md: "auto" }}>
+          <Button
+              type="button"
+              variant="contained"
+              sx={{
+                borderRadius: 2,
+                px: 5,
+                mr: 2,
+                backgroundColor: "#e0e0e0",
+                color: "#fafafa",
+                "&:hover": {
+                  backgroundColor: "#9e9e9e",
+                },
+              }}
+              onClick={handleCloseModal}
+            >
+              Back
+            </Button>
             <Button
               type="submit"
               variant="contained"
@@ -721,23 +739,6 @@ const AddItemModal = ({
               }}
             >
               Add
-            </Button>
-            <Button
-              type="button"
-              variant="contained"
-              sx={{
-                borderRadius: 2,
-                px: 5,
-                ml: 2,
-                backgroundColor: "#e0e0e0",
-                color: "#fafafa",
-                "&:hover": {
-                  backgroundColor: "#9e9e9e",
-                },
-              }}
-              onClick={handleCloseModal}
-            >
-              Back
             </Button>
           </Grid>
         </Grid>

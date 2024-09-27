@@ -220,59 +220,6 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
 
               <Divider sx={{ my: 3 }} />
 
-              {/* Cost and Description Information */}
-              <Typography
-                variant="subtitle1"
-                sx={{ fontWeight: "bold", mb: 2 }}
-              >
-                Cost Information
-              </Typography>
-              <Grid
-                container
-                rowSpacing={1}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-              >
-                
-                <Grid size={2.6}>
-                  <TextField
-                    fullWidth
-                    label="Unit Cost"
-                    value={ selectedItem.unitCost || ""}
-                    onChange={handleUnitCostChange}
-                    variant="outlined"
-                    slotProps={{
-                      input: {
-                        startAdornment: (
-                          <InputAdornment position="start">₱</InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid size={2.6}>
-                  <TextField
-                    fullWidth
-                    label="Total Cost"
-                    value={
-                      selectedItem.totalCost
-                        ? `₱ ${selectedItem.totalCost.toLocaleString()}`
-                        : ""
-                    }
-                    onChange={(e) =>
-                      handleInputChange("totalCost", e.target.value)
-                    }
-                    variant="outlined"
-                    slotProps={{
-                      input: {
-                        readOnly: true,
-                      },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Divider sx={{ my: 3 }} />
-
               <Typography
                 variant="subtitle1"
                 sx={{ fontWeight: "bold", mb: 2 }}
@@ -349,6 +296,59 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                   />
                 </Grid>
               </Grid>
+
+              <Divider sx={{ my: 3 }} />
+
+                  {/* Cost and Description Information */}
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: "bold", mb: 2 }}
+                  >
+                    Cost Information
+                  </Typography>
+                  <Grid
+                    container
+                    rowSpacing={1}
+                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                  >
+                    
+                    <Grid size={2.6}>
+                      <TextField
+                        fullWidth
+                        label="Unit Cost"
+                        value={ selectedItem.unitCost || ""}
+                        onChange={handleUnitCostChange}
+                        variant="outlined"
+                        slotProps={{
+                          input: {
+                            startAdornment: (
+                              <InputAdornment position="start">₱</InputAdornment>
+                            ),
+                          },
+                        }}
+                      />
+                    </Grid>
+                    <Grid size={2.6}>
+                      <TextField
+                        fullWidth
+                        label="Total Cost"
+                        value={
+                          selectedItem.totalCost
+                            ? `₱ ${selectedItem.totalCost.toLocaleString()}`
+                            : ""
+                        }
+                        onChange={(e) =>
+                          handleInputChange("totalCost", e.target.value)
+                        }
+                        variant="outlined"
+                        slotProps={{
+                          input: {
+                            readOnly: true,
+                          },
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
 
               <Divider sx={{ my: 3 }} />
 
@@ -434,14 +434,6 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
               >
                 <Box>
                   <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginRight: 2 }}
-                  >
-                    Update
-                  </Button>
-                  <Button
                     onClick={handleCloseOverlay}
                     variant="contained"
                     sx={{
@@ -455,8 +447,7 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                   >
                     Cancel
                   </Button>
-                </Box>
-                <Button
+                  <Button
                   type="button"
                   onClick={handleOpenDialog}
                   variant="contained"
@@ -464,12 +455,19 @@ const OverlayItem = ({ showOverlay, selectedItem, setSelectedItem, handleUpdate,
                 >
                   Delete
                 </Button>
+                </Box>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Update
+                  </Button>
               </Box>
             </form>
           </Paper>
         </Box>
       )}
-
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Confirm Changes</DialogTitle>
         <DialogContent>
