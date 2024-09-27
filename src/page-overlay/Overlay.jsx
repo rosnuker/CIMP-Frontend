@@ -174,38 +174,6 @@ const handleBackdropClick = (e) => {
               </Grid>
               </Grid>
 
-             <Divider sx={{ my: 3 }} />
-
-              {/* Cost and Description Information */}
-
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>
-                  Cost Information
-                </Typography>
-              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>  
-              <Grid size={2.6}>
-                <TextField
-                  label="Unit Cost"
-                  value={selectedItem.unitCost ? `₱ ${selectedItem.unitCost.toLocaleString()}` : ''}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={2.6}>
-                <TextField
-                  label="Total Cost"
-                  value={selectedItem.totalCost ? `₱ ${selectedItem.totalCost.toLocaleString()}` : ''}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
-              </Grid>
-              </Grid>
-
               <Divider sx={{ my: 3 }} />
               
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>
@@ -271,6 +239,38 @@ const handleBackdropClick = (e) => {
               />
               </Grid>
               </Grid>
+
+              <Divider sx={{ my: 3 }} />
+
+            {/* Cost and Description Information */}
+
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2 }}>
+                Cost Information
+              </Typography>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>  
+            <Grid size={2.6}>
+              <TextField
+                label="Unit Cost"
+                value={selectedItem.unitCost ? `₱ ${selectedItem.unitCost.toLocaleString()}` : ''}
+                slotProps={{
+                  input: {
+                    readOnly: true,
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={2.6}>
+              <TextField
+                label="Total Cost"
+                value={selectedItem.totalCost ? `₱ ${selectedItem.totalCost.toLocaleString()}` : ''}
+                slotProps={{
+                  input: {
+                    readOnly: true,
+                  },
+                }}
+              />
+            </Grid>
+            </Grid>
 
              <Divider sx={{ my: 3 }} />
 

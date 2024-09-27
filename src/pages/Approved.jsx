@@ -4,7 +4,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 
 export default function Approved() {
   const [appr, setAppr] = useState([]);
-
+  const columns = ["REQUEST ID", "PROPERTY TAG", "STATUS" ];
+  
   const fetchApproved = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/request/getApproved`);
@@ -35,14 +36,19 @@ export default function Approved() {
   >
     <Toolbar />
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={{ maxHeight: '550px', overflowY: 'auto' }}>
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Request ID</TableCell>
-            <TableCell>Property Tag</TableCell>
-            <TableCell>Status</TableCell>
-          </TableRow>
+      <TableHead>
+        <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
+          {columns.map((column) => (
+            <TableCell
+              key={column}
+              style={{ padding: '10px', fontWeight: '600', color: 'black', backgroundColor: '#eeeeee' }}
+            >
+              {column}
+            </TableCell>
+          ))}
+        </TableRow>
         </TableHead>
         <TableBody>
           {appr.map((item) => (

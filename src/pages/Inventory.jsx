@@ -23,7 +23,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
   const [id, setId] = useState("");
 	const [queryResults, setQueryResults] = useState([]);
 	const [LqueryResults, setLQueryResults] = useState([]);
-	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN"];
+	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN"];
 	
 	const [openDialog, setOpenDialog] = useState(false);
 	const handleOpenDialog = () => {
@@ -404,7 +404,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
             </Button>
 			</div>
 				
-		<TableContainer component={Paper} style={{ maxHeight: '700px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
+		<TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
     <Table size="small" stickyHeader aria-label="customized table">
       <TableHead>
         <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
