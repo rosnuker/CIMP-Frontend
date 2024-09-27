@@ -381,6 +381,11 @@ export default function Filter( {user, setUser} ) {
       printWindow.document.close();
       printWindow.print();
     }
+    
+    const formatNumberWithCommas = (num) => {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   
     const generatePrintableTable = () => {
       let printableContent = `
@@ -606,8 +611,8 @@ export default function Filter( {user, setUser} ) {
               <tr>
                   <td>${item.quantity}</td>
                   <td>${item.description ? item.description.name : 'None'}</td>
-                  <td>${item.unitCost}</td>
-                  <td>${item.totalCost}</td>
+                  <td>${formatNumberWithCommas(item.unitCost)}</td>
+                  <td>${formatNumberWithCommas(item.totalCost)}</td>
               </tr>
           `;
       });

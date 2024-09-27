@@ -283,14 +283,16 @@ export default function LogsHistory({ user, setUser }) {
               variant="outlined"
               placeholder="Search Property Tag"
               onChange={handleSpecific}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleSearch}>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearch}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
               }}
               sx={{
                 backgroundColor: 'grey.600',
@@ -318,11 +320,18 @@ export default function LogsHistory({ user, setUser }) {
               <TextField
                 id="before"
                 type="time"
-                inputProps={{ min: "09:00", max: "18:00" }}
                 onChange={handleBef}
                 variant="outlined"
                 label="Start Time"
-                InputLabelProps={{ shrink: true }}
+                slotProps={{
+                  input: {
+                    min: "09:00",
+                    max: "18:00",
+                  },
+                  inputLabel: {
+                    shrink: true, 
+                  },
+                }}
                 sx={{ width: 150, height: 40 }}
               />
             </FormControl>
@@ -331,10 +340,17 @@ export default function LogsHistory({ user, setUser }) {
               <TextField
                 id="after"
                 type="time"
-                inputProps={{ min: "09:00", max: "18:00" }}
                 onChange={handleAft}
                 label="End Time"
-                InputLabelProps={{ shrink: true }}
+                slotProps={{
+                  input: {
+                    min: "09:00",
+                    max: "18:00",
+                  },
+                  inputLabel: {
+                    shrink: true, 
+                  },
+                }}
                 sx={{ width: 150 }}
               />
             </FormControl>

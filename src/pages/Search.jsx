@@ -267,16 +267,16 @@ export default function Search( {user, setUser} ) {
         variant="outlined"
         placeholder="Search"
         onChange={handleSearch}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton 
-              onClick={handleFetchSearch}
-              >
-                <SearchIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleFetchSearch}>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
         }}
         sx={{
           backgroundColor: 'grey.600',
