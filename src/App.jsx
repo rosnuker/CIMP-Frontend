@@ -14,6 +14,8 @@ import Inventory from './pages/Inventory';
 import Filter from "./pages/Filter"
 import Pending from "./pages/Pending"
 import Approved from "./pages/Approved"
+import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
@@ -33,7 +35,15 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <Dashboard user={ user } setUser={ setUser } />,
+          element: (
+            user && user.type === 'admin' ? (
+              <AdminDashboard user={ user } setUser={ setUser } />
+            ) : user && user.type === 'acc_person' ? (
+              <UserDashboard user={ user } setUser={ setUser }/>
+            ) : (
+              <Dashboard user={ user } setUser={ setUser } />
+            )
+          ),
         },
         {
           path: '/app/receive',

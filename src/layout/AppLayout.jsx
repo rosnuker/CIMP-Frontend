@@ -137,7 +137,7 @@ export default function Dashboard({ user, setUser }) {
   };
 
   const items = [
-    { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['admin', 'acc_person'] },
+    { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['admin', 'acc_person', 'owner'] },
     { text: 'Inventory', icon: <InventoryIcon style={{ color: 'white' }} />, destination: "inventory", roles: ['admin'] },
     { text: 'Request', icon: <BookmarkAddIcon style={{ color: 'white' }} />, destination: "request", roles: ['admin'] },
     { text: 'Receive', icon: <BookmarkAddedIcon style={{ color: 'white' }} />, destination: "receive", roles: ['admin'] },
