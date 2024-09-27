@@ -58,7 +58,6 @@ export default function Dashboard({ user, setUser }) {
     try {
       const response = await axios.get(`http://localhost:8080/item/getStats2`);
       setStat2(response.data);
-      console.log(stat2);
     } catch (error) {
       console.error("Error fetching stats:", error);
     }
@@ -67,8 +66,6 @@ export default function Dashboard({ user, setUser }) {
   useEffect(() => {
     fetchStats2();
   }, []);
-
-
 
   const fetchDepartment = async () => {
     try {
