@@ -11,9 +11,7 @@ const AddItemModal = ({
   formData,
   combinedSubmit,
 }) => {
-  // const handleAutocompleteChange = (event, value) => {
-  //   handleChange({ target: { name: 'accPerson', value } });
-  // };
+
   const handleAutocompleteChange = (fieldName) => (event, value) => {
     handleChange({ target: { name: fieldName, value } });
   };
