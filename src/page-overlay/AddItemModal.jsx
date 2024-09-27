@@ -458,7 +458,7 @@ const AddItemModal = ({
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid xs={12} md={4} sx={{ width: { xs: '100%', md: '20%' } }}>
             <TextField
               fullWidth
               id="invoiceDate"
@@ -704,7 +704,7 @@ const AddItemModal = ({
         </Grid>
 
         <Grid container spacing={2} sx={{ mt: 5 }}>
-          <Grid item xs={12} sm={6} md={4} offset={{ md: "auto" }}>
+          <Grid xs={12} sm={6} md={4} offset={{ md: "auto" }}>
           <Button
               type="button"
               variant="contained"
