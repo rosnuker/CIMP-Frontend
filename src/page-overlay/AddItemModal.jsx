@@ -315,8 +315,8 @@ const AddItemModal = ({
                   name="accPerson"
                   value={formData.accPerson}
                   onChange={handleChange}
-                  placeholder="Required*"
-                  required
+                  //placeholder="Required*"
+                  //required
                   label="Accountable Person"
                   variant="outlined"
                 />
@@ -382,8 +382,8 @@ const AddItemModal = ({
                   fullWidth
                   id="department"
                   name="department"
-                  placeholder="Required*"
-                  required
+                  //placeholder="Required*"
+                  //required
                   label="Department"
                   variant="outlined"
                 />
@@ -397,8 +397,8 @@ const AddItemModal = ({
               name="designation"
               value={formData.designation}
               onChange={handleChange}
-              placeholder="Required*"
-              required
+              //placeholder="Required*"
+              //required
               label="Designation"
               variant="outlined"
             />
