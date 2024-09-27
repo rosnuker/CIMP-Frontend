@@ -136,6 +136,20 @@ export default function Dashboard({ user, setUser }) {
     handleCloseUserMenu();
   };
 
+  const items = [
+    { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['admin', 'acc_person'] },
+    { text: 'Inventory', icon: <InventoryIcon style={{ color: 'white' }} />, destination: "inventory", roles: ['admin'] },
+    { text: 'Request', icon: <BookmarkAddIcon style={{ color: 'white' }} />, destination: "request", roles: ['admin'] },
+    { text: 'Receive', icon: <BookmarkAddedIcon style={{ color: 'white' }} />, destination: "receive", roles: ['admin'] },
+    { text: 'Logs History', icon: <HistoryIcon style={{ color: 'white' }} />, destination: "logs", roles: ['admin'] },
+    { text: 'Search', icon: <SearchIcon style={{ color: 'white' }} />, destination: "search", roles: ['admin'] },
+    { text: 'Filter', icon: <FilterAltIcon style={{ color: 'white' }} />, destination: "filter", roles: ['admin'] },
+    { text: 'Pending', icon: <HourglassTopIcon style={{ color: 'white' }} />, destination: "pending", roles: ['admin'] },
+    { text: 'Approved', icon: <CheckCircleIcon style={{ color: 'white' }} />, destination: "approved", roles: ['admin'] },
+  ];
+
+  const filteredItems = items.filter(item => item.roles.includes(user.type));
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -213,17 +227,7 @@ export default function Dashboard({ user, setUser }) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {[
-              { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "" },
-              { text: 'Inventory', icon: <InventoryIcon style={{ color: 'white' }} />, destination: "inventory" },
-              { text: 'Request', icon: <BookmarkAddIcon style={{ color: 'white' }} />, destination: "request" },
-              { text: 'Receive', icon: <BookmarkAddedIcon style={{ color: 'white' }} />, destination: "receive" },
-              { text: 'Logs History', icon: <HistoryIcon style={{ color: 'white' }} />, destination: "logs" },
-              { text: 'Search', icon: <SearchIcon style={{ color: 'white' }} />, destination: "search" },
-              { text: 'Filter', icon: <FilterAltIcon style={{ color: 'white' }} />, destination: "filter" },
-              { text: 'Pending', icon: <HourglassTopIcon style={{ color: 'white' }} />, destination: "pending" },
-              { text: 'Approved', icon: <CheckCircleIcon style={{ color: 'white' }} />, destination: "approved" },
-            ].map((item, index) => (
+            {filteredItems.map((item, index) => (
               <ListItemButton
                 key={item.text}
                 onClick={() => handleNavigate(item.destination, index)}

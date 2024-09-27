@@ -87,7 +87,6 @@ export default function SignIn({ user, setUser }) {
 				document.getElementById("password").value="";
 				document.getElementById("username").focus();
       }
-      console.log(response);
     }).catch(error => {
       console.log('There was a problem with the fetch operation:', error);
     })
