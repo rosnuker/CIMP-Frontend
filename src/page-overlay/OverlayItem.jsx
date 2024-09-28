@@ -14,6 +14,7 @@ const OverlayItem = ({
   handleCloseDialog,
   openDialog,
   handleDelete,
+  formatNumber,
 }) => {
   const handleInputChange = (key, value) => {
     setSelectedItem((prevSelectedItem) => {
@@ -628,40 +629,46 @@ const OverlayItem = ({
                     
                     <Grid size={2.6}>
                       <TextField
-                        fullWidth
-                        label="Unit Cost"
-                        value={ selectedItem.unitCost || ""}
-                        onChange={handleUnitCostChange}
-                        variant="outlined"
-                        slotProps={{
-                          input: {
-                            startAdornment: (
-                              <InputAdornment position="start">₱</InputAdornment>
-                            ),
-                          },
-                        }}
+                          fullWidth
+                          label="Unit Cost"
+                          value={formatNumber(selectedItem.unitCost || "")}
+                          onChange={handleUnitCostChange}
+                          variant="outlined"
+                          slotProps={{
+                              input: {
+                                  startAdornment: (
+                                      <InputAdornment position="start">₱</InputAdornment>
+                                  ),
+                              },
+                          }}
                       />
-                    </Grid>
-                    <Grid size={2.6}>
-                      <TextField
-                        fullWidth
-                        label="Total Cost"
-                        value={
-                          selectedItem.totalCost
-                            ? `₱ ${selectedItem.totalCost.toLocaleString()}`
-                            : ""
-                        }
-                        onChange={(e) =>
-                          handleInputChange("totalCost", e.target.value)
-                        }
-                        variant="outlined"
-                        slotProps={{
-                          input: {
-                            readOnly: true,
-                          },
-                        }}
-                      />
-                    </Grid>
+                  </Grid>
+                  <Grid size={2.6}>
+                    <TextField
+                      fullWidth
+                      label="Total Cost"
+                      value={
+                        selectedItem.totalCost
+                          ? new Intl.NumberFormat('en-PH', {
+                              style: 'currency',
+                              currency: 'PHP',
+                              minimumFractionDigits: 2, // Enforce two decimal places
+                              maximumFractionDigits: 2,
+                            }).format(selectedItem.totalCost)
+                          : ""
+                      }
+                      onChange={(e) =>
+                        handleInputChange("totalCost", e.target.value)
+                      }
+                      variant="outlined"
+                      slotProps={{
+                        input: {
+                          readOnly: true,
+                        },
+                      }}
+                    />
+                  </Grid>
+
                   </Grid>
 
               <Divider sx={{ my: 3 }} />

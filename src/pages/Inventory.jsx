@@ -62,36 +62,80 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 		},
 	});
 
-	const handleChange = (event) => {
+	// const handleChange = (event) => {
+	// 	const { name, value } = event.target;
+	  
+	// 	if (name === "quantity" || name === "unitCost") {
+	// 	  const quantity = name === "quantity" ? value : formData.quantity;
+	// 	  const unitCost = name === "unitCost" ? value : formData.unitCost;
+	// 	  const totalCost = parseFloat(quantity) * parseFloat(unitCost);
+	  
+	// 	  setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[name]: value,
+	// 		totalCost: totalCost ? totalCost.toFixed(2) : "0.00", // Ensure two decimal places
+	// 	  }));
+	// 	} else if (name.includes(".")) {
+	// 	  const [parentKey, childKey] = name.split(".");
+	// 	  setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[parentKey]: {
+	// 		  ...prevState[parentKey],
+	// 		  [childKey]: value,
+	// 		},
+	// 	  }));
+	// 	} else {
+	// 	  setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[name]: value,
+	// 	  }));
+	// 	}
+	//   };
+
+	const formatNumber = (num) => {
+		if (!num) return '';
+		const [whole, decimal] = num.toString().split('.');
+		return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimal ? '.' + decimal : '');
+	  };
+	  
+	  const handleChange = (event) => {
 		const { name, value } = event.target;
-
+	  
+		// Check if the field being changed is quantity or unitCost
 		if (name === "quantity" || name === "unitCost") {
-			const quantity = name === "quantity" ? value : formData.quantity;
-			const unitCost = name === "unitCost" ? value : formData.unitCost;
-			const totalCost = parseFloat(quantity) * parseFloat(unitCost);
-
-			setFormData((prevState) => ({
-				...prevState,
-				[name]: value,
-				totalCost: totalCost.toString(),
-			}));
+		  // Remove commas for raw value calculations
+		  const rawValue = value.replace(/,/g, '');
+	  
+		  // Calculate total cost using raw values
+		  const quantity = name === "quantity" ? rawValue : formData.quantity;
+		  const unitCost = name === "unitCost" ? rawValue : formData.unitCost;
+		  const totalCost = parseFloat(quantity) * parseFloat(unitCost);
+	  
+		  // Update state for quantity or unitCost only
+		  setFormData((prevState) => ({
+			...prevState,
+			[name]: rawValue, // Store raw value for calculations
+			totalCost: totalCost ? totalCost.toFixed(2) : "0.00", // Ensure two decimal places
+		  }));
 		} else if (name.includes(".")) {
-			const [parentKey, childKey] = name.split(".");
-			setFormData((prevState) => ({
-				...prevState,
-				[parentKey]: {
-					...prevState[parentKey],
-					[childKey]: value,
-				},
-			}));
+		  // Handle nested fields (parent.child)
+		  const [parentKey, childKey] = name.split(".");
+		  setFormData((prevState) => ({
+			...prevState,
+			[parentKey]: {
+			  ...prevState[parentKey],
+			  [childKey]: value,
+			},
+		  }));
 		} else {
-			setFormData((prevState) => ({
-				...prevState,
-				[name]: value,
-			}));
+		  // Update other fields normally
+		  setFormData((prevState) => ({
+			...prevState,
+			[name]: value,
+		  }));
 		}
-	};
-
+	  };
+	  
 	const handleSubmit = () => {
 		const totalCost = parseFloat(formData.quantity) * parseFloat(formData.unitCost);
 	
@@ -367,11 +411,14 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 	};
 
 	const handleUnitCostChange = (e) => {
-		const unitCost = e.target.value;
+		const value = e.target.value.replace(/,/g, ''); // Remove commas for calculation
+		const unitCost = value;
 		const quantity = selectedItem.quantity || 0; // Handle cases where quantity is not set
-		const totalCost = quantity * unitCost;
+		const totalCost = quantity * (unitCost ? parseFloat(unitCost) : 0);
+		
 		setSelectedItem({ ...selectedItem, unitCost, totalCost });
 	};
+	
 
     return(
       <>
@@ -470,6 +517,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
         formData={formData}
         handleChange={handleChange}
         combinedSubmit={combinedSubmit}
+		formatNumber={formatNumber}
       />
     <Button onClick={() => handleRowClick(item)}></Button>
 		<OverlayItem
@@ -484,6 +532,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			handleCloseDialog={handleCloseDialog}
 			openDialog={openDialog}
 			handleDelete={handleDelete}
+			formatNumber={formatNumber}
 		/>   
           </Container>
         </Box>	
