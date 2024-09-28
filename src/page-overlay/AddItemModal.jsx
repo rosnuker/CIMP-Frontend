@@ -10,6 +10,7 @@ const AddItemModal = ({
   handleChange,
   formData,
   combinedSubmit,
+  formatNumber
 }) => {
 
   const handleAutocompleteChange = (fieldName) => (event, value) => {
@@ -594,52 +595,51 @@ const AddItemModal = ({
           Cost Information
         </Typography>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid size={2.6}>
+    <TextField
+      fullWidth
+      name="unitCost"
+      id="unitCost"
+      value={formatNumber(formData.unitCost)} // Format the displayed value
+      onChange={handleChange}
+      placeholder="Required*"
+      pattern="[0-9]+([.][0-9]+)?"
+      title="Please enter a valid number, e.g., 12.34"
+      required
+      label="Unit Cost"
+      variant="outlined"
+      slotProps={{
+        input: {
+          startAdornment: (
+            <InputAdornment position="start">₱</InputAdornment>
+          ),
+        },
+      }}
+    />
+  </Grid>
           <Grid size={2.6}>
-            <TextField
-              fullWidth
-              name="unitCost"
-              id="unitCost"
-              value={formData.unitCost}
-              onChange={handleChange}
-              placeholder="Required*"
-              pattern="[0-9]+([.][0-9]+)?"
-              title="Please enter a valid number, e.g., 12.34"
-              required
-              label="Unit Cost"
-              variant="outlined"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">₱</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Grid>
-          <Grid size={2.6}>
-            <TextField
-              fullWidth
-              name="totalCost"
-              id="totalCost"
-              value={new Intl.NumberFormat('en-PH', {
-              }).format(formData.totalCost)}
-              onChange={handleChange}
-              placeholder="Required*"
-              pattern="[0-9]+([.][0-9]+)?"
-              title="Please enter a valid number, e.g., 12.34"
-              required
-              label="Total Cost"
-              variant="outlined"
-              disabled
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">₱</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Grid>
+  <TextField
+    fullWidth
+    name="totalCost"
+    id="totalCost"
+    value={new Intl.NumberFormat('en-PH', {
+      minimumFractionDigits: 2, // Ensure two decimal places
+      maximumFractionDigits: 2,
+    }).format(formData.totalCost)}
+    onChange={handleChange}
+    placeholder="Required*"
+    pattern="[0-9]+([.][0-9]+)?"
+    title="Please enter a valid number, e.g., 12.34"
+    required
+    label="Total Cost"
+    variant="outlined"
+    disabled
+    InputProps={{
+      startAdornment: <InputAdornment position="start">₱</InputAdornment>,
+    }}
+  />
+</Grid>
+
         </Grid>
 
         <Divider sx={{ my: 3 }} />
