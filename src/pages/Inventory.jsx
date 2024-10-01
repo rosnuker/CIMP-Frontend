@@ -6,21 +6,8 @@ import axios from "axios";
 import AddItemModal from "../page-overlay/AddItemModal";
 import OverlayItem from '../page-overlay/OverlayItem';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://cit.edu/">
-        FAIM
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSnackbarRedOpen, setSnackbarMessage } ) {
-  const [id, setId] = useState("");
+	const [id, setId] = useState("");
 	const [queryResults, setQueryResults] = useState([]);
 	const [LqueryResults, setLQueryResults] = useState([]);
 	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN"];
@@ -139,8 +126,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 	const handleSubmit = () => {
 		const totalCost = parseFloat(formData.quantity) * parseFloat(formData.unitCost);
 	
-		axios.post(`http://${address}:8080/item/insertItem`, {
-			accPerson: formData.accPerson,
+		axios.post(`http://${address}:8080/item/insertItem?fullName=${formData.accPerson}`, {
 			department: formData.department,
 			designation: formData.designation,
 			invoiceNumber: formData.invoiceNumber,
@@ -338,12 +324,15 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
                 ? "ASSIGNED" 
                 : "TO BE ASSIGNED";
 
+				const fullName = selectedItem.accPerson.fname + " " + selectedItem.accPerson.lname;
+
 				const updatedItem = {
 					...selectedItem,
+					accPerson: null,
 					status: status,
 				};
 
-				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}`;
+				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}?fullName=${fullName}`;
 				await axios.put(url, updatedItem);
 				// alert("Data updated");
 				// setSnackbarMessage("Data updated!");
@@ -489,7 +478,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
               onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
             >
               <TableCell>{item.iid}</TableCell>
-              <TableCell>{item.accPerson}</TableCell>
+              <TableCell>{item.accPerson.fname + " " + item.accPerson.lname}</TableCell>
               <TableCell>{item.designation}</TableCell>
               <TableCell>{item.department}</TableCell>
               <TableCell>{item.invoiceNumber}</TableCell>
