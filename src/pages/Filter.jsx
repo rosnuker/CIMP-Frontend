@@ -1073,7 +1073,7 @@ export default function Filter( {user, setUser} ) {
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
               >
                 <TableCell>{item.iid}</TableCell>
-                <TableCell>{item.accPerson}</TableCell>
+                <TableCell>{item.accPerson.fname + " " + item.accPerson.lname}</TableCell>
                 <TableCell>{item.department}</TableCell>
                 <TableCell>{item.designation}</TableCell>
                 <TableCell>{item.invoiceNumber}</TableCell>
