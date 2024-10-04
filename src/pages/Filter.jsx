@@ -382,24 +382,24 @@ export default function Filter( {user, setUser} ) {
       printWindow.print();
     }
     
-    const formatNumberWithCommas = (num) => {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const getCurrentDate = () => {
+      const date = new Date();
+      return date.toLocaleDateString('en-PH', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+      });
   };
+    
+  //   const formatNumberWithCommas = (num) => {
+  //     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // };
 
   
     const generatePrintableTable = () => {
+      const currentDate = getCurrentDate();
       let printableContent = `
           <style>
-      @media print {
-          body {
-              width: 5.5in;
-              height: 8.5in;
-              margin: 0; 
-              padding: 10px; 
-              page-break-inside: avoid; 
-          }
-      }
-  
       table {
           border-collapse: collapse;
           width: 100%;
@@ -435,7 +435,7 @@ export default function Filter( {user, setUser} ) {
           text-align: right;
       }
   
-      .line-1 {
+      .property-custodian {
           border-top: 2px solid #000;
           margin-top: 15px;
           margin-bottom: 10px;
@@ -443,7 +443,7 @@ export default function Filter( {user, setUser} ) {
           margin-left: 0;
       }
   
-      .line-2 {
+      .finance-director {
           border-top: 2px solid #000;
           margin-top: 15px;
           margin-bottom: 10px;
@@ -452,7 +452,7 @@ export default function Filter( {user, setUser} ) {
           margin-right: auto;
       }
   
-      .line-3 {
+      .liaison-officer {
           border-top: 2px solid #000;
           margin-top: 15px;
           margin-bottom: 10px;
@@ -465,14 +465,7 @@ export default function Filter( {user, setUser} ) {
           text-align: center;
           margin-bottom: 20px;
       }
-      
-      .header img {
-        width: 120px; 
-        display: block;
-        margin: 0 auto 10px auto; 
-    }
-      
-      
+
       .header .institute {
           text-decoration: underline; 
       }
@@ -559,10 +552,9 @@ export default function Filter( {user, setUser} ) {
   </style>
   
   <div class="header">
-        <img src="/src/assets/cit.png" alt="Logo">
+        
       <h2>
-          <span class="institute">CEBU INSTITUTE OF TECHNOLOGY</span>
-          <span class="university">UNIVERSITY</span>
+          <span class="institute">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</span>   
           <span class="issue-order">ISSUE ORDER</span>
       </h2>
   </div>
@@ -578,11 +570,14 @@ export default function Filter( {user, setUser} ) {
       </div>
       <div class="no-section">
           NO.
+          <br />
+          <br />
+           <span>Date: ${currentDate}</span>
       </div>
   </div>
   
   <div class="issued-section">
-      <div class="issued-left">Issued by:</div>
+      <div class="issued-left">Issued by: TINA</div>
       <div class="department-container">
           <div class="department-line"></div>
           <div class="department-text">Department</div>
@@ -590,9 +585,9 @@ export default function Filter( {user, setUser} ) {
   </div>
   
   <div class="details-section">
-      <div class="details-item">Purchased From:</div>
-      <div class="details-item">Date:</div>
-      <div class="details-item">Inv No.</div>
+      <div class="details-item">Purchased From:</div> 
+      <div class="details-item">Invoice Date:&nbsp${queryResults[0].invoiceDate}</div>
+      <div class="details-item">Inv No.&nbsp&nbsp&nbsp&nbsp${queryResults[0].invoiceNumber}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div> <!-- Display only one invoice number --> 
   </div>
   
   <table>
@@ -611,15 +606,41 @@ export default function Filter( {user, setUser} ) {
               <tr>
                   <td>${item.quantity}</td>
                   <td>${item.description ? item.description.name : 'None'}</td>
-                  <td>${formatNumberWithCommas(item.unitCost)}</td>
-                  <td>${formatNumberWithCommas(item.totalCost)}</td>
+                  <td>${item.unitCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                  <td>${item.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
               </tr>
           `;
       });
       printableContent += `
-              </tbody>
+              <tr style ="height:29px">
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>>>>nothing follows<<<  </td>
+                <td></td><td></td>
+              </tr>
+              <tr style ="height:30px">
+                <td></td><td></td><td></td><td></td>
+              </tr>
+              <tr style ="height:30px">
+                <td></td>
+                <td colspan="2">I/We acknowledge to have received from the Property Custodian's Office</td>
+                <td></td>
+              </tr>
+              <tr style ="height:30px">
+                <td></td>
+                <td colspan="2"> the above listed property which will be used for the &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FAO    </td>
+                <td></td>
+              </tr>
+              <tr style ="height:30px">
+                <td></td>
+                <td colspan="2">and for which I/We am/ are accountable</td>
+               <td>${O_sum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+              </tr>
+            </tbody>
           </table>
-          <div class="footer-section">
+        <div class="footer-section">
       <div class="footer-item">
           Approved by
       </div>
@@ -633,24 +654,25 @@ export default function Filter( {user, setUser} ) {
   
   <div class="footer-section">
       <div class="footer-item">
-          <div class="line-1"></div>
+        <div>Engr. Nicarter V. Teves</div>
+          <div class="property-custodian"></div>
           Property Custodian
       </div>
       <div class="footer-item">
-          <div class="line-2"></div>
+          <div class="finance-director"></div>
           Finance Director
       </div>
       <div class="footer-item">
-          <div class="line-3"></div>
+          <div class="liaison-officer"></div>
           Liaison Officer
       </div>
   </div>
-  
-          // <p>Total Cost: ${O_sum}</p>
       `;
   
       return printableContent;
     }
+  
+
   
     const handleRowClick = (item) => {
       setSelectedItem(item);
