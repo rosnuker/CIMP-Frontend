@@ -1,4 +1,4 @@
-import { Box, Container, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar } from "@mui/material";
+import { Box, Container, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Button } from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ export default function UserDashboard({ user, setUser }) {
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(null);
 	
-  const columns = ["PROPERTY TAG", "NAME", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "SUPPLIER", "TOTAL COST", "UNIT COST", "LIFESPAN", "STATUS", "ACTIONS"];
+  const columns = ["PROPERTY TAG", "NAME", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "SUPPLIER", "TOTAL COST", "UNIT COST", "LIFESPAN", "STATUS", "ACTIONS", "ACTIONS"];
   const address = getIpAddress();
 	
 	function getIpAddress() {
@@ -53,8 +53,8 @@ export default function UserDashboard({ user, setUser }) {
           }}
         >
           <Toolbar />
-          <Container maxWidth="xl" sx={{ mt: 10, mb: 4 }}>
-            <TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
+          <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
+            <TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '1px', marginTop: '20px' }}>
               <Table size="small" stickyHeader aria-label="customized table">
                 <TableHead>
                   <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
@@ -93,15 +93,17 @@ export default function UserDashboard({ user, setUser }) {
                         <TableCell>{item.lifespan}</TableCell>
                         <TableCell>{item.status}</TableCell>
                         <TableCell>
-                          <Stack direction="row" spacing={1}>
-                            <IconButton aria-label="Approve" color="success">
-                                <CheckCircleOutlineIcon />
-                            </IconButton>
-                            <IconButton aria-label="Reject" color="error">
-                              <RemoveCircleOutlineIcon />
-                            </IconButton>
-                          </Stack>
-                        </TableCell>
+                          <Button variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />}
+                          sx={{ width: '110px' }} 
+                           >
+                            Approve
+                          </Button>
+                      </TableCell>
+                      <TableCell>
+                          <Button variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
+                            Reject
+                          </Button>
+                      </TableCell>
                       </TableRow>
                     )
                   ))}
