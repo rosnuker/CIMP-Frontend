@@ -6,19 +6,6 @@ TableContainer, TableHead, TableRow, Paper, TablePagination} from '@mui/material
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://cit.edu/">
-        FAIM
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 export default function LogsHistory({ user, setUser }) {
   const [queryResults, setQueryResults] = useState([]);
   const [specific, setSpecific] = useState("");
@@ -392,7 +379,6 @@ export default function LogsHistory({ user, setUser }) {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
           </Box>
-          <Copyright sx={{ pt: 4 }} />
         </Container>
       </Box>
     </>

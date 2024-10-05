@@ -8,22 +8,8 @@ import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
-
 // Register chart.js components
 Chart.register(...registerables);
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://cit.edu/">
-        CIMP
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 export default function Dashboard({ user, setUser }) {
   const [department, setDepartments] = useState([]);
@@ -345,7 +331,6 @@ export default function Dashboard({ user, setUser }) {
               </Paper>
             </Grid>
           </Grid>
-          <Copyright sx={{ pt: 4 }} />
         </Container>
       </Box>
 
@@ -382,7 +367,7 @@ export default function Dashboard({ user, setUser }) {
                       onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
                     >
                       <TableCell>{selectedItem.iid || 'N/A'}</TableCell>
-                      <TableCell>{selectedItem.accPerson || 'N/A'}</TableCell>
+                      <TableCell>{selectedItem.accPerson.fname + " " + selectedItem.accPerson.lname || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.designation || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.department || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.invoiceNumber || 'N/A'}</TableCell>
