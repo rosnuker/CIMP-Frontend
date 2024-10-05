@@ -343,6 +343,10 @@ export default function Filter( {user, setUser} ) {
       console.error("Error fetching options:", error)
     }
     }
+
+    useEffect(() => {
+      fetchO_sum();
+    }, []);
   
     const fetchO_sum = () => {
         axios

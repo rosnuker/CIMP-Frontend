@@ -66,7 +66,7 @@ const handleBackdropClick = (e) => {
                 <Grid size={2.6}>
                 <TextField
                   label="Accountable Person"
-                  value={selectedItem.accPerson || ''}
+                  value={(selectedItem.accPerson?.fname || "") + " " + (selectedItem.accPerson?.lname || "")}
                   slotProps={{
                     input: {
                       readOnly: true,
