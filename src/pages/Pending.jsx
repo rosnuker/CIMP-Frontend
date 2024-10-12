@@ -5,30 +5,48 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 export default function Pending() {
   const [pends, setPends] = useState([]);
-const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID" ];
-  const fetchPending = async () => {
+  const [loader, setLoader] = useState(null);
+
+  const columns = ["REQUEST ID", "ITEM NAME", "ACCOUNTABLE PERSON", "DATE REQUESTED", "STATUS", "ACTIONS" ];
+
+  const address = getIpAddress();
+	
+	function getIpAddress() {
+		const hostname = window.location.hostname;
+
+		const indexOfColon = hostname.indexOf(':');
+
+		if(indexOfColon !== -1) {
+			return hostname.substring(0, indexOfColon);
+		}
+
+		return hostname;
+	}
+
+  const fetchReturn = async (status) => {
     try {
-      const response = await axios.get(`http://localhost:8080/request/getPending`);
+      const response = await axios.get(`http://${address}:8080/request/byItemStatus`, {
+        params: { status }
+      });
       setPends(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching options:", error);
     }
   };
 
   useEffect(() => {
-    fetchPending();
-  }, []);
+    fetchReturn('TO BE RETURNED');
+  }, [loader]);
 
   const handleApproving = async (rid) => {
     try {
-      await axios.put(`http://localhost:8080/request/update`, null, {
+      await axios.put(`http://localhost:8080/request/update`, {}, {
         params: {
           rid: rid,
-          status: 'approved'
+          status: 'approved return'
         }
       });
-      fetchPending(); // Refresh the list after approval
+      setLoader(Math.random() * 1000);
     } catch (error) {
       console.log(error);
       alert("No Data Found!");
@@ -77,16 +95,10 @@ const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID" ];
           ) : (
             pends.map((pend) => (
               <TableRow key={pend.rid}>
-                <TableCell>{pend.rid}</TableCell>
-                <TableCell>
-                  {pend.item ? (
-                    <div>
-                      <p>{pend.item.iid}</p>
-                    </div>
-                  ) : (
-                    <div>None</div>
-                  )}
-                </TableCell>
+                <TableCell> {pend.rid} </TableCell>
+                <TableCell> {pend.item.description.name} </TableCell>
+                <TableCell> {pend.item.accPerson.fname + " " + pend.item.accPerson.lname} </TableCell>
+                <TableCell> {pend.item.invoiceDate} </TableCell>
                 <TableCell>
                 {pend.status === 'pending' ? (
                 <div
@@ -113,12 +125,12 @@ const columns = ["REQUEST ID", "DATE REQUESTED", "STATUS", "ITEM ID" ];
                     variant="contained"
                     color="primary"
                     onClick={() => handleApproving(pend.rid)}
-                    disabled={pend.status !== 'pending'}
+                    // disabled={pend.status !== 'pending'}
                     style={{ 
                       backgroundColor: 'green', 
                       color: 'white' }}
                   >
-                    Approve
+                    Accept
                       </Button>
                     </TableCell>
                   </TableRow>

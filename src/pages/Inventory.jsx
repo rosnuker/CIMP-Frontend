@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Toolbar, Container } from "@mui/material";
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Toolbar, Container, Typography } from "@mui/material";
 import axios from "axios";
 import AddItemModal from "../page-overlay/AddItemModal";
 import OverlayItem from '../page-overlay/OverlayItem';
@@ -12,6 +11,20 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 	const [LqueryResults, setLQueryResults] = useState([]);
 	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN"];
 	
+	const address = getIpAddress();
+	
+	function getIpAddress() {
+		const hostname = window.location.hostname;
+
+		const indexOfColon = hostname.indexOf(':');
+
+		if(indexOfColon !== -1) {
+			return hostname.substring(0, indexOfColon);
+		}
+
+		return hostname;
+	}
+
 	const [openDialog, setOpenDialog] = useState(false);
 	const handleOpenDialog = () => {
         setOpenDialog(true);
@@ -20,6 +33,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
     const handleCloseDialog = () => {
         setOpenDialog(false);
     };
+
 
 	const [formData, setFormData] = useState({
 		accPerson: "",
@@ -48,36 +62,6 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			room: "",
 		},
 	});
-
-	// const handleChange = (event) => {
-	// 	const { name, value } = event.target;
-	  
-	// 	if (name === "quantity" || name === "unitCost") {
-	// 	  const quantity = name === "quantity" ? value : formData.quantity;
-	// 	  const unitCost = name === "unitCost" ? value : formData.unitCost;
-	// 	  const totalCost = parseFloat(quantity) * parseFloat(unitCost);
-	  
-	// 	  setFormData((prevState) => ({
-	// 		...prevState,
-	// 		[name]: value,
-	// 		totalCost: totalCost ? totalCost.toFixed(2) : "0.00", // Ensure two decimal places
-	// 	  }));
-	// 	} else if (name.includes(".")) {
-	// 	  const [parentKey, childKey] = name.split(".");
-	// 	  setFormData((prevState) => ({
-	// 		...prevState,
-	// 		[parentKey]: {
-	// 		  ...prevState[parentKey],
-	// 		  [childKey]: value,
-	// 		},
-	// 	  }));
-	// 	} else {
-	// 	  setFormData((prevState) => ({
-	// 		...prevState,
-	// 		[name]: value,
-	// 	  }));
-	// 	}
-	//   };
 
 	const formatNumber = (num) => {
 		if (!num) return '';
@@ -135,7 +119,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			lifespan: formData.lifespan,
 			quantity: formData.quantity,
 			remarks: formData.remarks,
-			status: (formData.accPerson && formData.department && formData.designation) ? "ASSIGNED" : "TO BE ASSIGNED",
+			status: (formData.accPerson && formData.department && formData.designation) ? "WAITING" : "TO BE ASSIGNED",
 			supplier: formData.supplier,
 			totalCost: totalCost,
 			unitCost: formData.unitCost,
@@ -164,7 +148,19 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			console.log("Data added!");
 			console.log("New item ID:", newId); 
 			console.log(response.data);
-			
+
+			if(response.data.status === "WAITING") {
+				axios.post(`http://${address}:8080/request/add`, {}, {
+					params: {
+						iid: newId,
+					}
+				}).then(response => {
+					console.log(response.data);
+				}).catch(error => {
+					console.error("Error sending request:", error);
+				});
+			}
+
 			axios.post(`http://${address}:8080/addLog`, {
 				description: `Added an Item: [${newId}] - ${newName}`,
 				type: "ADD"
@@ -228,19 +224,6 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [showAddItemModal, setShowAddItemModal] = useState(false);
 	const [loader, setLoader] = useState(null);
-	const address = getIpAddress();
-	
-	function getIpAddress() {
-		const hostname = window.location.hostname;
-
-		const indexOfColon = hostname.indexOf(':');
-
-		if(indexOfColon !== -1) {
-			return hostname.substring(0, indexOfColon);
-		}
-
-		return hostname;
-	}
 
 	const handleOpenModal = () => setShowAddItemModal(true);
 	const handleCloseModal = () => setShowAddItemModal(false);
@@ -321,7 +304,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			if (selectedItem) {
 
 				const status = (selectedItem.accPerson && selectedItem.department && selectedItem.designation) 
-                ? "ASSIGNED" 
+                ? "WAITING" 
                 : "TO BE ASSIGNED";
 
 				const fullName = selectedItem.accPerson.fname + " " + selectedItem.accPerson.lname;
@@ -334,6 +317,18 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 
 				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}?fullName=${fullName}`;
 				await axios.put(url, updatedItem);
+
+				if(status === "WAITING") {
+					axios.post(`http://${address}:8080/request/add`, {}, {
+						params: {
+							iid: selectedItem.iid,
+						}
+					}).then(response => {
+						console.log(response.data);
+					}).catch(error => {
+						console.error("Error sending request:", error);
+					});
+				}
 				// alert("Data updated");
 				// setSnackbarMessage("Data updated!");
 				// setSnackbarGreenOpen(true);
@@ -423,92 +418,99 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
             overflow: 'auto',
           }}
         >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-		  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-		  <Button
-              type="button"
-              variant="contained"
-              sx={{ borderRadius: 2, fontFamily: "Poppins", backgroundColor: '#8c383e',   
-                color: '#fafafa', 
-                '&:hover': {
-                backgroundColor: 'darkred', 
-            }, }}
-				onClick={handleOpenModal}
-				startIcon={<AddIcon />}
-            >
-				<span
-					style={{
-					position: "relative",
-					right: "5px",
-					top: "0.5px",
-						}}
-					>
-					
-					</span>
-              Add Item
-            </Button>
-			</div>
+		<Toolbar />
+		<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+		<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+		<Button
+			type="button"
+			variant="contained"
+			sx={{ borderRadius: 2, fontFamily: "Poppins", backgroundColor: '#8c383e',   
+			color: '#fafafa', 
+			'&:hover': {
+			backgroundColor: 'darkred', 
+		}, }}
+			onClick={handleOpenModal}
+			startIcon={<AddIcon />}
+		>
+			<span
+				style={{
+				position: "relative",
+				right: "5px",
+				top: "0.5px",
+					}}
+				>
+				
+				</span>
+			Add Item
+		</Button>
+		</div>
 				
 		<TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
-    <Table size="small" stickyHeader aria-label="customized table">
-      <TableHead>
-        <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
-          {columns.map((column) => (
-            <TableCell
-              key={column}
-              style={{ padding: '10px', fontWeight: '600', color: 'black', backgroundColor: '#eeeeee' }}
-            >
-              {column}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data.map((item) => (
-          !item.deleted && (
-            <TableRow
-              key={item.iid}
-              onClick={() => handleRowClick(item)}
-              style={{
-                backgroundColor: 'white',
-                transition: 'background-color 0.3s ease',
-              }}
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
-            >
-              <TableCell>{item.iid}</TableCell>
-              <TableCell>{item.accPerson.fname + " " + item.accPerson.lname}</TableCell>
-              <TableCell>{item.designation}</TableCell>
-              <TableCell>{item.department}</TableCell>
-              <TableCell>{item.invoiceNumber}</TableCell>
-              <TableCell>{item.invoiceDate}</TableCell>
-              <TableCell>{item.issueOrder}</TableCell>
-              <TableCell>{item.quantity}</TableCell>
-              <TableCell>{item.remarks}</TableCell>
-              <TableCell>{item.status}</TableCell>
-              <TableCell>{item.supplier}</TableCell>
-              <TableCell>₱{item.totalCost.toLocaleString()}</TableCell>
-              <TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
-              <TableCell>{item.unitOfMeasurement}</TableCell>
-			  <TableCell>{item.lifespan}</TableCell>
+			<Table size="small" stickyHeader aria-label="customized table">
+			<TableHead>
+				<TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
+				{columns.map((column) => (
+					<TableCell
+					key={column}
+					style={{ padding: '10px', fontWeight: '600', color: 'black', backgroundColor: '#eeeeee' }}
+					>
+					{column}
+					</TableCell>
+				))}
+				</TableRow>
+			</TableHead>
+			<TableBody>
+				{data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length + 1} style={{ textAlign: 'center', padding: '20px' }}>
+                    <Typography variant="body1">There are no item(s) to show</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (data.map((item) => (
+				!item.deleted && (
+					<TableRow
+					key={item.iid}
+					onClick={() => handleRowClick(item)}
+					style={{
+						backgroundColor: 'white',
+						transition: 'background-color 0.3s ease',
+					}}
+					onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
+					onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+					>
+					<TableCell>{item.iid}</TableCell>
+					<TableCell>{item.accPerson ? `${item.accPerson.fname} ${item.accPerson.lname}` : ""}</TableCell>
+					<TableCell>{item.designation}</TableCell>
+					<TableCell>{item.department}</TableCell>
+					<TableCell>{item.invoiceNumber}</TableCell>
+					<TableCell>{item.invoiceDate}</TableCell>
+					<TableCell>{item.issueOrder}</TableCell>
+					<TableCell>{item.quantity}</TableCell>
+					<TableCell>{item.remarks}</TableCell>
+					<TableCell>{item.status}</TableCell>
+					<TableCell>{item.supplier}</TableCell>
+					<TableCell>₱{item.totalCost.toLocaleString()}</TableCell>
+					<TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
+					<TableCell>{item.unitOfMeasurement}</TableCell>
+					<TableCell>{item.lifespan}</TableCell>
+					
+					</TableRow>
+				)
+				))
+			)}
+			</TableBody>
+			</Table>
+		</TableContainer>
 
-            </TableRow>
-          )
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-
-  <AddItemModal
-        showAddItemModal={showAddItemModal}
-        handleCloseModal={handleCloseModal}
-        formData={formData}
-        handleChange={handleChange}
-        combinedSubmit={combinedSubmit}
-		formatNumber={formatNumber}
-      />
-    <Button onClick={() => handleRowClick(item)}></Button>
+		<AddItemModal
+				showAddItemModal={showAddItemModal}
+				handleCloseModal={handleCloseModal}
+				formData={formData}
+				handleChange={handleChange}
+				combinedSubmit={combinedSubmit}
+				formatNumber={formatNumber}
+		/>
+		<Button onClick={() => handleRowClick(item)}></Button>
 		<OverlayItem
 			showOverlay={showOverlay}
 			selectedItem={selectedItem}
@@ -523,8 +525,8 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			handleDelete={handleDelete}
 			formatNumber={formatNumber}
 		/>   
-          </Container>
-        </Box>	
-		</>
+		</Container>
+		</Box>	
+	</>
 	);
 }

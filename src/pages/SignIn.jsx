@@ -12,20 +12,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://cit.edu/">
-        CIMP
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const defaultTheme = createTheme();
 
 export default function SignIn({ user, setUser }) {
@@ -44,7 +30,7 @@ export default function SignIn({ user, setUser }) {
 
   useEffect(() => {
     if (user) {
-      navigate('/app');
+      navigate('/app', { replace: true });
     }
   }, [user, navigate]);
 
@@ -102,7 +88,7 @@ export default function SignIn({ user, setUser }) {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 25,
+            marginTop: { lg: 12.5, xl: 25 },
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -163,7 +149,6 @@ export default function SignIn({ user, setUser }) {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
