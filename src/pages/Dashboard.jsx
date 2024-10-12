@@ -367,7 +367,7 @@ export default function Dashboard({ user, setUser }) {
                       onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
                     >
                       <TableCell>{selectedItem.iid || 'N/A'}</TableCell>
-                      <TableCell>{selectedItem.accPerson.fname + " " + selectedItem.accPerson.lname || 'N/A'}</TableCell>
+                      <TableCell>{selectedItem.accPerson ? `${selectedItem.accPerson.fname} ${selectedItem.accPerson.lname}` : "N/A"}</TableCell>
                       <TableCell>{selectedItem.designation || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.department || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.invoiceNumber || 'N/A'}</TableCell>
