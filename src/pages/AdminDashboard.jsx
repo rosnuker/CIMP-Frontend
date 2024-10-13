@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider, Snackbar,  MenuItem, Select, InputLabel, FormControl} from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider, Snackbar,  MenuItem, Select, InputLabel, FormControl, Switch, FormControlLabel} from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,7 +20,7 @@ function Copyright(props) {
 export default function AdminDashboard({ user, setUser, data = [] }) {
   const columns = ["FIRST NAME", "LAST NAME", "USERNAME", "TYPE"];
   const [users, setUsers] = useState([]);
-
+  const [showDeleted, setShowDeleted] = useState(false);
   // States for form fields
   const [fname, setFirstName] = useState('');
   const [lname, setLastName] = useState('');
@@ -202,49 +202,62 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
           </Button>
         </div>
 
-        <TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
-          <Table size="small" stickyHeader aria-label="customized table">
-            <TableHead>
-              <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column}
-                    style={{ padding: '10px', fontWeight: '600', color: 'black', backgroundColor: '#eeeeee' }}
-                  >
-                    {column}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={columns.length} style={{ textAlign: 'center', padding: '20px' }}>
-                    <Typography variant="body1">There are no User(s) to show</Typography>
-                  </TableCell>
-                </TableRow>
-              ) : (users.map((user) => (
-                !user.deleted && (
-                  <TableRow
-                    key={user.uid}
-                    style={{
-                      backgroundColor: 'white',
-                      transition: 'background-color 0.3s ease',
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
-                    onClick={() => handleEditOpen(user)} // Open edit dialog on row click
-                  >
-                    <TableCell>{user.fname}</TableCell>
-                    <TableCell>{user.lname}</TableCell>
-                    <TableCell>{user.username}</TableCell>
-                    <TableCell>{user.type}</TableCell>
-                  </TableRow>
-                )
-              )))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <FormControlLabel
+  control={
+    <Switch
+      checked={showDeleted}
+      onChange={() => setShowDeleted(!showDeleted)}
+      color="primary"
+    />
+  }
+  label="Show Deleted Users"
+/>
+
+<TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
+  <Table size="small" stickyHeader aria-label="customized table">
+    <TableHead>
+      <TableRow style={{ position: 'sticky', top: 0, backgroundColor: '#eeeeee', zIndex: 1 }}>
+        {columns.map((column) => (
+          <TableCell
+            key={column}
+            style={{ padding: '10px', fontWeight: '600', color: 'black', backgroundColor: '#eeeeee' }}
+          >
+            {column}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {users.length === 0 ? (
+        <TableRow>
+          <TableCell colSpan={columns.length} style={{ textAlign: 'center', padding: '20px' }}>
+            <Typography variant="body1">There are no User(s) to show</Typography>
+          </TableCell>
+        </TableRow>
+      ) : (
+        users
+          .filter((user) => showDeleted ? user.deleted : !user.deleted) // Filter users based on toggle
+          .map((user) => (
+            <TableRow
+              key={user.uid}
+              style={{
+                backgroundColor: 'white',
+                transition: 'background-color 0.3s ease',
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+              onClick={() => handleEditOpen(user)} // Open edit dialog on row click
+            >
+              <TableCell>{user.fname}</TableCell>
+              <TableCell>{user.lname}</TableCell>
+              <TableCell>{user.username}</TableCell>
+              <TableCell>{user.type}</TableCell>
+            </TableRow>
+          ))
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
 
         {/* Dialog for adding users */}
         <Dialog open={open} onClose={handleClose}>
@@ -490,7 +503,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
         <DialogTitle>Delete Confirmation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this item? This action cannot be undone.
+            Are you sure you want to delete this user? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
