@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Button } from "@mui/material";
+import { Button, List, ListItem, ListItemText } from "@mui/material";
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
@@ -24,7 +24,69 @@ export default function Dashboard({ user, setUser }) {
     "ISSUE ORDER NUMBER", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN",
     "LOCATION BUILDING", "LOCATION ROOM", "DESCRIPTION NAME", "DESCRIPTION MODEL", "DESCRIPTION TYPE", "SERIAL NUMBER", "DECRIPTION OTHER"];
 
-  const fetchStats = async () => {
+    const [toBeAssigned, setToBeAssigned] = useState("");
+    const fetchToBeAssigned = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/item/getToBeAssigned`);
+        setToBeAssigned(response.data);
+        
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchToBeAssigned();
+    }, []);
+
+    const [frequent, setFrequent] = useState([]);
+    const fetchFrequent = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/item/frequentlyOrdered`);
+        setFrequent(response.data);
+        
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchFrequent();
+    }, []);
+
+    const [waiting, setWaiting] = useState([]);
+    const fetchWaiting = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/item/waiting`);
+        setWaiting(response.data);
+        
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchWaiting();
+    }, []);
+
+    const [returned, setReturned] = useState([]);
+    const fetchReturned = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/item/toBeReturned`);
+        setReturned(response.data);
+        
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchReturned();
+    }, []);
+
+
+
+    const fetchStats = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/request/getStats`);
       setStat1(response.data);
@@ -285,17 +347,56 @@ export default function Dashboard({ user, setUser }) {
 
 
             {/* Recent wako kahibaw */}
+            <Grid container spacing={2} justifyContent="center">
+  <Grid item xs={12} sm={6} md={4}>
+    <Paper
+      sx={{
+        p: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        height: 242,
+        width:305,
+        borderRadius: 2,
+        backgroundColor: '#f5f5f5',
+      }}
+    >
+      <Typography
+        variant="h7"
+        sx={{
+          textAlign: 'center',
+          fontWeight: 'bold',
+          color: 'maroon',
+          paddingY: 1,
+          marginBottom: 1,
+        }}
+      >
+        Frequently Ordered Items
+      </Typography>
+      {frequent.map((order, index) => (
+        <Typography
+          key={index}
+          sx={{
+            paddingBottom: 1,
+            fontSize: '1rem',
+            color: 'maroon',
+            fontWeight: 500,
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span style={{ color: 'black' }}>{order[0]}</span>
+          <span style={{ color: 'maroon' }}>({order[1]})</span>
+        </Typography>
+      ))}
+    </Paper>
+  </Grid>
+</Grid>
+
+            {/* Recent Orders */}
+
             <Grid size={4}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: 250,
-                  marginBottom: 1,
-                }}
-              >
-                <Typography
+              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 242, width:440,}}>
+              <Typography
                   variant="h7"
                   sx={{
                     textAlign: "center",
@@ -305,29 +406,19 @@ export default function Dashboard({ user, setUser }) {
                     marginBottom: 1,
                   }}
                 >
-                  Pie Chart
+                  Reminders
                 </Typography>
-                <Pie
-                  data={{
-                    labels: stat2.map(item => item[0]), // Department names
-                    datasets: [{
-                      data: stat2.map(item => item[1]), // Counts
-                      backgroundColor: ['red', 'blue', 'green', 'yellow'], // Customize as needed
-                    }]
-                  }}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                  }}
-                />
-              </Paper>
-            </Grid>
-
-            {/* Recent Orders */}
-
-            <Grid size={4}>
-              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240, }}>
-                {/* <Orders /> */}
+                <Typography sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black', }}><strong>
+                  Items to be assigned: <span style={{ color: 'maroon' }}>{toBeAssigned}</span></strong>
+                  <p></p>
+                </Typography>
+                <Typography sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black ' }}><strong>
+                  Items to be accepted/denied by Accountable Person: <span style={{ color: 'maroon' }}>{waiting}</span></strong>
+                  <p></p>
+                </Typography>
+                <Typography sx={{ fontSize: '1rem', color: 'black' }}><strong>
+                  Items to be returned: <span style={{ color: 'maroon' }}>{returned}</span></strong>
+                </Typography>
               </Paper>
             </Grid>
           </Grid>
