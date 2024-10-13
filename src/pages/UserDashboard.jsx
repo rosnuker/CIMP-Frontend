@@ -146,12 +146,6 @@ export default function UserDashboard({ user, setUser }) {
                       <TableCell>{req.item.status}</TableCell>
                       <TableCell style={{ position: 'sticky', right: 0, backgroundColor: 'white', zIndex: 2 }}>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                          {/* <Button variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />} sx={{ width: '110px', mr: 1 }}>
-                            Approve
-                          </Button>
-                          <Button variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
-                            Reject
-                          </Button> */}
                           {req.item.status === "WAITING" && (
                             <>
                                 <Button onClick={() => handleApprove(req.rid)} variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />} sx={{ width: '110px', mr: 1 }}>

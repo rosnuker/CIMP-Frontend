@@ -130,38 +130,35 @@ export default function Filter( {user, setUser} ) {
     const handleSum = event => {
       setO_sum(event.target.value)
     }
-    
-    const handleFilter = () => {
-        //console.log({ acc_per,department,designation,status,uom,supplier,building,room,name,model,type,invoicedate,lifespan })
   
-          axios
-          .get(`http://${address}:8080/item/filter`, {
-            params: {
-              acc_per: acc_per,
-              department: department,
-              designation: designation,
-              status: status,
-              uom: uom,
-              supplier: supplier,
-              building: building,
-              room: room,
-              name: name,
-              model: model,
-              type: type,
-              invoice_date: invoicedate,
-              lifespan: lifespan
-            }
-          })
-          .then(result => {
-            setQueryResults(result.data)
-          })
-          .catch(error => {
-            console.log(error)
-            alert("No Data found!")
-          })
-      }
-      
-      
+    const handleFilter = () => {
+      const params = {
+          accountablePerson: acc_per || null,
+          department: department || null,
+          designation: designation || null,
+          unitOfMeasurement: uom || null,
+          status: status || null,
+          supplier: supplier || null,
+          building: building || null,
+          room: room || null,
+          name: name || null,
+          model: model || null,
+          type: type || null,
+          invoiceDate: invoicedate || null,
+          lifespan: lifespan || null
+      };
+  
+      axios
+      .get(`http://${address}:8080/item/filter`, { params })
+      .then(result => {
+          setQueryResults(result.data);
+      })
+      .catch(error => {
+          console.log(error);
+          alert("No Data found!");
+      });
+  }
+    
     useEffect(() => {
         fetchO_accPer();
       }, []);
@@ -349,33 +346,34 @@ export default function Filter( {user, setUser} ) {
     }, []);
   
     const fetchO_sum = () => {
-        axios
-        .get(`http://${address}:8080/item/sum`, {
-          params: {
-            acc_per: acc_per,
-            department: department,
-            designation: designation,
-            status: status,
-            uom: uom,
-            supplier: supplier,
-            building: building,
-            room: room,
-            name: name,
-            model: model,
-            type: type,
-            invoice_date: invoicedate,
-            lifespan: lifespan
-          }
-        })
-        .then(result => {
-          setO_sum(result.data)
-        })
-        .catch(error => {
-          console.log(error)
-          alert("No Data Found!")
-  
-          setO_sum("")
-        })
+
+      const params = {
+        accountablePerson: acc_per || null,
+        department: department || null,
+        designation: designation || null,
+        unitOfMeasurement: uom || null,
+        status: status || null,
+        supplier: supplier || null,
+        building: building || null,
+        room: room || null,
+        name: name || null,
+        model: model || null,
+        type: type || null,
+        invoiceDate: invoicedate || null,
+        lifespan: lifespan || null
+      };
+
+      axios
+      .get(`http://${address}:8080/item/sum`, { params })
+      .then(result => {
+        setO_sum(result.data)
+      })
+      .catch(error => {
+        console.log(error)
+        alert("No Data Found!")
+
+        setO_sum("")
+      })
     };
   
     const handlePrintTable = () => {
