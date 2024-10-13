@@ -1,10 +1,13 @@
-import { Box, Container, Paper, Toolbar, Typography, Dialog, Divider, DialogTitle, DialogContent, DialogActions, Select, MenuItem, FormControl, InputLabel, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography, Dialog, Divider, DialogTitle, DialogContent, DialogActions, Select, MenuItem, ButtonGroup, FormControl, InputLabel, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+
 
 // Register chart.js components
 Chart.register(...registerables);
@@ -285,28 +288,43 @@ export default function Dashboard({ user, setUser }) {
               </Paper>
             </Grid>
 
-            {/* Department  */}
+            {/* Department List */}
             <Grid size={4}
               sx={{
-                maxWidth: '350px',
+                maxWidth: '300px',
                 maxHeight: '2px',
               }}>
-              <Paper sx={{ p: 1, overflowY: 'auto', height: 658, }}>
+              <Paper sx={{ p: 1, overflowY: 'auto', height: 657, ml: 5, }}>
+              <ButtonGroup
+                orientation="vertical"
+                aria-label="Vertical department button group"
+                variant="contained"
+                color="white"
+              >
                 <Typography
                   variant="h6"
                   sx={{
                     textAlign: "center",
-                    fontWeight: "Bold",
+                    fontWeight: "bold",
                     color: "maroon",
-                    backgroundColor: "",
-                    paddingY: 1,
-                    marginBottom: 1,
+                    py: 1,
+                    mb: 1,
                   }}
                 >
                   DEPARTMENT
                 </Typography>
                 <Divider sx={{ marginBottom: 2 }} />
-                {department.length === 0 ? (
+                {loading ? (
+                  <Typography
+                    sx={{
+                      textAlign: 'center',
+                      color: 'gray',
+                      padding: 2,
+                    }}
+                  >
+                    Loading departments...
+                  </Typography>
+                ) : department.length === 0 ? (
                   <Typography
                     sx={{
                       textAlign: 'center',
@@ -320,15 +338,14 @@ export default function Dashboard({ user, setUser }) {
                   department.map((item, index) => (
                     <Button
                       key={index}
-                      variant="contained"
-                      color="primary"
                       sx={{
-                        margin: '8px',
                         minWidth: '300px',
                         minHeight: '40px',
-                        width: 'auto',
-                        height: 'auto',
-                        padding: '8px 16px'
+                        backgroundColor: '#8c383e',
+                        color: 'white',
+                        '&:hover': {
+                          backgroundColor: '#732c33',
+                        },
                       }}
                       onClick={() => handleDepItems(item)}
                       aria-label={`Button for ${item}`}
@@ -338,34 +355,36 @@ export default function Dashboard({ user, setUser }) {
                     </Button>
                   ))
                 )}
-              </Paper>
-            </Grid>
+              </ButtonGroup>
+                 </Paper>
+               </Grid>
 
-
-            {/* Recent wako kahibaw */}
+            {/* Frequently Ordered Items */}
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={12} sm={6} md={4}>
                 <Paper
                   sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 242,
-                    width:305,
-                    borderRadius: 2,
-                    backgroundColor: '',
+                    p: 3, 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    height: 240, 
+                    width: 305, 
+                    backgroundColor: '#f9f9f9', 
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+                    borderRadius: '12px'
                   }}
                 >
                   <Typography
                     variant="h7"
                     sx={{
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      color: 'maroon',
-                      paddingY: 1,
+                      textAlign: "center",
+                      fontWeight: "Bold",
+                      color: "maroon",
+                      borderBottom: '1px solid #ddd',
                       marginBottom: 1,
                     }}
                   >
+                    <ShoppingBagIcon sx={{ mb: -0.6, mr: 0.6 }} /> 
                     Frequently Ordered Items
                   </Typography>
                   {frequent.length === 0 ? (
@@ -404,17 +423,29 @@ export default function Dashboard({ user, setUser }) {
             {/* Recent Orders */}
 
             <Grid size={4}>
-              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 242, width:440,}}>
+              <Paper 
+              sx={{ 
+              p: 3, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              height: 240, 
+              width: 440, 
+              backgroundColor: '#f9f9f9', 
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+              borderRadius: '12px' 
+              }}>
               <Typography
-                  variant="h7"
+                  variant="h6"
                   sx={{
                     textAlign: "center",
                     fontWeight: "Bold",
                     color: "maroon",
-                    paddingY: 1,
-                    marginBottom: 1,
+                    borderBottom: '1px solid #ddd',
+                    marginBottom: 2,
+                    mt: -1,
                   }}
                 >
+                <NotificationsActiveIcon sx={{ mb: -0.6, mr: 0.6 }} /> 
                   Reminders
                 </Typography>
                 <Typography sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black', }}><strong>

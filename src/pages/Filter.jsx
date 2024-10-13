@@ -395,283 +395,285 @@ export default function Filter( {user, setUser} ) {
   // };
 
   
-    const generatePrintableTable = () => {
-      const currentDate = getCurrentDate();
-      let printableContent = `
-          <style>
-      table {
-          border-collapse: collapse;
-          width: 100%;
-      }
-  
-      th, td {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-      }
-  
-      th {
-          background-color: #f2f2f2;
-      }
-  
-      .footer-section {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 20px;
-          width: 100%;
-      }
-  
-      .footer-item {
-          width: 33%;
-          text-align: center;
-      }
-  
-      .footer-item:first-child {
-          text-align: left;
-      }
-  
-      .footer-item:last-child {
-          text-align: right;
-      }
-  
-      .property-custodian {
-          border-top: 2px solid #000;
-          margin-top: 15px;
-          margin-bottom: 10px;
-          width: 60%;
-          margin-left: 0;
-      }
-  
-      .finance-director {
-          border-top: 2px solid #000;
-          margin-top: 15px;
-          margin-bottom: 10px;
-          width: 70%;
-          margin-left: auto;
-          margin-right: auto;
-      }
-  
-      .liaison-officer {
-          border-top: 2px solid #000;
-          margin-top: 15px;
-          margin-bottom: 10px;
-          width: 50%;
-          margin-right: 0;
-          margin-left: auto;
-      }
-  
-      .header {
-          text-align: center;
-          margin-bottom: 20px;
-      }
-
-      .header .institute {
-          text-decoration: underline; 
-      }
-  
-      .header .university,
-      .header .issue-order {
-          display: block;
-          margin-top: 5px; 
-      }
-  
-      .header .issue-order {
-          font-weight: bold;
-          text-decoration: underline; 
-      }
-  
-      .instruction-section {
-          display: flex;
-          align-items: center; 
-          margin-top: 10px;
-      }
-  
-      .instruction-left {
-          font-weight: bold;
-          margin-right: 5px; 
-          white-space: nowrap; 
-      }
-  
-      .instruction-right {
-          text-align: left; 
-      }
-  
-      .no-section {
-          text-align: right; 
-          margin-left: auto; 
-          font-weight: bold;
-      }
-  
-      .issued-section {
-          display: flex;
-          flex-direction: column;
-          margin-top: 5px;
-      }
-  
-      .issued-left {
-          font-weight: bold;
-      }
-  
-      .department-container {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end; 
-          margin-top: 10px; 
-      }
-  
-      .department-line {
-          border-top: 1px solid #000;
-          width: 120px; 
-          margin-bottom: 5px;
-      }
-  
-      .department-text {
-          text-align: center; 
-          margin-right: 10px;
-      }
-  
-      .details-section {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 10px;
-      }
-  
-      .details-item {
-          width: 33%;
-          text-align: center; 
-      }
-  
-      .details-item:first-child {
-          text-align: left; 
-      }
-  
-      .details-item:last-child {
-          text-align: right; 
-      }
-  </style>
-  
-  <div class="header">
-        
-      <h2>
-          <span class="institute">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</span>   
-          <span class="issue-order">ISSUE ORDER</span>
-      </h2>
-  </div>
-  
-  <div class="instruction-section">
-      <div class="instruction-left">
-          STOREKEEPER:
-      </div>
-      <div class="instruction-right">
-          <span>Please issue to the bearer the <br>
-          materials and/or supplies<br>
-          Listed below:</span>
-      </div>
-      <div class="no-section">
-          NO.
-          <br />
-          <br />
-           <span>Date: ${currentDate}</span>
-      </div>
-  </div>
-  
-  <div class="issued-section">
-      <div class="issued-left">Issued by: TINA</div>
-      <div class="department-container">
-          <div class="department-line"></div>
-          <div class="department-text">Department</div>
-      </div>
-  </div>
-  
-  <div class="details-section">
-      <div class="details-item">Purchased From:</div> 
-      <div class="details-item">Invoice Date:&nbsp${queryResults[0].invoiceDate}</div>
-      <div class="details-item">Inv No.&nbsp&nbsp&nbsp&nbsp${queryResults[0].invoiceNumber}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div> <!-- Display only one invoice number --> 
-  </div>
-  
-  <table>
-      <thead>
-          <tr>
-              <th>QUANTITY</th>
-              <th>ARTICLE / Description</th>
-              <th>UNIT COST</th>
-              <th>TOTAL COST</th>
-          </tr>
-      </thead>
-      <tbody>
-      `;
-      queryResults.forEach(item => {
-          printableContent += `
-              <tr>
-                  <td>${item.quantity}</td>
-                  <td>${item.description ? item.description.name : 'None'}</td>
-                  <td>${item.unitCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                  <td>${item.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-              </tr>
-          `;
-      });
-      printableContent += `
-              <tr style ="height:29px">
-                <td></td><td></td><td></td><td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>>>>nothing follows<<<  </td>
-                <td></td><td></td>
-              </tr>
-              <tr style ="height:30px">
-                <td></td><td></td><td></td><td></td>
-              </tr>
-              <tr style ="height:30px">
-                <td></td>
-                <td colspan="2">I/We acknowledge to have received from the Property Custodian's Office</td>
-                <td></td>
-              </tr>
-              <tr style ="height:30px">
-                <td></td>
-                <td colspan="2"> the above listed property which will be used for the &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FAO    </td>
-                <td></td>
-              </tr>
-              <tr style ="height:30px">
-                <td></td>
-                <td colspan="2">and for which I/We am/ are accountable</td>
-               <td>${O_sum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-              </tr>
-            </tbody>
-          </table>
-        <div class="footer-section">
-      <div class="footer-item">
-          Approved by
-      </div>
-      <div class="footer-item">
-          Noted by
-      </div>
-      <div class="footer-item">
-          Received by
-      </div>
-  </div>
-  
-  <div class="footer-section">
-      <div class="footer-item">
-        <div>Engr. Nicarter V. Teves</div>
-          <div class="property-custodian"></div>
-          Property Custodian
-      </div>
-      <div class="footer-item">
-          <div class="finance-director"></div>
-          Finance Director
-      </div>
-      <div class="footer-item">
-          <div class="liaison-officer"></div>
-          Liaison Officer
-      </div>
-  </div>
-      `;
-  
-      return printableContent;
+  const generatePrintableTable = () => {
+    const currentDate = getCurrentDate();
+    let printableContent = `
+        <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
     }
-  
 
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .footer-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .footer-item {
+        width: 33%;
+        text-align: center;
+    }
+
+    .footer-item:first-child {
+        text-align: left;
+    }
+
+    .footer-item:last-child {
+        text-align: right;
+    }
+
+    .property-custodian {
+        border-top: 2px solid #000;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        width: 60%;
+        margin-left: 0;
+    }
+
+    .finance-director {
+        border-top: 2px solid #000;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .accountable-person {
+        border-top: 2px solid #000;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        width: 50%;
+        margin-right: 0;
+        margin-left: auto;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .header .institute {
+        text-decoration: underline; 
+    }
+
+    .header .university,
+    .header .issue-order {
+        display: block;
+        margin-top: 5px; 
+    }
+
+    .header .issue-order {
+        font-weight: bold;
+        text-decoration: underline; 
+    }
+
+    .instruction-section {
+        display: flex;
+        align-items: center; 
+        margin-top: 10px;
+    }
+
+    .instruction-left {
+        font-weight: bold;
+        margin-right: 5px; 
+        white-space: nowrap; 
+    }
+
+    .instruction-right {
+        text-align: left; 
+    }
+
+    .no-section {
+        text-align: right; 
+        margin-left: auto; 
+        font-weight: bold;
+    }
+
+    .issued-section {
+        display: flex;
+        flex-direction: column;
+        margin-top: 5px;
+    }
+
+    .issued-left {
+        font-weight: bold;
+    }
+
+    .department-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; 
+        margin-top: 10px; 
+    }
+
+    .department-line {
+        border-top: 1px solid #000;
+        width: 120px; 
+        margin-bottom: 5px;
+    }
+
+    .department-text {
+        text-align: center; 
+        margin-right: 10px;
+    }
+
+    .details-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .details-item {
+        width: 33%;
+        text-align: center; 
+    }
+
+    .details-item:first-child {
+        text-align: left; 
+    }
+
+    .details-item:last-child {
+        text-align: right; 
+    }
+</style>
+
+<div class="header">
+      
+    <h2>
+        <span class="institute">CEBU INSTITUTE OF TECHNOLOGY - UNIVERSITY</span>   
+        <span class="issue-order">ISSUE ORDER</span>
+    </h2>
+</div>
+
+<div class="instruction-section">
+    <div class="instruction-left">
+        STOREKEEPER:
+    </div>
+    <div class="instruction-right">
+        <span>Please issue to the bearer the <br>
+        materials and/or supplies<br>
+        Listed below:</span>
+    </div>
+    <div class="no-section">
+        NO.&nbsp${queryResults[0].issueOrder}
+        <br />
+        <br />
+         <span>Date: ${currentDate}</span>
+    </div>
+</div>
+
+<div class="issued-section">
+    <div class="issued-left">Issued by: TINA</div>
+    <div class="department-container">
+        <div class="department-line"></div>
+        <div class="department-text">Department</div>
+    </div>
+</div>
+
+<div class="details-section">
+    <div class="details-item">Purchased From:</div> 
+    <div class="details-item">Invoice Date:&nbsp${queryResults[0].invoiceDate}</div>
+    <div class="details-item">Inv No.&nbsp&nbsp&nbsp&nbsp${queryResults[0].invoiceNumber}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div> <!-- Display only one invoice number --> 
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>QUANTITY</th>
+            <th>ARTICLE / Description</th>
+            <th>UNIT COST</th>
+            <th>TOTAL COST</th>
+        </tr>
+    </thead>
+    <tbody>
+    `;
+    queryResults.forEach(item => {
+        printableContent += `
+            <tr>
+                <td>${item.quantity}</td>
+                <td>${item.description ? item.description.name : 'None'}</td>
+                <td>${item.unitCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td>${item.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            </tr>
+        `;
+    });
+    printableContent += `
+            <tr style ="height:29px">
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>>>>nothing follows<<<  </td>
+              <td></td><td></td>
+            </tr>
+            <tr style ="height:30px">
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr style ="height:30px">
+              <td></td>
+              <td colspan="2">I/We acknowledge to have received from the Property Custodian's Office</td>
+              <td></td>
+            </tr>
+            <tr style ="height:30px">
+              <td></td>
+              <td colspan="2"> the above listed property which will be used for the &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FAO    </td>
+              <td></td>
+            </tr>
+            <tr style ="height:30px">
+              <td></td>
+              <td colspan="2">and for which I/We am/ are accountable</td>
+             <td>${O_sum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            </tr>
+          </tbody>
+        </table>
+      <div class="footer-section">
+    <div class="footer-item">
+        Approved by
+    </div>
+    <div class="footer-item">
+        Noted by
+    </div>
+    <div class="footer-item">
+        Received by
+    </div>
+</div>
+
+<div class="footer-section">
+    <div class="footer-item">
+      <div>Engr. Nicarter V. Teves</div>
+        <div class="property-custodian"></div>
+        Property Custodian
+    </div>
+    <div class="footer-item">
+    <div>&nbsp&nbsp</div>
+        <div class="finance-director"></div>
+        Finance Director
+    </div>
+    <div class="footer-item">
+      <div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div>
+        <div class="accountable-person"></div>
+        Accountable Person
+    </div>
+</div>
+    `;
+
+    return printableContent;
+  }
+  
+  // <div>${queryResults[0].acc_per ? `${queryResults[0].acc_per.fname} ${queryResults[0].acc_per.lname}` : ""}</div>
   
     const handleRowClick = (item) => {
       setSelectedItem(item);

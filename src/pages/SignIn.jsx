@@ -143,7 +143,7 @@ export default function SignIn({ user, setUser }) {
             <Grid container>
               <Grid sx={{ ml: 12}}>
                 <Link href="#" variant="body2" underline="hover" sx={{ color: "#8A252C" }}>
-                  {"Don't have an account? Sign Up"}
+                  {/* {"Don't have an account? Sign Up"} */}
                 </Link>
               </Grid>
             </Grid>
