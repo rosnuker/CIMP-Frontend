@@ -829,22 +829,28 @@ const OverlayItem = ({
         </Box>
       )}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Confirm Changes</DialogTitle>
+        <DialogTitle>Delete Confirmation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to confirm?
+            Are you sure you want to delete this item? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="warning" onClick={handleDelete}>
-            Confirm
-          </Button>
           <Button
-            variant="outlined"
-            color="warning"
+            variant="contained"
             onClick={handleCloseDialog}
+            sx={{
+              backgroundColor: "#e0e0e0",
+              color: "#fafafa",
+              "&:hover": {
+                backgroundColor: "#9e9e9e",
+              },
+            }}
           >
             Cancel
+          </Button>
+          <Button variant="contained" color="error" onClick={handleDelete}>
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
