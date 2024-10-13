@@ -356,7 +356,14 @@ export default function LogsHistory({ user, setUser }) {
                   {renderTableHeader()}
                 </TableHead>
                 <TableBody>
-                {queryResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((res) => (
+                {queryResults.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} style={{ textAlign: 'center', padding: '20px' }}>
+                      There are no log(s) to show
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  queryResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((res) => (
                     <TableRow
                       key={res.logid}
                       style={{
@@ -373,7 +380,8 @@ export default function LogsHistory({ user, setUser }) {
                       <TableCell>{res.user ? <p>{res.user.lname}, {res.user.fname}</p> : <div>None</div>}</TableCell>
                       <TableCell>{res.description}</TableCell>
                     </TableRow>
-                  ))}
+                  ))
+                )}
                 </TableBody>
               </Table>
             </TableContainer>

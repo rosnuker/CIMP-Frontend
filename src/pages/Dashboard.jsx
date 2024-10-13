@@ -1,12 +1,10 @@
 import { Box, Container, Paper, Toolbar, Typography, Dialog, Divider, DialogTitle, DialogContent, DialogActions, Select, MenuItem, FormControl, InputLabel, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { Button, List, ListItem, ListItemText } from "@mui/material";
+import { Button } from "@mui/material";
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
 
 // Register chart.js components
 Chart.register(...registerables);
@@ -17,7 +15,6 @@ export default function Dashboard({ user, setUser }) {
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [stat1, setStat1] = useState([]);
-  const [stat2, setStat2] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
 
   const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE",
@@ -100,19 +97,6 @@ export default function Dashboard({ user, setUser }) {
 
   useEffect(() => {
     fetchStats();
-  }, []);
-
-  const fetchStats2 = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/item/getStats2`);
-      setStat2(response.data);
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchStats2();
   }, []);
 
   const fetchDepartment = async () => {
@@ -322,75 +306,100 @@ export default function Dashboard({ user, setUser }) {
                   DEPARTMENT
                 </Typography>
                 <Divider sx={{ marginBottom: 2 }} />
-                {department.map((item, index) => (
-                  <Button
-                    key={index}
-                    variant="contained"
-                    color="primary"
+                {department.length === 0 ? (
+                  <Typography
                     sx={{
-                      margin: '8px',
-                      minWidth: '300px',
-                      minHeight: '40px',
-                      width: 'auto',
-                      height: 'auto',
-                      padding: '8px 16px'
+                      textAlign: 'center',
+                      color: 'gray',
+                      padding: 2,
                     }}
-                    onClick={() => handleDepItems(item)}
-                    aria-label={`Button for ${item}`}
-                    disabled={loading}
                   >
-                    {item}
-                  </Button>
-                ))}
+                    No departments are currently available.
+                  </Typography>
+                ) : (
+                  department.map((item, index) => (
+                    <Button
+                      key={index}
+                      variant="contained"
+                      color="primary"
+                      sx={{
+                        margin: '8px',
+                        minWidth: '300px',
+                        minHeight: '40px',
+                        width: 'auto',
+                        height: 'auto',
+                        padding: '8px 16px'
+                      }}
+                      onClick={() => handleDepItems(item)}
+                      aria-label={`Button for ${item}`}
+                      disabled={loading}
+                    >
+                      {item}
+                    </Button>
+                  ))
+                )}
               </Paper>
             </Grid>
 
 
             {/* Recent wako kahibaw */}
             <Grid container spacing={2} justifyContent="center">
-  <Grid item xs={12} sm={6} md={4}>
-    <Paper
-      sx={{
-        p: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        height: 242,
-        width:305,
-        borderRadius: 2,
-        backgroundColor: '#f5f5f5',
-      }}
-    >
-      <Typography
-        variant="h7"
-        sx={{
-          textAlign: 'center',
-          fontWeight: 'bold',
-          color: 'maroon',
-          paddingY: 1,
-          marginBottom: 1,
-        }}
-      >
-        Frequently Ordered Items
-      </Typography>
-      {frequent.map((order, index) => (
-        <Typography
-          key={index}
-          sx={{
-            paddingBottom: 1,
-            fontSize: '1rem',
-            color: 'maroon',
-            fontWeight: 500,
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <span style={{ color: 'black' }}>{order[0]}</span>
-          <span style={{ color: 'maroon' }}>({order[1]})</span>
-        </Typography>
-      ))}
-    </Paper>
-  </Grid>
-</Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 242,
+                    width:305,
+                    borderRadius: 2,
+                    backgroundColor: '',
+                  }}
+                >
+                  <Typography
+                    variant="h7"
+                    sx={{
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      color: 'maroon',
+                      paddingY: 1,
+                      marginBottom: 1,
+                    }}
+                  >
+                    Frequently Ordered Items
+                  </Typography>
+                  {frequent.length === 0 ? (
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                        fontSize: '1rem',
+                        color: 'gray',
+                        padding: 2,
+                      }}
+                    >
+                      No frequently ordered item(s) are available.
+                    </Typography>
+                  ) : (
+                    frequent.map((order, index) => (
+                      <Typography
+                        key={index}
+                        sx={{
+                          paddingBottom: 1,
+                          fontSize: '1rem',
+                          color: 'maroon',
+                          fontWeight: 500,
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <span style={{ color: 'black' }}>{order[0]}</span>
+                        <span style={{ color: 'maroon' }}>({order[1]})</span>
+                      </Typography>
+                    ))
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
 
             {/* Recent Orders */}
 
