@@ -318,7 +318,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}?fullName=${fullName}`;
 				await axios.put(url, updatedItem);
 
-				if(status === "WAITING") {
+				if(updatedItem.status === "WAITING") {
 					axios.post(`http://${address}:8080/request/add`, {}, {
 						params: {
 							iid: selectedItem.iid,
@@ -493,7 +493,6 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 					<TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
 					<TableCell>{item.unitOfMeasurement}</TableCell>
 					<TableCell>{item.lifespan}</TableCell>
-					
 					</TableRow>
 				)
 				))

@@ -54,15 +54,7 @@ export default function Approved() {
           {appr.map((item) => (
             <TableRow key={item.rid}> 
               <TableCell>{item.rid}</TableCell>
-              <TableCell>
-                {item.item ? (
-                  <div>
-                    <p>{item.item.iid}</p>
-                  </div>
-                ) : (
-                  <div>None</div>
-                )}
-              </TableCell>
+              <TableCell> {item.itemId} </TableCell>
               <TableCell>{item.status}</TableCell>
             </TableRow>
           ))}

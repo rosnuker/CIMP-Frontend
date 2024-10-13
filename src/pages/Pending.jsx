@@ -5,9 +5,10 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 export default function Pending() {
   const [pends, setPends] = useState([]);
+  const [fullNames, setFullNames] = useState({});
   const [loader, setLoader] = useState(null);
 
-  const columns = ["REQUEST ID", "ITEM NAME", "ACCOUNTABLE PERSON", "DATE REQUESTED", "STATUS", "ACTIONS" ];
+  const columns = ["REQUEST ID", "ITEM ID", "NAME", "ACCOUNTABLE PERSON", "STATUS", "ACTIONS" ];
 
   const address = getIpAddress();
 	
@@ -22,6 +23,20 @@ export default function Pending() {
 
 		return hostname;
 	}
+
+  const fetchFullName = async (uid) => {
+    try {
+        const response = await fetch(`http://${address}:8080/${uid}/full-name`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const fullName = await response.text();
+        return fullName;
+    } catch (error) {
+        console.error('Error fetching full name:', error);
+        return '';
+    }
+  };
 
   const fetchReturn = async (status) => {
     try {
@@ -38,14 +53,22 @@ export default function Pending() {
     fetchReturn('TO BE RETURNED');
   }, [loader]);
 
+  useEffect(() => {
+    const loadFullNames = async () => {
+        const names = {};
+        for (const pend of pends) {
+            const fullName = await fetchFullName(pend.itemAccPerId);
+            names[pend.itemAccPerId] = fullName;
+        }
+        setFullNames(names);
+    };
+    console.log(fullNames);
+    loadFullNames();
+  }, [pends]);
+
   const handleApproving = async (rid) => {
     try {
-      await axios.put(`http://localhost:8080/request/update`, {}, {
-        params: {
-          rid: rid,
-          status: 'approved return'
-        }
-      });
+      await axios.put(`http://localhost:8080/request/approve-return/${rid}`);
       setLoader(Math.random() * 1000);
     } catch (error) {
       console.log(error);
@@ -96,36 +119,15 @@ export default function Pending() {
             pends.map((pend) => (
               <TableRow key={pend.rid}>
                 <TableCell> {pend.rid} </TableCell>
-                <TableCell> {pend.item.description.name} </TableCell>
-                <TableCell> {pend.item.accPerson.fname + " " + pend.item.accPerson.lname} </TableCell>
-                <TableCell> {pend.item.invoiceDate} </TableCell>
-                <TableCell>
-                {pend.status === 'pending' ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '5px 10px',
-                    border: '2px solid orange',
-                    borderRadius: '50px',
-                    color: 'orange',
-                    width: '100px', 
-                    height: '30px',
-                    textAlign: 'center',
-                  }}
-                > < HourglassBottomIcon /> Pending
-                </div>
-              ) : (
-                <div>{pend.status}</div>
-              )}    
-              </TableCell>
+                <TableCell> {pend.itemId} </TableCell>
+                <TableCell> {pend.itemName} </TableCell>
+                <TableCell> {fullNames[pend.itemAccPerId] || 'Loading...'} </TableCell>
+                <TableCell> {pend.status} </TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={() => handleApproving(pend.rid)}
-                    // disabled={pend.status !== 'pending'}
                     style={{ 
                       backgroundColor: 'green', 
                       color: 'white' }}
