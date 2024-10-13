@@ -339,7 +339,7 @@ const handleBackdropClick = (e) => {
             </Grid>
               </Grid>
             
-             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 3 }}>
+             <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginTop: 3 }}>
               <Button
                 type="button"
                 onClick={handleCloseOverlay}

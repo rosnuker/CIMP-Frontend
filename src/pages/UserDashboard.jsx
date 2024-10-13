@@ -1,4 +1,4 @@
-import { Box, Container, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Button, Typography } from "@mui/material";
+import { Box, Container, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Divider } from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useEffect, useState } from "react";
@@ -8,6 +8,11 @@ export default function UserDashboard({ user, setUser }) {
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(null);
 	
+  const [openRejectDialog, setOpenRejectDialog] = useState(false); 
+  const [rejectionReason, setRejectionReason] = useState(''); // State to store rejection reason
+  const [selectedRid, setSelectedRid] = useState(null); // State to store the selected rid for rejection
+
+
   const columns = ["PROPERTY TAG", "NAME", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "SUPPLIER", "TOTAL COST", "UNIT COST", "LIFESPAN", "STATUS"];
   const address = getIpAddress();
 	
@@ -58,6 +63,7 @@ export default function UserDashboard({ user, setUser }) {
         params: {
           rid: rid,
           status: 'rejected'
+          // reason: rejectionReason
         }
       });
       setLoader(Math.random() * 1000);
@@ -79,6 +85,16 @@ export default function UserDashboard({ user, setUser }) {
       console.error(error);
     }
   }
+
+  const handleOpenRejectDialog = (rid) => {
+    setSelectedRid(rid); // Store the rid of the item being rejected
+    setOpenRejectDialog(true); 
+  };
+
+  const handleCloseRejectDialog = () => {
+    setOpenRejectDialog(false); 
+    setRejectionReason(''); 
+  };
 
   return(
     <>
@@ -151,7 +167,7 @@ export default function UserDashboard({ user, setUser }) {
                                 <Button onClick={() => handleApprove(req.rid)} variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />} sx={{ width: '110px', mr: 1 }}>
                                     Approve
                                 </Button>
-                                <Button variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
+                                <Button onClick={() => handleOpenRejectDialog(req.rid)} variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
                                     Reject
                                 </Button>
                             </>
@@ -172,6 +188,63 @@ export default function UserDashboard({ user, setUser }) {
             </TableContainer>
           </Container>
         </Box>	
+          {/* Reject Dialog */}
+          <Dialog open={openRejectDialog} onClose={handleCloseRejectDialog} fullWidth maxWidth="sm">
+      <DialogTitle>
+      <Typography
+              variant="h6"
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "black ",
+                backgroundColor: "",
+                paddingY: 1,
+                marginBottom: 3,
+              }}
+            >
+               Please State Your Reason for Rejection
+            </Typography>
+        <Divider sx={{ marginBottom: 2 }} />
+      </DialogTitle>
+      <DialogContent>
+        <Box my={2}>
+          <TextField
+            autoFocus
+            id="reason"
+            label="Reason"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            multiline
+            rows={4} 
+          />
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Box display="flex" justifyContent="space-between" width="100%" px={2} pb={2}>
+          <Button 
+          onClick={handleCloseRejectDialog} 
+          variant="contained"
+          sx={{
+            marginRight: 2,
+            backgroundColor: "#e0e0e0",
+            color: "#fafafa",
+            "&:hover": {
+              backgroundColor: "#9e9e9e",
+            },
+          }}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleReject} color="primary" variant="contained">
+            Submit
+          </Button>
+        </Box>
+      </DialogActions>
+    </Dialog>
+
     </>
   );
 }
