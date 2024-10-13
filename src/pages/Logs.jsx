@@ -171,11 +171,19 @@ export default function LogsHistory({ user, setUser }) {
                 <MenuItem value="">
                   <em>Choose Month</em>
                 </MenuItem>
-                {[...Array(12).keys()].map((i) => (
-                  <MenuItem key={i + 1} value={i + 1}>
-                    {new Date(0, i).toLocaleString('default', { month: 'long' })}
-                  </MenuItem>
-                ))}
+                <MenuItem value="1">January</MenuItem>
+            <MenuItem value="2">February</MenuItem>
+            <MenuItem value="3">March</MenuItem>
+            <MenuItem value="4">April</MenuItem>
+            <MenuItem value="5">May</MenuItem>
+            <MenuItem value="6">June</MenuItem>
+            <MenuItem value="7">July</MenuItem>
+            <MenuItem value="8">August</MenuItem>
+            <MenuItem value="9">September</MenuItem>
+            <MenuItem value="ten">October</MenuItem>
+            <MenuItem value="eleven">November</MenuItem>
+            <MenuItem value="twelve">December</MenuItem>
+             
               </Select>
             </FormControl>
 
@@ -201,7 +209,7 @@ export default function LogsHistory({ user, setUser }) {
             <MenuItem value="7">7</MenuItem>
             <MenuItem value="8">8</MenuItem>
             <MenuItem value="9">9</MenuItem>
-            <MenuItem value="10">10</MenuItem>
+            <MenuItem value="ten">10</MenuItem>
             <MenuItem value="eleven">11</MenuItem>
             <MenuItem value="twelve">12</MenuItem>
             <MenuItem value="thirteen">13</MenuItem>
