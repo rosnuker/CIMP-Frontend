@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider  } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
@@ -48,6 +48,17 @@ export default function AdminDashboard({ user, setUser, data = [] })
     // Placeholder for opening a modal or dialog to add a new user
   };
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
   return (
     <Box
       component="main"
@@ -77,7 +88,7 @@ export default function AdminDashboard({ user, setUser, data = [] })
               },
             }}
             startIcon={<AddIcon />}
-            onClick={handleOpenModal}
+            onClick={handleClickOpen}
           >
             Add Users
           </Button>
@@ -125,6 +136,63 @@ export default function AdminDashboard({ user, setUser, data = [] })
             </TableBody>
           </Table>
         </TableContainer>
+           {/* Dialog for adding users */}
+           <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>
+        <Typography
+              variant="h6"
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "maroon",
+                backgroundColor: "yellow",
+                paddingY: 1,
+                marginBottom: 3,
+              }}
+            >
+               Add New User
+          </Typography>
+        <Divider sx={{ marginBottom: 2 }} />
+      </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please fill in the details of the new user.
+            </DialogContentText>
+            <TextField autoFocus margin="dense" label="First Name" type="text" fullWidth variant="outlined" />
+            <TextField margin="dense" label="Last Name" type="text" fullWidth variant="outlined" />
+            <TextField margin="dense" label="Username" type="text" fullWidth variant="outlined" />
+            <TextField margin="dense" label="Type" type="text" fullWidth variant="outlined" />
+          </DialogContent>
+          <DialogActions>
+          <Button 
+                onClick={handleClose} 
+                variant="contained"
+                sx={{
+                  marginRight: 1,
+                  marginBottom: 2,
+                  backgroundColor: "#e0e0e0",
+                  color: "#fafafa",
+                  "&:hover": {
+                    backgroundColor: "#9e9e9e",
+                  },
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                // onClick={handleAddUser} 
+                color="primary" 
+                variant="contained"
+                sx={{
+                  marginLeft: 1,
+                  marginBottom: 2,
+                  width: '100px', 
+                }}
+              >
+                Add
+              </Button>
+          </DialogActions>
+        </Dialog>
         <Copyright sx={{ pt: 4 }} />
       </Container>
     </Box>
