@@ -1,9 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
 
-function Copyright(props) {
+function Copyright(props) 
+{
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -16,8 +18,35 @@ function Copyright(props) {
   );
 }
 
-export default function AdminDashboard({ user, setUser, data = [] }) {
+export default function AdminDashboard({ user, setUser, data = [] }) 
+{
   const columns = ["FIRST NAME", "LAST NAME", "USERNAME", "TYPE"];
+  const [users, setUsers] = useState([]);
+
+  // Fetch data from the backend on component mount
+  useEffect(() => 
+  {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => 
+  {
+    try 
+    {
+      const response = await axios.get(`http://localhost:8080/getAllUsers`);
+      setUsers(response.data);
+    } 
+    catch (error) 
+    {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleOpenModal = () => 
+  {
+    console.log("Open Add User Modal");
+    // Placeholder for opening a modal or dialog to add a new user
+  };
 
   return (
     <Box
@@ -48,7 +77,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               },
             }}
             startIcon={<AddIcon />}
-            // onClick={handleOpenModal} // Uncomment when the function is defined
+            onClick={handleOpenModal}
           >
             Add Users
           </Button>
@@ -69,16 +98,16 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.length === 0 ? (
+              {users.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} style={{ textAlign: 'center', padding: '20px' }}>
                     <Typography variant="body1">There are no User(s) to show</Typography>
                   </TableCell>
                 </TableRow>
-              ) : (data.map((item) => (
-                !item.deleted && (
+              ) : (users.map((user) => (
+                !user.deleted && (
                   <TableRow
-                    key={item.iid}
+                    key={user.uid}
                     style={{
                       backgroundColor: 'white',
                       transition: 'background-color 0.3s ease',
@@ -86,10 +115,10 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
                     onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
                   >
-                    <TableCell>{item.firstName}</TableCell>
-                    <TableCell>{item.lastName}</TableCell>
-                    <TableCell>{item.username}</TableCell>
-                    <TableCell>{item.type}</TableCell>
+                    <TableCell>{user.fname}</TableCell>
+                    <TableCell>{user.lname}</TableCell>
+                    <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.type}</TableCell>
                   </TableRow>
                 )
               )))}
