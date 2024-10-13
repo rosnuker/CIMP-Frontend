@@ -13,7 +13,7 @@ export default function UserDashboard({ user, setUser }) {
   const [selectedRid, setSelectedRid] = useState(null); // State to store the selected rid for rejection
 
 
-  const columns = ["PROPERTY TAG", "NAME", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "SUPPLIER", "TOTAL COST", "UNIT COST", "LIFESPAN", "STATUS"];
+  const columns = ["PROPERTY TAG", "NAME", "MODEL", "SERIAL NUMBER", "STATUS", "QUANTITY", "TOTAL COST"];
   const address = getIpAddress();
 	
 	function getIpAddress() {
@@ -45,12 +45,7 @@ export default function UserDashboard({ user, setUser }) {
 
   const handleApprove = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/update`, {}, {
-        params: {
-          rid: rid,
-          status: 'approved'
-        }
-      });
+      await axios.put(`http://${address}:8080/request/approve/${rid}`);
       setLoader(Math.random() * 1000);
     } catch(error) {
       console.error(error);
@@ -59,27 +54,22 @@ export default function UserDashboard({ user, setUser }) {
 
   const handleReject = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/update`, {}, {
+      await axios.put(`http://${address}:8080/request/reject/${rid}`, {}, {
         params: {
-          rid: rid,
-          status: 'rejected'
-          // reason: rejectionReason
+          reason: rejectionReason
         }
       });
       setLoader(Math.random() * 1000);
+      handleCloseRejectDialog();
     } catch(error) {
+      console.log(rid);
       console.error(error);
     }
   }
 
   const handleReturn = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/update`, {}, {
-        params: {
-          rid: rid,
-          status: 'pending return'
-        }
-      });
+      await axios.put(`http://${address}:8080/request/return/${rid}`);
       setLoader(Math.random() * 1000);
     } catch(error) {
       console.error(error);
@@ -140,47 +130,42 @@ export default function UserDashboard({ user, setUser }) {
                 </TableRow>
               ) : (
                 data.map((req) => (
-                  !req.item.deleted && (req.item.status === "WAITING" || req.item.status === "ASSIGNED") && (
-                    <TableRow
-                      key={req.rid}
-                      style={{
-                        backgroundColor: 'white',
-                        transition: 'background-color 0.3s ease',
-                      }}
-                    >
-                      <TableCell>{req.item.iid}</TableCell>
-                      <TableCell>{req.item.description.name}</TableCell>
-                      <TableCell>{req.item.invoiceNumber}</TableCell>
-                      <TableCell>{req.item.invoiceDate}</TableCell>
-                      <TableCell>{req.item.issueOrder}</TableCell>
-                      <TableCell>{req.item.quantity} {req.item.unitOfMeasurement}</TableCell>
-                      <TableCell>{req.item.remarks}</TableCell>
-                      <TableCell>{req.item.supplier}</TableCell>
-                      <TableCell>₱{req.item.totalCost.toLocaleString()}</TableCell>
-                      <TableCell>₱{req.item.unitCost.toLocaleString()}</TableCell>
-                      <TableCell>{req.item.lifespan}</TableCell>
-                      <TableCell>{req.item.status}</TableCell>
-                      <TableCell style={{ position: 'sticky', right: 0, backgroundColor: 'white', zIndex: 2 }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                          {req.item.status === "WAITING" && (
-                            <>
-                                <Button onClick={() => handleApprove(req.rid)} variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />} sx={{ width: '110px', mr: 1 }}>
-                                    Approve
-                                </Button>
-                                <Button onClick={() => handleOpenRejectDialog(req.rid)} variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
-                                    Reject
-                                </Button>
-                            </>
-                        )}
-                        {req.item.status === "ASSIGNED" && (
-                            <Button onClick={() => handleReturn(req.rid)} variant="contained" color="primary" startIcon={<CheckCircleOutlineIcon />}>
-                                Return
-                            </Button>
-                        )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )
+                  
+                  <TableRow
+                    key={req.rid}
+                    style={{
+                      backgroundColor: 'white',
+                      transition: 'background-color 0.3s ease',
+                    }}
+                  >
+                    <TableCell>{req.itemId}</TableCell>
+                    <TableCell>{req.itemName}</TableCell>
+                    <TableCell>{req.itemModel}</TableCell>
+                    <TableCell>{req.itemSerialNumber}</TableCell>
+                    <TableCell>{req.itemStatus}</TableCell>
+                    <TableCell>{req.itemQuantity} {req.itemUnitOfMeasurement}</TableCell>
+                    <TableCell>₱{req.itemTotalCost.toLocaleString()}</TableCell>
+                    <TableCell style={{ position: 'sticky', right: 0, backgroundColor: 'white', zIndex: 2 }}>
+                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {req.itemStatus === "WAITING" && (
+                          <>
+                              <Button onClick={() => handleApprove(req.rid)} variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />} sx={{ width: '110px', mr: 1 }}>
+                                  Approve
+                              </Button>
+                              <Button onClick={() => handleOpenRejectDialog(req.rid)} variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
+                                  Reject
+                              </Button>
+                          </>
+                      )}
+                      {req.itemStatus === "ASSIGNED" && (
+                          <Button onClick={() => handleReturn(req.rid)} variant="contained" color="primary" startIcon={<CheckCircleOutlineIcon />}>
+                              Return
+                          </Button>
+                      )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                  
                 ))
               )}
             </TableBody>
@@ -238,7 +223,7 @@ export default function UserDashboard({ user, setUser }) {
           >
             Cancel
           </Button>
-          <Button onClick={handleReject} color="primary" variant="contained">
+          <Button onClick={() => handleReject(selectedRid)} color="primary" variant="contained">
             Submit
           </Button>
         </Box>
