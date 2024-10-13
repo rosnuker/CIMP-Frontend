@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -8,19 +7,6 @@ import { Container, Box, Toolbar, TextField, InputAdornment, IconButton, TableCo
 import SearchIcon from '@mui/icons-material/Search';
 import Overlay from '../page-overlay/Overlay';
 import * as XLSX from 'xlsx';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://cit.edu/">
-        FAIM
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 export default function Search( {user, setUser} ) {
 
@@ -221,21 +207,6 @@ export default function Search( {user, setUser} ) {
         </TableRow>
       );
 
-    // const handleRowClick = (item) => {
-    //     setSelectedItem(item);
-    //     setShowOverlay(true);
-    //     //setQueryResults(item);
-    //     //const url = `/viewAll?${createSearchParams({ id: item.iid }).toString()}`;
-      
-    //       // Programmatically navigate to the URL
-    //       //window.open(url, '_blank');
-    //   };
-
-    //   const handleCloseOverlay = () => {
-    //     setShowOverlay(false);
-    //     setSelectedItem({}); // Reset selectedItem to an empty object
-    //   };
-
     const handleRowClick = (item) => {
         setSelectedItem(item);
         setShowOverlay(true);
@@ -323,32 +294,41 @@ export default function Search( {user, setUser} ) {
         {renderTableHeader()}
             </TableHead>
         <TableBody>
-        {queryResults.map((item) => 
-        !item.deleted && (
-            <TableRow
-                key={item.iid}
-                onClick={() => handleRowClick(item)}                
-                style={{
-                backgroundColor: 'white',
-            //  transition: 'background-color 0.3s ease', // optional nlang ni transition effect sa hover
-                }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'} // hover
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'} // Revert 
-                >
-                <TableCell>{item.iid}</TableCell>
-                <TableCell>{item.invoiceNumber}</TableCell>
-                <TableCell>{item.issueOrder}</TableCell>
-                <TableCell>
-                    {item.description ? (
-                <div>
-                    <p>{item.description.serialNumber}</p>
-                </div>
-                    ) : (
-                <div>None</div>
-                )}
-                </TableCell>
+          {queryResults.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} style={{ textAlign: 'center', padding: '20px' }}>
+                There are no item(s) to show
+              </TableCell>
             </TableRow>
-                ))}
+          ) : (
+            queryResults.map((item) => 
+              !item.deleted && (
+                <TableRow
+                  key={item.iid}
+                  onClick={() => handleRowClick(item)}
+                  style={{
+                    backgroundColor: 'white',
+                    // transition: 'background-color 0.3s ease', // optional transition effect on hover
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'} // hover
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'} // revert 
+                >
+                  <TableCell>{item.iid}</TableCell>
+                  <TableCell>{item.invoiceNumber}</TableCell>
+                  <TableCell>{item.issueOrder}</TableCell>
+                  <TableCell>
+                    {item.description ? (
+                      <div>
+                        <p>{item.description.serialNumber}</p>
+                      </div>
+                    ) : (
+                      <div>None</div>
+                    )}
+                  </TableCell>
+                </TableRow>
+              )
+            )
+          )}
             </TableBody>
                 </Table>
                 </TableContainer>

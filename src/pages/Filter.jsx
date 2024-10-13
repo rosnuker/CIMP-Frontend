@@ -1,14 +1,11 @@
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PrintIcon from '@mui/icons-material/Print';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import { Container, Box, TextField, Button, Select, MenuItem, InputLabel, 
-FormControl, Toolbar, InputAdornment, IconButton, Table, TableBody, TableCell, 
+import { Container, Box, Button, Select, MenuItem, InputLabel, 
+FormControl, Toolbar, Table, TableBody, TableCell, 
 TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import Overlay from '../page-overlay/Overlay';
-
-
 
 export default function Filter( {user, setUser} ) {
     const [selectedItem, setSelectedItem] = useState({});
@@ -1084,36 +1081,44 @@ export default function Filter( {user, setUser} ) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {queryResults.map((item) => (
-            !item.deleted && (
-              <TableRow
-                key={item.iid}
-                onClick={() => handleRowClick(item)}
-                style={{
-                  backgroundColor: 'white',
-                  transition: 'background-color 0.3s ease',
-                }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
-              >
-                <TableCell>{item.iid}</TableCell>
-                <TableCell>{item.accPerson ? `${item.accPerson.fname} ${item.accPerson.lname}` : ""}</TableCell>
-                <TableCell>{item.department}</TableCell>
-                <TableCell>{item.designation}</TableCell>
-                <TableCell>{item.invoiceNumber}</TableCell>
-                <TableCell>{item.invoiceDate}</TableCell>
-                <TableCell>{item.issueOrder}</TableCell>
-                <TableCell>{item.lifespan}</TableCell>
-                <TableCell>{item.quantity}</TableCell>
-                <TableCell>{item.remarks}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>{item.supplier}</TableCell>
-                <TableCell>₱{item.totalCost.toLocaleString()}</TableCell>
-                <TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
-                <TableCell>{item.unitOfMeasurement}</TableCell>
-              </TableRow>
-            )
-          ))}
+          {queryResults.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={columns.length} style={{ textAlign: 'center', padding: '20px' }}>
+                There are no item(s) to show
+              </TableCell>
+            </TableRow>
+          ) : (
+            queryResults.map((item) => (
+              !item.deleted && (
+                <TableRow
+                  key={item.iid}
+                  onClick={() => handleRowClick(item)}
+                  style={{
+                    backgroundColor: 'white',
+                    transition: 'background-color 0.3s ease',
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'gray'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                >
+                  <TableCell>{item.iid}</TableCell>
+                  <TableCell>{item.accPerson ? `${item.accPerson.fname} ${item.accPerson.lname}` : ""}</TableCell>
+                  <TableCell>{item.department}</TableCell>
+                  <TableCell>{item.designation}</TableCell>
+                  <TableCell>{item.invoiceNumber}</TableCell>
+                  <TableCell>{item.invoiceDate}</TableCell>
+                  <TableCell>{item.issueOrder}</TableCell>
+                  <TableCell>{item.lifespan}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.remarks}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                  <TableCell>{item.supplier}</TableCell>
+                  <TableCell>₱{item.totalCost.toLocaleString()}</TableCell>
+                  <TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
+                  <TableCell>{item.unitOfMeasurement}</TableCell>
+                </TableRow>
+              )
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
