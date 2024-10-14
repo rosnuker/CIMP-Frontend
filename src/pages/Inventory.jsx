@@ -4,8 +4,10 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 import axios from "axios";
 import AddItemModal from "../page-overlay/AddItemModal";
 import OverlayItem from '../page-overlay/OverlayItem';
+import { useSnackbar } from "../components/SnackbarContext";
 
-export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSnackbarRedOpen, setSnackbarMessage } ) {
+export default function Inventory( { user, setUser } ) {
+	const showSnackbar = useSnackbar();
 	const [id, setId] = useState("");
 	const [queryResults, setQueryResults] = useState([]);
 	const [LqueryResults, setLQueryResults] = useState([]);
@@ -206,13 +208,8 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			setId(newId);
 			
 			if(response.data.status !== "WAITING") {
-				setSnackbarMessage("Data added!");
-				setSnackbarGreenOpen(true);
-			}	
-
-			console.log("Data added!");
-			console.log("New item ID:", newId); 
-			console.log(response.data);
+				showSnackbar('Data added!', 'success');
+			}
 
 			if(response.data.status === "WAITING") {
 				axios.post(`http://${address}:8080/request/add`, {}, {
@@ -221,10 +218,10 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 					}
 				}).then(response => {
 					console.log(response.data);
-					setSnackbarMessage("Request sent!");
-					setSnackbarGreenOpen(true);
+					showSnackbar('Request sent!', 'success');
 				}).catch(error => {
 					console.error("Error sending request:", error);
+					showSnackbar('Error sending request!', 'error');
 				});
 			}
 
@@ -276,8 +273,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 		})
 		.catch(error => {
 			console.error("Error inserting data:", error);
-			console.log(formData.invoiceDate);
-			console.log(typeof formData.invoiceDate);
+			showSnackbar('Error inserting data!', 'error');
 		});
 	};
 
@@ -293,7 +289,36 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 	const [loader, setLoader] = useState(null);
 
 	const handleOpenModal = () => setShowAddItemModal(true);
-	const handleCloseModal = () => setShowAddItemModal(false);
+	const handleCloseModal = () => {
+		setShowAddItemModal(false);
+		setFormData({
+			accPerson: "",
+			department: "",
+			designation: "",
+			invoiceNumber: "",
+			invoiceDate: "",
+			issueOrder: "",
+			lifespan: "",
+			quantity: "",
+			remarks: "",
+			status: "",
+			supplier: "",
+			totalCost: "",
+			unitCost: "",
+			unitOfMeasurement: "",
+			description: {
+				name: "",
+				model: "",
+				serialNumber: "",
+				type: "",
+				other: "",
+			},
+			location: {
+				building: "",
+				room: "",
+			},
+		});
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {

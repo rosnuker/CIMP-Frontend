@@ -11,11 +11,13 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from '../components/SnackbarContext';
 
 const defaultTheme = createTheme();
 
-export default function SignIn({ user, setUser, setSnackbarGreenOpen, setSnackbarRedOpen, setSnackbarMessage }) {
+export default function SignIn({ user, setUser }) {
 
+  const showSnackbar = useSnackbar();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
 		username: '',
@@ -80,15 +82,7 @@ export default function SignIn({ user, setUser, setSnackbarGreenOpen, setSnackba
           password: '',
         });
 
-        setSnackbarMessage("Login success!");
-				setSnackbarGreenOpen(true);
-      } else {
-        document.getElementById("username").value="";
-				document.getElementById("password").value="";
-				document.getElementById("username").focus();
-
-        setSnackbarMessage("Username / Password is incorrect.");
-				setSnackbarRedOpen(true);
+        showSnackbar('Login success!', 'success');
       }
     }).catch(error => { 
       if(error.status === 401) {
@@ -96,8 +90,7 @@ export default function SignIn({ user, setUser, setSnackbarGreenOpen, setSnackba
 				document.getElementById("password").value="";
 				document.getElementById("username").focus();
 
-        setSnackbarMessage("Username / Password is incorrect.");
-				setSnackbarRedOpen(true);
+        showSnackbar('Username / Password is incorrect.', 'error');
       }
       console.log('There was a problem with the fetch operation:', error);
     })

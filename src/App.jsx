@@ -7,7 +7,7 @@ import AppLayout from './layout/AppLayout';
 import SignIn from './pages/SignIn';
 import Dashboard from './pages/Dashboard';
 import Receive from './pages/Receive';
-import Request from './pages/Request2';
+import Request from './pages/Request3';
 import LogsHistory from './pages/Logs';
 import Search from './pages/Search';
 import Inventory from './pages/Inventory';
@@ -16,22 +16,10 @@ import Pending from "./pages/Pending"
 import Approved from "./pages/Approved"
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
-import { Alert, Snackbar } from '@mui/material';
+import { SnackbarProvider } from './components/SnackbarContext';
 
 export default function App() {
   const [ user, setUser ] = useState(null);
-  const [snackbarGreenOpen, setSnackbarGreenOpen] = useState(false);
-  const [snackbarRedOpen, setSnackbarRedOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    event.stopPropagation();
-    setSnackbarGreenOpen(false);
-    setSnackbarRedOpen(false);
-  };
 
   function RequireAuth({ children }) {
     return (user !== null && user !== undefined) ? children : <Navigate to="/" replace />;
@@ -40,84 +28,63 @@ export default function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <SignIn user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />,
+      element: <SignIn user={ user } setUser={ setUser } />,
     },
     {
       path: '/app',
-      element: <RequireAuth> <AppLayout user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } /> </RequireAuth>,
+      element: <RequireAuth> <AppLayout user={ user } setUser={ setUser } /> </RequireAuth>,
       children: [
         {
           index: true,
           element: (
             user && user.type === 'admin' ? (
-              <AdminDashboard user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+              <AdminDashboard user={ user } setUser={ setUser } />
             ) : user && user.type === 'acc_person' ? (
-              <UserDashboard user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+              <UserDashboard user={ user } setUser={ setUser } />
             ) : (
-              <Dashboard user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+              <Dashboard user={ user } setUser={ setUser } />
             )
           ),
         },
         {
           path: '/app/receive',
-          element: <Receive user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Receive user={ user } setUser={ setUser } />
         },
         {
           path: '/app/request',
-          element: <Request user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Request user={ user } setUser={ setUser } />
         },
         {
           path: '/app/logs',
-          element: <LogsHistory user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <LogsHistory user={ user } setUser={ setUser } />
         },
         {
           path: '/app/search',
-          element: <Search user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Search user={ user } setUser={ setUser } />
         },
         {
           path: '/app/inventory',
-          element: <Inventory user={ user } setUser={ setUser } setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Inventory user={ user } setUser={ setUser } />
         },
         {
           path: '/app/filter',
-          element: <Filter user={user} setUser={setUser} setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Filter user={user} setUser={setUser} />
         },
         {
           path: '/app/pending',
-          element: <Pending user={user} setUser={setUser} setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Pending user={user} setUser={setUser} />
         },
         {
           path: '/app/approved',
-          element: <Approved user={user} setUser={setUser} setSnackbarGreenOpen={ setSnackbarGreenOpen } setSnackbarRedOpen={ setSnackbarRedOpen } setSnackbarMessage={ setSnackbarMessage } />
+          element: <Approved user={user} setUser={setUser} />
         }
       ],
     },
   ]);
 
   return (
-    <>
-      <Snackbar open={snackbarGreenOpen} autoHideDuration={3500} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={snackbarRedOpen} autoHideDuration={3500} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="error"
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-      
+    <SnackbarProvider>
       <RouterProvider router={ router } />
-    </>
+    </SnackbarProvider>
   );
 }
