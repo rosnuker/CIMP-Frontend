@@ -4,13 +4,14 @@ import PrintIcon from '@mui/icons-material/Print';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Container, Box, Button, Select, MenuItem, InputLabel, 
 FormControl, Toolbar, Table, TableBody, TableCell, 
-TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
+TableContainer, TableHead, TableRow, Paper, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import Overlay from '../page-overlay/Overlay';
 
 export default function Filter( {user, setUser} ) {
     const [selectedItem, setSelectedItem] = useState({});
     const [showOverlay, setShowOverlay] = useState(false);
     const [queryResults, setQueryResults] = useState([])
+    const [open, setOpen] = useState(false);
   
     const [O_accPer, setO_accPer] = useState([])
     const [O_dep, setO_dep] = useState([])
@@ -40,9 +41,12 @@ export default function Filter( {user, setUser} ) {
     const [type, settype] = useState("")
     const [invoicedate, setinvoicedate] = useState("")
     const [lifespan, setlifespan] = useState("")
-  
+    const [head1, setHead1] = useState('');
+    const [pos1, setPos1] = useState('');
+    const [acc1, setAcc1] = useState('');
+    const [des1, setDes1] = useState('');
     const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DEPARTMENT", "DESIGNATION", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "LIFESPAN", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE"];
-  
+    
     const address = getIpAddress();
       
     function getIpAddress() {
@@ -578,6 +582,7 @@ export default function Filter( {user, setUser} ) {
 <div class="issued-section">
     <div class="issued-left">Issued by: TINA</div>
     <div class="department-container">
+    <div>${queryResults[0].department}</div>
         <div class="department-line"></div>
         <div class="department-text">Department</div>
     </div>
@@ -658,14 +663,14 @@ export default function Filter( {user, setUser} ) {
         Property Custodian
     </div>
     <div class="footer-item">
-    <div>&nbsp&nbsp</div>
+    <div>${head1}</div>
         <div class="finance-director"></div>
-        Finance Director
+        ${pos1}
     </div>
     <div class="footer-item">
-      <div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div>
+      <div>${acc1}</div>
         <div class="accountable-person"></div>
-        Accountable Person
+        <div>${des1}</div>
     </div>
 </div>
     `;
@@ -684,6 +689,15 @@ export default function Filter( {user, setUser} ) {
     const handleCloseOverlay = () => {
       setShowOverlay(false);
       setSelectedItem({}); // Reset selectedItem to an empty object
+    };
+
+    const handleClickOpenPrint = () => {
+      setOpen(true);
+    };
+  
+    // Function to handle closing the modal
+    const handleClose = () => {
+      setOpen(false);
     };
   
       return (
@@ -1043,7 +1057,7 @@ export default function Filter( {user, setUser} ) {
         &nbsp;
         <Button
           variant="outlined"
-          onClick={handlePrintTable}
+          onClick={handleClickOpenPrint}
           sx={{
             color: 'black',
             borderColor: '#f8c702',
@@ -1134,8 +1148,62 @@ export default function Filter( {user, setUser} ) {
         </div>
     </Container>
 </Box>
+         {/* Dialog (Modal) */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Enter Additional Details</DialogTitle>
+        <DialogContent>  
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Head"
+            value={head1}
+            onChange={(e) => setHead1(e.target.value)} 
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            margin="dense"
+            id="email"
+            label="Position"
+            value={pos1}
+            onChange={(e) => setPos1(e.target.value)} 
+            type="email"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            margin="dense"
+            id="phone"
+            label="Accountable Person"
+            type="tel"
+            fullWidth
+            variant="outlined"
+            //value={acc_per}
+            //onChange={handleaccPer} 
+            value={acc1}
+            onChange={(e) => setAcc1(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            id="address"
+            label="Designation"
+            type="text"
+            fullWidth
+            variant="outlined"
+            //value={designation}
+            //onChange={handleDes}
+            value={des1}
+            onChange={(e) => setDes1(e.target.value)} 
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handlePrintTable}>Print</Button>
+        </DialogActions>
+      </Dialog>
+    
       </>
     ); 
   }
-  
-  

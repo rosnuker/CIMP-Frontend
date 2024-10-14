@@ -62,49 +62,113 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 		},
 	});
 
+	// const formatNumber = (num) => {
+	// 	if (!num) return '';
+	// 	const [whole, decimal] = num.toString().split('.');
+	// 	return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimal ? '.' + decimal : '');
+	//   };
+	  
+	//   const handleChange = (event) => {
+	// 	const { name, value } = event.target;
+	  
+	// 	// Check if the field being changed is quantity or unitCost
+	// 	if (name === "quantity" || name === "unitCost") {
+	// 	  // Remove commas for raw value calculations
+	// 	  const rawValue = value.replace(/,/g, '');
+	  
+	// 	  // Calculate total cost using raw values
+	// 	  const quantity = name === "quantity" ? rawValue : formData.quantity;
+	// 	  const unitCost = name === "unitCost" ? rawValue : formData.unitCost;
+	// 	  const totalCost = parseFloat(quantity) * parseFloat(unitCost);
+	  
+	// 	  // Update state for quantity or unitCost only
+	// 	  setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[name]: rawValue, // Store raw value for calculations
+	// 		totalCost: totalCost ? totalCost.toFixed(2) : "0.00", // Ensure two decimal places
+	// 	  }));
+	// 	} else if (name.includes(".")) {
+	// 	  // Handle nested fields (parent.child)
+	// 	  const [parentKey, childKey] = name.split(".");
+	// 	  setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[parentKey]: {
+	// 		  ...prevState[parentKey],
+	// 		  [childKey]: value,
+	// 		},
+	// 	  }));
+	// 	} else {
+	// 	  // Update other fields normally
+	// 	  setFormData((prevState) => ({
+	// 		...prevState,
+	// 		[name]: value,
+	// 	  }));
+	// 	}
+	//   };
+
 	const formatNumber = (num) => {
 		if (!num) return '';
 		const [whole, decimal] = num.toString().split('.');
+		// Format the whole part with commas and keep the decimal part as is
 		return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimal ? '.' + decimal : '');
-	  };
-	  
-	  const handleChange = (event) => {
+	};
+	
+	const handleChange = (event) => {
 		const { name, value } = event.target;
-	  
+	
+		// Remove commas to handle raw value calculations
+		const rawValue = value.replace(/,/g, '');
+	
 		// Check if the field being changed is quantity or unitCost
 		if (name === "quantity" || name === "unitCost") {
-		  // Remove commas for raw value calculations
-		  const rawValue = value.replace(/,/g, '');
-	  
-		  // Calculate total cost using raw values
-		  const quantity = name === "quantity" ? rawValue : formData.quantity;
-		  const unitCost = name === "unitCost" ? rawValue : formData.unitCost;
-		  const totalCost = parseFloat(quantity) * parseFloat(unitCost);
-	  
-		  // Update state for quantity or unitCost only
-		  setFormData((prevState) => ({
-			...prevState,
-			[name]: rawValue, // Store raw value for calculations
-			totalCost: totalCost ? totalCost.toFixed(2) : "0.00", // Ensure two decimal places
-		  }));
+			// Allow decimal values
+			const quantity = name === "quantity" ? rawValue : formData.quantity;
+			const unitCost = name === "unitCost" ? rawValue : formData.unitCost;
+			const totalCost = parseFloat(quantity) * parseFloat(unitCost);
+	
+			setFormData((prevState) => ({
+				...prevState,
+				[name]: rawValue, // Store raw value for calculations
+				totalCost: totalCost.toString(), // Store as raw value for flexibility
+			}));
 		} else if (name.includes(".")) {
-		  // Handle nested fields (parent.child)
-		  const [parentKey, childKey] = name.split(".");
-		  setFormData((prevState) => ({
-			...prevState,
-			[parentKey]: {
-			  ...prevState[parentKey],
-			  [childKey]: value,
-			},
-		  }));
+			// Handle nested fields (parent.child)
+			const [parentKey, childKey] = name.split(".");
+			setFormData((prevState) => ({
+				...prevState,
+				[parentKey]: {
+					...prevState[parentKey],
+					[childKey]: value,
+				},
+			}));
 		} else {
-		  // Update other fields normally
-		  setFormData((prevState) => ({
-			...prevState,
-			[name]: value,
-		  }));
+			setFormData((prevState) => ({
+				...prevState,
+				[name]: value,
+			}));
 		}
-	  };
+	};
+	
+	const handleBlur = (event) => {
+		const { name, value } = event.target;
+	
+		if (name === "unitCost" || name === "quantity") {
+			// Format the input when the field loses focus
+			const formattedValue = formatNumber(value);
+			setFormData((prevState) => ({
+				...prevState,
+				[name]: formattedValue,
+			}));
+		} else if (name === "totalCost") {
+			// Format totalCost when the field loses focus
+			const formattedTotalCost = formatNumber(formData.totalCost);
+			setFormData((prevState) => ({
+				...prevState,
+				totalCost: formattedTotalCost,
+			}));
+		}
+	};
+	
 	  
 	const handleSubmit = () => {
 		const totalCost = parseFloat(formData.quantity) * parseFloat(formData.unitCost);
@@ -511,6 +575,7 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 				handleChange={handleChange}
 				combinedSubmit={combinedSubmit}
 				formatNumber={formatNumber}
+				handleBlur={handleBlur}
 		/>
 		<Button onClick={() => handleRowClick(item)}></Button>
 		<OverlayItem
