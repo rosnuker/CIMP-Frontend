@@ -260,8 +260,197 @@ export default function Dashboard({ user, setUser }) {
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        {/* Frequently Ordered Items and Reminders */}
+        <Grid container spacing={2}>
+          {/* Frequently Ordered Items */}
+          <Grid size xs={12} sm={6} md={4}>
+          <Paper
+            sx={{
+              p: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              height: 240,
+              width: 305,
+              backgroundColor: '#f9f9f9',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+              borderRadius: '12px',
+            }}
+          >
+            <Typography
+              variant="h7"
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "maroon",
+                borderBottom: '1px solid #ddd',
+                marginBottom: 1,
+              }}
+            >
+              <ShoppingBagIcon sx={{ mb: -0.6, mr: 0.6 }} />
+              Frequently Ordered Items
+            </Typography>
+            {frequent.length === 0 ? (
+              <Typography
+                sx={{
+                  textAlign: 'center',
+                  fontSize: '1rem',
+                  color: 'gray',
+                  padding: 2,
+                }}
+              >
+                No frequently ordered item(s) are available.
+              </Typography>
+            ) : (
+              frequent.map((order, index) => (
+                <Typography
+                  key={index}
+                  sx={{
+                    paddingBottom: 1,
+                    fontSize: '1rem',
+                    color: 'maroon',
+                    fontWeight: 500,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span style={{ color: 'black' }}>{order[0]}</span>
+                  <span style={{ color: 'maroon' }}>({order[1]})</span>
+                </Typography>
+              ))
+            )}
+          </Paper>
+        </Grid>
+
+            {/* Reminders */}
+            <Grid size xs={12} sm={6} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: 240,
+                  width: 440,
+                  backgroundColor: '#f9f9f9',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  borderRadius: '12px',
+                  marginBottom: 2,
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    color: "maroon",
+                    borderBottom: '1px solid #ddd',
+                    marginBottom: 2,
+                    mt: -1,
+                  }}
+                >
+                  <NotificationsActiveIcon sx={{ mb: -0.6, mr: 0.6 }} />
+                  Reminders
+                </Typography>
+                <Typography
+                  sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black' }}
+                >
+                  <strong>
+                    Items to be assigned: <span style={{ color: 'maroon' }}>{toBeAssigned}</span>
+                  </strong>
+                </Typography>
+                <Typography
+                  sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black' }}
+                >
+                  <strong>
+                    Items to be accepted/denied by Accountable Person: <span style={{ color: 'maroon' }}>{waiting}</span>
+                  </strong>
+                </Typography>
+                <Typography
+                  sx={{ fontSize: '1rem', color: 'black' }}
+                >
+                  <strong>
+                    Items to be returned: <span style={{ color: 'maroon' }}>{returned}</span>
+                  </strong>
+                </Typography>
+              </Paper>
+            </Grid>
+          {/* Department List */}
+          <Grid container spacing={2} sx={{}}>
+          <Grid size sx={{ maxWidth: '600px', minHeight: '200px', maxHeight: '1px' }}>
+              <Paper
+                sx={{
+                  p: 1,
+                  overflowY: 'auto',
+                  height: 727,
+                  ml: 5,
+                }}
+              >
+                <ButtonGroup
+                  orientation="vertical"
+                  aria-label="Vertical department button group"
+                  variant="contained"
+                  color="white"
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      color: "maroon",
+                      py: 1,
+                      mb: 1,
+                    }}
+                  >
+                    DEPARTMENT
+                  </Typography>
+                  <Divider sx={{ marginBottom: 2 }} />
+                  {loading ? (
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                        color: 'gray',
+                        padding: 2,
+                      }}
+                    >
+                      Loading departments...
+                    </Typography>
+                  ) : department.length === 0 ? (
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                        color: 'gray',
+                        padding: 2,
+                      }}
+                    >
+                      No departments are currently available.
+                    </Typography>
+                  ) : (
+                    department.map((item, index) => (
+                      <Button
+                        key={index}
+                        sx={{
+                          minWidth: '300px',
+                          minHeight: '40px',
+                          backgroundColor: '#8c383e',
+                          color: 'white',
+                          '&:hover': {
+                            backgroundColor: '#732c33',
+                          },
+                        }}
+                        onClick={() => handleDepItems(item)}
+                        aria-label={`Button for ${item}`}
+                        disabled={loading}
+                      >
+                        {item}
+                      </Button>
+                    ))
+                  )}
+                </ButtonGroup>
+              </Paper>
+            </Grid>
+          </Grid>
+          </Grid>
           {/* Select Year Dropdown */}
-          <FormControl sx={{ m: 1, minWidth: 160, }}>
+          <FormControl sx={{ m: 1, minWidth: 160 }}>
             <InputLabel>Select Year</InputLabel>
             <Select
               id="year-select-label"
@@ -277,200 +466,26 @@ export default function Dashboard({ user, setUser }) {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
-
-          {/* statistics */}
-          <Grid container spacing={2}>
-            <Grid size={8}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: { xs: 240, sm: 400, md: 400 }, // Adjustable height
-                  width: { xs: '100%', sm: '90%', md: '762px' }, // Adjustable width
-                }}
-              >
-                <Bar data={chartData} options={chartOptions} />
-              </Paper>
-            </Grid>
-
-            {/* Department List */}
-            <Grid size={4}
-              sx={{
-                maxWidth: '300px',
-                maxHeight: '2px',
-              }}>
-              <Paper sx={{ p: 1, overflowY: 'auto', height: 657, ml: 5, }}>
-              <ButtonGroup
-                orientation="vertical"
-                aria-label="Vertical department button group"
-                variant="contained"
-                color="white"
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    color: "maroon",
-                    py: 1,
-                    mb: 1,
-                  }}
-                >
-                  DEPARTMENT
-                </Typography>
-                <Divider sx={{ marginBottom: 2 }} />
-                {loading ? (
-                  <Typography
-                    sx={{
-                      textAlign: 'center',
-                      color: 'gray',
-                      padding: 2,
-                    }}
-                  >
-                    Loading departments...
-                  </Typography>
-                ) : department.length === 0 ? (
-                  <Typography
-                    sx={{
-                      textAlign: 'center',
-                      color: 'gray',
-                      padding: 2,
-                    }}
-                  >
-                    No departments are currently available.
-                  </Typography>
-                ) : (
-                  department.map((item, index) => (
-                    <Button
-                      key={index}
-                      sx={{
-                        minWidth: '300px',
-                        minHeight: '40px',
-                        backgroundColor: '#8c383e',
-                        color: 'white',
-                        '&:hover': {
-                          backgroundColor: '#732c33',
-                        },
-                      }}
-                      onClick={() => handleDepItems(item)}
-                      aria-label={`Button for ${item}`}
-                      disabled={loading}
-                    >
-                      {item}
-                    </Button>
-                  ))
-                )}
-              </ButtonGroup>
-                 </Paper>
-               </Grid>
-
-            {/* Frequently Ordered Items */}
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item xs={12} sm={6} md={4}>
+            </FormControl>
+              {/* Statistics */}
+              <Grid container spacing={2}>
+              <Grid size={8}>
                 <Paper
                   sx={{
-                    p: 3, 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    height: 240, 
-                    width: 305, 
-                    backgroundColor: '#f9f9f9', 
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
-                    borderRadius: '12px'
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: { xs: 240, sm: 400, md: 400 }, // Adjustable height
+                    width: { xs: '100%', sm: '90%', md: '100%' }, // Full width in smaller sizes
+                          
                   }}
                 >
-                  <Typography
-                    variant="h7"
-                    sx={{
-                      textAlign: "center",
-                      fontWeight: "Bold",
-                      color: "maroon",
-                      borderBottom: '1px solid #ddd',
-                      marginBottom: 1,
-                    }}
-                  >
-                    <ShoppingBagIcon sx={{ mb: -0.6, mr: 0.6 }} /> 
-                    Frequently Ordered Items
-                  </Typography>
-                  {frequent.length === 0 ? (
-                    <Typography
-                      sx={{
-                        textAlign: 'center',
-                        fontSize: '1rem',
-                        color: 'gray',
-                        padding: 2,
-                      }}
-                    >
-                      No frequently ordered item(s) are available.
-                    </Typography>
-                  ) : (
-                    frequent.map((order, index) => (
-                      <Typography
-                        key={index}
-                        sx={{
-                          paddingBottom: 1,
-                          fontSize: '1rem',
-                          color: 'maroon',
-                          fontWeight: 500,
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <span style={{ color: 'black' }}>{order[0]}</span>
-                        <span style={{ color: 'maroon' }}>({order[1]})</span>
-                      </Typography>
-                    ))
-                  )}
+                  <Bar data={chartData} options={chartOptions} />
                 </Paper>
               </Grid>
-            </Grid>
-
-            {/* Recent Orders */}
-
-            <Grid size={4}>
-              <Paper 
-              sx={{ 
-              p: 3, 
-              display: 'flex', 
-              flexDirection: 'column', 
-              height: 240, 
-              width: 440, 
-              backgroundColor: '#f9f9f9', 
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
-              borderRadius: '12px' 
-              }}>
-              <Typography
-                  variant="h6"
-                  sx={{
-                    textAlign: "center",
-                    fontWeight: "Bold",
-                    color: "maroon",
-                    borderBottom: '1px solid #ddd',
-                    marginBottom: 2,
-                    mt: -1,
-                  }}
-                >
-                <NotificationsActiveIcon sx={{ mb: -0.6, mr: 0.6 }} /> 
-                  Reminders
-                </Typography>
-                <Typography sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black', }}><strong>
-                  Items to be assigned: <span style={{ color: 'maroon' }}>{toBeAssigned}</span></strong>
-                  <p></p>
-                </Typography>
-                <Typography sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black ' }}><strong>
-                  Items to be accepted/denied by Accountable Person: <span style={{ color: 'maroon' }}>{waiting}</span></strong>
-                  <p></p>
-                </Typography>
-                <Typography sx={{ fontSize: '1rem', color: 'black' }}><strong>
-                  Items to be returned: <span style={{ color: 'maroon' }}>{returned}</span></strong>
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+                  </Grid>
+            </Container>
+            </Box>
 
       {/* Dialog for displaying department items */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="lg" fullWidth>

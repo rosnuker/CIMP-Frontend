@@ -649,6 +649,33 @@ const OverlayItem = ({
                     sx={{ mt: 2 }} 
                   />
                 </Grid>
+                <Grid size={2.6}>
+                  <TextField
+                    fullWidth
+                    label="Serial Number*"
+                    value={selectedItem.description?.serialNumber || ""}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "description.serialNumber",
+                        e.target.value
+                      )
+                    }
+                    variant="outlined"
+                    sx={{ mt: 2 }}
+                  />
+                </Grid>
+                <Grid size={2.6}>
+                  <TextField
+                    fullWidth
+                    label="Model*"
+                    value={selectedItem.description?.model || ""}
+                    onChange={(e) =>
+                      handleInputChange("description.model", e.target.value)
+                    }
+                    variant="outlined"
+                    sx={{ mt: 2 }}
+                  />
+                </Grid>
               </Grid>
 
               <Divider sx={{ my: 3 }} />
@@ -738,31 +765,6 @@ const OverlayItem = ({
                 <Grid size={2.6}>
                   <TextField
                     fullWidth
-                    label="Description Model"
-                    value={selectedItem.description?.model || ""}
-                    onChange={(e) =>
-                      handleInputChange("description.model", e.target.value)
-                    }
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid size={2.6}>
-                  <TextField
-                    fullWidth
-                    label="Description Serial Number"
-                    value={selectedItem.description?.serialNumber || ""}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "description.serialNumber",
-                        e.target.value
-                      )
-                    }
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid size={2.6}>
-                  <TextField
-                    fullWidth
                     label="Description Type"
                     value={selectedItem.description?.type || ""}
                     onChange={(e) =>
@@ -780,7 +782,6 @@ const OverlayItem = ({
                       handleInputChange("description.other", e.target.value)
                     }
                     variant="outlined"
-                    sx={{ mt: 2 }} 
                   />
                 </Grid>
               </Grid>

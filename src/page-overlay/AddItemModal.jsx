@@ -617,6 +617,20 @@ const AddItemModal = ({
               sx={{ mt: 2 }}
             />
           </Grid>
+          <Grid size={2.6}>
+            <TextField
+              fullWidth
+              name="description.model"
+              id="description.model"
+              value={formData.description.model}
+              onChange={handleChange}
+              placeholder="Required*"
+              required
+              label="Model"
+              variant="outlined"
+              sx={{ mt: 2 }}
+            />
+          </Grid>
         </Grid>
 
         <Divider sx={{ my: 3 }} />
@@ -690,19 +704,6 @@ const AddItemModal = ({
               placeholder="Required*"
               required
               label="Description Name"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid size={2.6}>
-            <TextField
-              fullWidth
-              name="description.model"
-              id="description.model"
-              value={formData.description.model}
-              onChange={handleChange}
-              placeholder="Required*"
-              required
-              label="Description Model"
               variant="outlined"
             />
           </Grid>

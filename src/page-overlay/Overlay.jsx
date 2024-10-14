@@ -238,6 +238,30 @@ const handleBackdropClick = (e) => {
                 sx={{ mt: 2 }} 
               />
               </Grid>
+              <Grid size={2.6}>
+                <TextField
+                  label="Serial Number"
+                  value={selectedItem.description?.serialNumber || ''}
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                    },
+                  }}
+                  sx={{ mt: 2 }} 
+                />
+              </Grid>
+              <Grid size={2.6}>
+                <TextField          
+                  label="Model"
+                  value={selectedItem.description?.model || ''}
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                    },
+                  }}
+                  sx={{ mt: 2 }} 
+                />
+              </Grid>
               </Grid>
 
               <Divider sx={{ my: 3 }} />
@@ -292,28 +316,6 @@ const handleBackdropClick = (e) => {
                 />
               </Grid>
               <Grid size={2.6}>
-                <TextField          
-                  label="Description Model"
-                  value={selectedItem.description?.model || ''}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={2.6}>
-                <TextField
-                  label="Description Serial Number"
-                  value={selectedItem.description?.serialNumber || ''}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid size={2.6}>
               <TextField
                 label="Description Type"
                 value={selectedItem.description?.type || ''}
@@ -334,7 +336,6 @@ const handleBackdropClick = (e) => {
                     readOnly: true,
                   },
                 }}
-                sx={{ mt: 2 }} 
               />
             </Grid>
               </Grid>
