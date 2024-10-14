@@ -38,6 +38,14 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   const [editOpen, setEditOpen] = useState(false); // For editing user
   const [selectedUserId, setSelectedUserId] = useState(null); // To track which user is selected
 
+  const address = getIpAddress();
+
+  function getIpAddress() {
+      const hostname = window.location.hostname;
+      const indexOfColon = hostname.indexOf(':');
+      return indexOfColon !== -1 ? hostname.substring(0, indexOfColon) : hostname;
+  }
+
   // Fetch data from the backend on component mount
   useEffect(() => {
     fetchData();
@@ -45,7 +53,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/getAllUsers`);
+      const response = await axios.get(`http://${address}:8080/getAllUsers`);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,7 +86,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       };
 
       // Make a POST request to register a new user
-      await axios.post(`http://localhost:8080/register`, newUser);
+      await axios.post(`http://${address}:8080/register`, newUser);
 
       // Fetch updated user list
       fetchData();
@@ -146,7 +154,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       };
 
       // Make a PUT request to update the user
-      await axios.put(`http://localhost:8080/updateUser/${selectedUserId}`, updatedUser);
+      await axios.put(`http://${address}:8080/updateUser/${selectedUserId}`, updatedUser);
 
       // Fetch updated user list
       fetchData();
@@ -159,7 +167,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   const handleDeleteUser = async () => {
     try {
       // Make a DELETE request to delete the user
-      await axios.delete(`http://localhost:8080/deleteUser/${selectedUserId}`);
+      await axios.delete(`http://${address}:8080/deleteUser/${selectedUserId}`);
 
       // Fetch updated user list
       fetchData();
