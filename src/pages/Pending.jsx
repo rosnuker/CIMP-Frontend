@@ -68,7 +68,7 @@ export default function Pending() {
 
   const handleApproving = async (rid) => {
     try {
-      await axios.put(`http://localhost:8080/request/approve-return/${rid}`);
+      await axios.put(`http://${address}:8080/request/approve-return/${rid}`);
       setLoader(Math.random() * 1000);
     } catch (error) {
       console.log(error);

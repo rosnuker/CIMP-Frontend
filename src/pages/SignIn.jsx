@@ -14,13 +14,20 @@ import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
-export default function SignIn({ user, setUser }) {
+export default function SignIn({ user, setUser, setSnackbarGreenOpen, setSnackbarRedOpen, setSnackbarMessage }) {
 
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
 		username: '',
 		password: ''
 	});
+  const address = getIpAddress();
+
+  function getIpAddress() {
+      const hostname = window.location.hostname;
+      const indexOfColon = hostname.indexOf(':');
+      return indexOfColon !== -1 ? hostname.substring(0, indexOfColon) : hostname;
+  }
 
   useEffect(() => {
     if (loginData.username !== '' && loginData.password !== '') {
@@ -47,7 +54,7 @@ export default function SignIn({ user, setUser }) {
   };
 
   async function login() {
-    return axios.post('http://localhost:8080/login', {
+    return axios.post(`http://${address}:8080/login`, {
       username: loginData.username,
 			password: loginData.password,
     }, {
@@ -67,17 +74,31 @@ export default function SignIn({ user, setUser }) {
           username: response.data.username,
           type: response.data.type,
         });
-  
+        
         setLoginData({
           username: '',
           password: '',
         });
+
+        setSnackbarMessage("Login success!");
+				setSnackbarGreenOpen(true);
       } else {
         document.getElementById("username").value="";
 				document.getElementById("password").value="";
 				document.getElementById("username").focus();
+
+        setSnackbarMessage("Username / Password is incorrect.");
+				setSnackbarRedOpen(true);
       }
-    }).catch(error => {
+    }).catch(error => { 
+      if(error.status === 401) {
+        document.getElementById("username").value="";
+				document.getElementById("password").value="";
+				document.getElementById("username").focus();
+
+        setSnackbarMessage("Username / Password is incorrect.");
+				setSnackbarRedOpen(true);
+      }
       console.log('There was a problem with the fetch operation:', error);
     })
   };

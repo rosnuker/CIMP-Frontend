@@ -5,10 +5,17 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 export default function Approved() {
   const [appr, setAppr] = useState([]);
   const columns = ["REQUEST ID", "PROPERTY TAG", "STATUS" ];
-  
+  const address = getIpAddress();
+
+  function getIpAddress() {
+      const hostname = window.location.hostname;
+      const indexOfColon = hostname.indexOf(':');
+      return indexOfColon !== -1 ? hostname.substring(0, indexOfColon) : hostname;
+  }
+
   const fetchApproved = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/request/getApproved`);
+      const response = await axios.get(`http://${address}:8080/request/getApproved`);
       setAppr(response.data); 
       console.log(response.data); // Log the response data directly
     } catch (error) {
