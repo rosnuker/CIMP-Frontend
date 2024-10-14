@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider, Snackbar,  MenuItem, Select, InputLabel, FormControl, Switch, FormControlLabel} from "@mui/material";
+import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, IconButton, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider, Snackbar,  MenuItem, Select, InputLabel, FormControl, Switch, FormControlLabel} from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import PersonIcon from '@mui/icons-material/Person';
+import Grid from "@mui/material/Grid2";
 
 function Copyright(props) {
   return (
@@ -202,16 +205,45 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
           </Button>
         </div>
 
-        <FormControlLabel
-  control={
-    <Switch
-      checked={showDeleted}
-      onChange={() => setShowDeleted(!showDeleted)}
-      color="primary"
-    />
-  }
-  label="Show Deleted Users"
-/>
+        <Grid container alignItems="center" justifyContent="center">
+      {/* Left Icon */}
+      <Grid item>
+      <Typography variant="caption" color="blue">Users</Typography> 
+        <IconButton>
+          <PersonIcon sx={{ color: 'blue' }} />
+        </IconButton>
+      </Grid>
+
+      {/* Switch */}
+      <Grid item>
+        <Switch
+          checked={showDeleted}
+          onChange={() => setShowDeleted(!showDeleted)}
+          sx={{
+            '& .MuiSwitch-switchBase': {
+              color: 'blue',
+            },
+            '& .MuiSwitch-switchBase.Mui-checked': {
+              color: 'red', 
+            },
+            '& .MuiSwitch-switchBase + .MuiSwitch-track': {
+              backgroundColor: 'blue', 
+            },
+            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+              backgroundColor: 'red',
+            },
+          }}
+        />
+      </Grid>
+
+      {/* Right Icon */}
+      <Grid item>
+        <IconButton>
+          <DeleteIcon sx={{ color: 'red' }} />
+        </IconButton>
+        <Typography variant="caption" color="red">Deleted Users</Typography> 
+      </Grid>
+    </Grid>
 
 <TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
   <Table size="small" stickyHeader aria-label="customized table">
