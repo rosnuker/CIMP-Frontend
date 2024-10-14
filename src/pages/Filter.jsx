@@ -26,6 +26,7 @@ export default function Filter( {user, setUser} ) {
     const [O_type, setO_type] = useState([])
     const [O_invoicedate, setO_invoicedate] = useState([])
     const [O_lifespan, setO_lifespan] = useState([])
+    const [O_issueOrder, setO_issueOrder] = useState([])
     const [O_sum, setO_sum] = useState([])
   
     const [acc_per, setacc_per] = useState("")
@@ -41,11 +42,12 @@ export default function Filter( {user, setUser} ) {
     const [type, settype] = useState("")
     const [invoicedate, setinvoicedate] = useState("")
     const [lifespan, setlifespan] = useState("")
+    const [issueOrder, setIssueOrder] = useState("");
     const [head1, setHead1] = useState('');
     const [pos1, setPos1] = useState('');
     const [acc1, setAcc1] = useState('');
     const [des1, setDes1] = useState('');
-    const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DEPARTMENT", "DESIGNATION", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "LIFESPAN", "QUANTITY", "REMAKRS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE"];
+    const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DEPARTMENT", "DESIGNATION", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "LIFESPAN", "QUANTITY", "REMARKS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE"];
     
     const address = getIpAddress();
       
@@ -127,6 +129,10 @@ export default function Filter( {user, setUser} ) {
     const handleLifespan = event => {
       setlifespan(event.target.value)
     }
+
+    const handleIssueOrder = event => {
+      setIssueOrder(event.target.value)
+    }
   
     const handleSum = event => {
       setO_sum(event.target.value)
@@ -146,7 +152,8 @@ export default function Filter( {user, setUser} ) {
           model: model || null,
           type: type || null,
           invoiceDate: invoicedate || null,
-          lifespan: lifespan || null
+          lifespan: lifespan || null,
+          issueOrder: issueOrder || null
       };
   
       axios
@@ -333,13 +340,27 @@ export default function Filter( {user, setUser} ) {
     }, []);
   
     const fetchO_lifespan = async () => {
-    try {
-      const response = await axios.get(`http://${address}:8080/item/lifespan`) 
-      const uniqueOptions_lifespan = [...new Set(response.data)] // Remove duplicates
-      setO_lifespan(uniqueOptions_lifespan)
-    } catch (error) {
-      console.error("Error fetching options:", error)
+      try {
+        const response = await axios.get(`http://${address}:8080/item/lifespan`) 
+        const uniqueOptions_lifespan = [...new Set(response.data)] // Remove duplicates
+        setO_lifespan(uniqueOptions_lifespan)
+      } catch (error) {
+        console.error("Error fetching options:", error)
+      }
     }
+
+    useEffect(() => {
+      fetchO_issueOrder();
+    }, []);
+  
+    const fetchO_issueOrder = async () => {
+      try {
+        const response = await axios.get(`http://${address}:8080/item/issueOrder`) 
+        const uniqueOptions_issueOrder = [...new Set(response.data)] // Remove duplicates
+        setO_issueOrder(uniqueOptions_issueOrder)
+      } catch (error) {
+        console.error("Error fetching options:", error)
+      }
     }
 
     useEffect(() => {
@@ -361,7 +382,8 @@ export default function Filter( {user, setUser} ) {
         model: model || null,
         type: type || null,
         invoiceDate: invoicedate || null,
-        lifespan: lifespan || null
+        lifespan: lifespan || null,
+        issueOrder: issueOrder || null
       };
 
       axios
@@ -1030,6 +1052,30 @@ export default function Filter( {user, setUser} ) {
               {O_lifespan.map((O_lifespans, index) => (
                 <MenuItem key={index} value={O_lifespans}>
                   {O_lifespans}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Issue Order */}
+          <FormControl sx={{ minWidth: 190 }}>
+            <InputLabel>Issue Order</InputLabel>
+            <Select 
+            value={issueOrder}
+            onChange={handleIssueOrder} 
+            label="Issue Order"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 400, 
+                  overflow: 'auto',
+                },
+              },
+            }}>
+              <MenuItem value="">Issue Order</MenuItem>
+              {O_issueOrder.map((O_issueOrders, index) => (
+                <MenuItem key={index} value={O_issueOrders}>
+                  {O_issueOrders}
                 </MenuItem>
               ))}
             </Select>
