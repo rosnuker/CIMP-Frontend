@@ -318,9 +318,6 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
             <Divider sx={{ marginBottom: 2 }} />
           </DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Please fill in the details of the new user.
-            </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
@@ -399,6 +396,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               variant="contained"
               sx={{
                 marginLeft: 1,
+                marginRight: 2,
                 marginBottom: 2,
                 width: '100px',
               }}
@@ -427,9 +425,6 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
             <Divider sx={{ marginBottom: 2 }} />
           </DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Please edit the details of the user.
-            </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
@@ -503,6 +498,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               sx={{
                 marginRight: 1,
                 marginBottom: 2,
+                marginRight: 30,
                 backgroundColor: "#e0e0e0",
                 color: "#fafafa",
                 "&:hover": {
@@ -511,18 +507,6 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               }}
             >
               Cancel
-            </Button>
-            <Button 
-              onClick={handleUpdateUser} 
-              color="primary" 
-              variant="contained"
-              sx={{
-                marginLeft: 1,
-                marginBottom: 2,
-                width: '100px',
-              }}
-            >
-              Update
             </Button>
             <Button 
               onClick={handleOpenDialog} 
@@ -536,6 +520,19 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
             >
               Delete
             </Button>
+            <Button 
+              onClick={handleUpdateUser} 
+              color="primary" 
+              variant="contained"
+              sx={{
+                marginLeft: 1,
+                marginRight: 2,
+                marginBottom: 2,
+                width: '100px',
+              }}
+            >
+              Update
+            </Button>
           </DialogActions>
         </Dialog>
 
@@ -543,7 +540,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
         <DialogTitle>Delete Confirmation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this user? This action cannot be undone.
+            Are you sure you want to delete this user?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

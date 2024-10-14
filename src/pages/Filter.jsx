@@ -4,7 +4,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Container, Box, Button, Select, MenuItem, InputLabel, 
 FormControl, Toolbar, Table, TableBody, TableCell, 
-TableContainer, TableHead, TableRow, Paper, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+TableContainer, TableHead, TableRow, Paper, Typography, Dialog, DialogActions, DialogContent, Divider, DialogTitle, TextField } from '@mui/material';
 import Overlay from '../page-overlay/Overlay';
 
 export default function Filter( {user, setUser} ) {
@@ -1195,8 +1195,23 @@ export default function Filter( {user, setUser} ) {
     </Container>
 </Box>
          {/* Dialog (Modal) */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Enter Additional Details</DialogTitle>
+         <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>
+            <Typography
+              variant="h6"
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "maroon",
+                backgroundColor: "yellow",
+                paddingY: 1,
+                marginBottom: 3,
+              }}
+            >
+              Enter Addional Details
+            </Typography>
+            <Divider sx={{ marginBottom: 2 }} />
+          </DialogTitle>
         <DialogContent>  
           <TextField
             autoFocus
@@ -1245,11 +1260,41 @@ export default function Filter( {user, setUser} ) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handlePrintTable}>Print</Button>
+          <Button onClick={handleClose}
+              variant="contained"
+              sx={{
+                marginRight: 1,
+                marginBottom: 2,
+                marginRight: 43,
+                backgroundColor: "#e0e0e0",
+                color: "#fafafa",
+                "&:hover": {
+                  backgroundColor: "#9e9e9e",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+          <Button
+            variant="outlined"
+            onClick={handlePrintTable}
+            sx={{
+              marginRight: 3,
+              marginBottom: 2,
+              color: 'black',
+              borderColor: '#f8c702',
+              backgroundColor: '#f8c702',
+              '&:hover': {
+                backgroundColor: '#e0b600',
+                borderColor: '#e0b600',
+              },
+            }}
+          >
+          Print
+          <PrintIcon />
+        </Button>
         </DialogActions>
       </Dialog>
-    
       </>
     ); 
   }
