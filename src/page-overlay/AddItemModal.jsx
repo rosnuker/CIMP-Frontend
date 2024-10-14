@@ -11,7 +11,8 @@ const AddItemModal = ({
   handleChange,
   formData,
   combinedSubmit,
-  formatNumber
+  formatNumber,
+  handleBlur
 }) => {
 
   const address = getIpAddress();
@@ -641,7 +642,7 @@ const AddItemModal = ({
         </Typography>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid size={2.6}>
-    <TextField
+    {/* <TextField
       fullWidth
       name="unitCost"
       id="unitCost"
@@ -660,10 +661,32 @@ const AddItemModal = ({
           ),
         },
       }}
-    />
+    /> */}
+
+<TextField
+  fullWidth
+  name="unitCost"
+  id="unitCost"
+  value={formData.unitCost} // Do not format during typing
+  onChange={handleChange}
+  onBlur={handleBlur} // Format after losing focus
+  placeholder="Required*"
+  pattern="[0-9]+([.][0-9]+)?"
+  title="Please enter a valid number, e.g., 12.34"
+  required
+  label="Unit Cost"
+  variant="outlined"
+  slotProps={{
+    input: {
+      startAdornment: (
+        <InputAdornment position="start">₱</InputAdornment>
+      ),
+    },
+  }}
+/>
   </Grid>
           <Grid size={2.6}>
-  <TextField
+  {/* <TextField
     fullWidth
     name="totalCost"
     id="totalCost"
@@ -682,7 +705,25 @@ const AddItemModal = ({
     InputProps={{
       startAdornment: <InputAdornment position="start">₱</InputAdornment>,
     }}
-  />
+  /> */}
+  <TextField
+  fullWidth
+  name="totalCost"
+  id="totalCost"
+  value={formatNumber(formData.totalCost)} // Format the displayed value with commas
+  onChange={handleChange}
+  placeholder="Required*"
+  pattern="[0-9]+([.][0-9]+)?"
+  title="Please enter a valid number, e.g., 12.34"
+  required
+  label="Total Cost"
+  variant="outlined"
+  disabled
+  InputProps={{
+    startAdornment: <InputAdornment position="start">₱</InputAdornment>,
+  }}
+/>
+
 </Grid>
 
         </Grid>

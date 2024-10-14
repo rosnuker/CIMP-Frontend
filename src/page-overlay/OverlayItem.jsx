@@ -718,8 +718,8 @@ const OverlayItem = ({
                           ? new Intl.NumberFormat('en-PH', {
                               style: 'currency',
                               currency: 'PHP',
-                              minimumFractionDigits: 2, // Enforce two decimal places
-                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 0, // Enforce two decimal places
+                              maximumFractionDigits: 20,
                             }).format(selectedItem.totalCost)
                           : ""
                       }

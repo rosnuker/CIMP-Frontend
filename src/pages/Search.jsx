@@ -95,16 +95,45 @@ export default function Search( {user, setUser} ) {
         }
     };
     
+    // const generateExportDataForExcel = () => {
+    //     return queryResults
+    //         .filter(item => !item.deleted)
+    //         .map(item => ({
+    //             "Property Tag": item.iid || '', 
+    //             "Invoice Number": item.invoiceNumber || '',
+    //             "Issue Order Number": item.issueOrder || '',
+    //             "Serial Number": item.description ? item.description.serialNumber : 'None'
+    //         }));
+    // };
     const generateExportDataForExcel = () => {
-        return queryResults
-            .filter(item => !item.deleted)
-            .map(item => ({
-                "Property Tag": item.iid || '', 
-                "Invoice Number": item.invoiceNumber || '',
-                "Issue Order Number": item.issueOrder || '',
-                "Serial Number": item.description ? item.description.serialNumber : 'None'
-            }));
-    };
+      return queryResults
+          .filter(item => !item.deleted)
+          .map(item => ({
+              "Property Tag": item.iid || '',
+              "Accountable Person": item.accPerson.fname + " " + item.accPerson.lname || '',
+              "Department": item.department || '',
+              "Designation": item.designation || '',
+              "Invoice Number": item.invoiceNumber || '',
+              "Invoice Date": item.invoiceDate || '',
+              "Issue Order Number": item.issueOrder || '',
+              "Lifespan": item.lifespan || '',
+              "Quantity": item.quantity || '',
+              "Remarks": item.remarks || '',
+              "Status": item.status || '',
+              "Supplier": item.supplier || '',
+              "Total Cost": item.totalCost || '',
+              "Unit Cost": item.unitCost || '',
+              "Unit of Measurement": item.unitOfMeasurement || '',
+              "Item Name": item.description ? item.description.name : '',
+              "Item Model": item.description ? item.description.model : '',
+              "Item Serial Number": item.description ? item.description.serialNumber : '',
+              "Item Type": item.description ? item.description.type : '',
+              "Item Other Description": item.description ? item.description.other : '',
+              "Location Building": item.location ? item.location.building : '',
+              "Location Room": item.location ? item.location.room : ''
+          }));
+  };
+  
     
     const calculateColumnWidths = (data) => {
         const widths = {};
@@ -131,7 +160,7 @@ export default function Search( {user, setUser} ) {
     
     const generateHeaderRows = () => {
         return [
-            ['CIT U PROPERTY REPORT MARINADO'],
+            ['CIT U INVENTORY MANAGEMENT PORTAL'],
             ['2024'],
             []
         ];
@@ -144,6 +173,9 @@ export default function Search( {user, setUser} ) {
       'Serial Number'
     ];
 
+
+  
+
     const handlePrintTable = () => {
         const printableContent = generatePrintableTable();
         const printWindow = window.open('', '_blank');
@@ -153,49 +185,86 @@ export default function Search( {user, setUser} ) {
     }
 
     const generatePrintableTable = () => {
-        let printableContent = `
-            <style>
-                table {
-                    border-collapse: collapse;
-                    width: 100%;
-                }
-                th, td {
-                    border: 1px solid #dddddd;
-                    text-align: left;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-            </style>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Quantity</th>
-                        <th>Unit</th>
-                        <th>Description</th>
-                        <th>Remarks</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-        queryResults.forEach(item => {
-            printableContent += `
-                <tr>
-                    <td>${item.quantity}</td>
-                    <td>${item.unitOfMeasurement}</td>
-                    <td>${item.description ? item.description.name : 'None'}</td>
-                    <td>${item.remarks}</td>
-                </tr>
-            `;
-        });
-        printableContent += `
-                </tbody>
-            </table>
-        `;
-        return printableContent;
-    }
+      let printableContent = `
+          <style>
+              table {
+                  border-collapse: collapse;
+                  width: 100%;
+              }
+              th, td {
+                  border: 1px solid #dddddd;
+                  text-align: left;
+                  padding: 8px;
+              }
+              th {
+                  background-color: #f2f2f2;
+              }
+          </style>
+          <table>
+              <thead>
+                  <tr>
+                      <th>Property Tag</th>
+                      <th>Accountable Person</th>
+                      <th>Department</th>
+                      <th>Designation</th>
+                      <th>Invoice Number</th>
+                      <th>Invoice Date</th>
+                      <th>Issue Order Number</th>
+                      <th>Lifespan</th>
+                      <th>Quantity</th>
+                      <th>Remarks</th>
+                      <th>Status</th>
+                      <th>Supplier</th>
+                      <th>Total Cost</th>
+                      <th>Unit Cost</th>
+                      <th>Unit of Measurement</th>
+                      <th>Item Name</th>
+                      <th>Item Model</th>
+                      <th>Serial Number</th>
+                      <th>Item Type</th>
+                      <th>Other Description</th>
+                      <th>Location Building</th>
+                      <th>Location Room</th>
+                  </tr>
+              </thead>
+              <tbody>
+      `;
+      queryResults.forEach(item => {
+          printableContent += `
+              <tr>
+                  <td>${item.iid || ''}</td>
+                  <td>${item.accPerson.fname + " " + item.accPerson.lname || ''}</td>
+                  <td>${item.department || ''}</td>
+                  <td>${item.designation || ''}</td>
+                  <td>${item.invoiceNumber || ''}</td>
+                  <td>${item.invoiceDate || ''}</td>
+                  <td>${item.issueOrder || ''}</td>
+                  <td>${item.lifespan || ''}</td>
+                  <td>${item.quantity || ''}</td>
+                  <td>${item.remarks || ''}</td>
+                  <td>${item.status || ''}</td>
+                  <td>${item.supplier || ''}</td>
+                  <td>${item.totalCost || ''}</td>
+                  <td>${item.unitCost || ''}</td>
+                  <td>${item.unitOfMeasurement || ''}</td>
+                  <td>${item.description ? item.description.name : ''}</td>
+                  <td>${item.description ? item.description.model : ''}</td>
+                  <td>${item.description ? item.description.serialNumber : ''}</td>
+                  <td>${item.description ? item.description.type : ''}</td>
+                  <td>${item.description ? item.description.other : ''}</td>
+                  <td>${item.location ? item.location.building : ''}</td>
+                  <td>${item.location ? item.location.room : ''}</td>
+              </tr>
+          `;
+      });
+      printableContent += `
+              </tbody>
+          </table>
+      `;
+      return printableContent;
+  };
+  
+  
 
       const renderTableHeader = () => (
         <TableRow style={{ position: 'sticky', top: 0 }}>

@@ -13,7 +13,7 @@ export default function UserDashboard({ user, setUser }) {
   const [selectedRid, setSelectedRid] = useState(null); // State to store the selected rid for rejection
 
 
-  const columns = ["PROPERTY TAG", "NAME", "MODEL", "SERIAL NUMBER", "STATUS", "QUANTITY", "TOTAL COST"];
+  const columns = ["PROPERTY TAG", "ITEM NAME", "MODEL", "SERIAL NUMBER", "STATUS", "QUANTITY", "TOTAL COST"];
   const address = getIpAddress();
 	
 	function getIpAddress() {
