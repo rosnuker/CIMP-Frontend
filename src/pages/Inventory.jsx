@@ -34,7 +34,6 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
         setOpenDialog(false);
     };
 
-
 	const [formData, setFormData] = useState({
 		accPerson: "",
 		department: "",
@@ -141,9 +140,11 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 			const newName = response.data.description.name; 
 			setQueryResults(response.data);
 			setId(newId);
-			// window.alert("Data added!");
-			// setSnackbarMessage("Data added!");
-			// setSnackbarGreenOpen(true);
+			
+			if(response.data.status !== "WAITING") {
+				setSnackbarMessage("Data added!");
+				setSnackbarGreenOpen(true);
+			}	
 
 			console.log("Data added!");
 			console.log("New item ID:", newId); 
@@ -156,6 +157,8 @@ export default function Inventory( { user, setUser, setSnackbarGreenOpen, setSna
 					}
 				}).then(response => {
 					console.log(response.data);
+					setSnackbarMessage("Request sent!");
+					setSnackbarGreenOpen(true);
 				}).catch(error => {
 					console.error("Error sending request:", error);
 				});
