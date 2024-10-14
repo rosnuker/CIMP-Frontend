@@ -137,16 +137,16 @@ export default function Dashboard({ user, setUser }) {
   };
 
   const items = [
-    { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['acc_person', 'owner'] },
+    { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['acc_person', 'encoder', 'owner'] },
     { text: 'User Management', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['admin'] },
-    { text: 'Inventory', icon: <InventoryIcon style={{ color: 'white' }} />, destination: "inventory", roles: ['owner'] },
+    { text: 'Inventory', icon: <InventoryIcon style={{ color: 'white' }} />, destination: "inventory", roles: ['encoder', 'owner'] },
     { text: 'Request', icon: <BookmarkAddIcon style={{ color: 'white' }} />, destination: "request", roles: ['hidden'] },
     { text: 'Receive', icon: <BookmarkAddedIcon style={{ color: 'white' }} />, destination: "receive", roles: ['hidden'] },
     { text: 'Logs History', icon: <HistoryIcon style={{ color: 'white' }} />, destination: "logs", roles: ['owner'] },
     { text: 'Search', icon: <SearchIcon style={{ color: 'white' }} />, destination: "search", roles: ['owner'] },
     { text: 'Filter', icon: <FilterAltIcon style={{ color: 'white' }} />, destination: "filter", roles: ['owner'] },
     { text: 'Pending', icon: <HourglassTopIcon style={{ color: 'white' }} />, destination: "pending", roles: ['owner'] },
-    { text: 'Approved', icon: <CheckCircleIcon style={{ color: 'white' }} />, destination: "approved", roles: ['owner'] },
+    { text: 'Approved', icon: <CheckCircleIcon style={{ color: 'white' }} />, destination: "approved", roles: ['hidden'] },
   ];
 
   const filteredItems = items.filter(item => item.roles.includes(user.type));
