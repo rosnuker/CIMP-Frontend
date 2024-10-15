@@ -720,6 +720,10 @@ export default function Filter( {user, setUser} ) {
     // Function to handle closing the modal
     const handleClose = () => {
       setOpen(false);
+      setHead1('');
+      setPos1('');
+      setAcc1('');
+      setDes1('');
     };
   
       return (
