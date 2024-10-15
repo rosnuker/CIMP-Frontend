@@ -57,44 +57,51 @@ export default function SignIn({ user, setUser }) {
 
   async function login() {
     return axios.post(`http://${address}:8080/login`, {
-      username: loginData.username,
-			password: loginData.password,
+        username: loginData.username,
+        password: loginData.password,
     }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+        headers: {
+            'Content-Type': 'application/json'
+        }
     }).then(response => {
-      if(!(response.status === 200)) {
-        throw new Error('There is a problem with the request');
-      }
-      
-      if(response.data !== '') {
-        setUser({
-          uid: response.data.uid,
-          fname: response.data.fname,
-          lname: response.data.lname,
-          username: response.data.username,
-          type: response.data.type,
-        });
-        
-        setLoginData({
-          username: '',
-          password: '',
-        });
+        if (!(response.status === 200)) {
+            throw new Error('There is a problem with the request');
+        }
 
-        showSnackbar('Login success!', 'success');
-      }
-    }).catch(error => { 
-      if(error.status === 401) {
-        document.getElementById("username").value="";
-				document.getElementById("password").value="";
-				document.getElementById("username").focus();
+        if (response.data !== '') {
+            // Check if the user is marked as deleted
+            if (response.data.deleted) {
+                showSnackbar('This account has been deleted. Please contact the admin.', 'error');
+                return; // Stop the login process
+            }
 
-        showSnackbar('Username / Password is incorrect.', 'error');
-      }
-      console.log('There was a problem with the fetch operation:', error);
-    })
-  };
+            setUser({
+                uid: response.data.uid,
+                fname: response.data.fname,
+                lname: response.data.lname,
+                username: response.data.username,
+                type: response.data.type,
+            });
+
+            setLoginData({
+                username: '',
+                password: '',
+            });
+
+            showSnackbar('Login success!', 'success');
+        }
+    }).catch(error => {
+        if (error.response && error.response.status === 401) {
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("username").focus();
+
+            showSnackbar('Username / Password is incorrect.', 'error');
+        }
+        console.log('There was a problem with the fetch operation:', error);
+    });
+};
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
