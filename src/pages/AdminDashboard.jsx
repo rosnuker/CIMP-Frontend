@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import Grid from "@mui/material/Grid2";
+import { useSnackbar } from '../components/SnackbarContext';
 
 function Copyright(props) {
   return (
@@ -29,7 +30,9 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   const [lname, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [type, setType] = useState('');
+  const showSnackbar = useSnackbar();
 
   // State for opening/closing the modal
   const [open, setOpen] = useState(false);
@@ -45,6 +48,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       const indexOfColon = hostname.indexOf(':');
       return indexOfColon !== -1 ? hostname.substring(0, indexOfColon) : hostname;
   }
+  
 
   // Fetch data from the backend on component mount
   useEffect(() => {
@@ -61,19 +65,35 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   };
 
   const handleClickOpen = () => {
+    setFirstName('');
+    setLastName('');
+    setUsername('');
+    setPassword('');
+    setConfirmPassword('');
+    setType('');
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setFirstName('');
+    setLastName('');
+    setUsername('');
+    setPassword('');
+    setConfirmPassword('');
+    setType('');
   };
 
   const handleAddUser = async () => {
     // Check if all fields are filled
-    if (!fname || !lname || !username || !password || !type) {
+    if (!fname || !lname || !username || !password || !confirmPassword || !type) {
       setSnackbarMessage('All fields must be filled!');
       setSnackbarOpen(true);
       return; // Prevent further execution
+    }
+    if (password !== confirmPassword) {
+      showSnackbar('Password does not match!', 'error');
+      return;
     }
 
     try {
@@ -138,10 +158,14 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   };
 
   const handleUpdateUser = async () => {
-    if (!fname || !lname || !username || !password || !type) {
+    if (!fname || !lname || !username || !password || !confirmPassword || !type) {
       setSnackbarMessage('All fields must be filled!');
       setSnackbarOpen(true);
       return; // Prevent further execution
+    }
+    if (password !== confirmPassword) {
+      showSnackbar('Password does not match!', 'error');
+      return;
     }
 
     try {
@@ -359,6 +383,16 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               required
               onChange={(e) => setPassword(e.target.value)}
             />
+            <TextField
+              margin="dense"
+              label="Confirm Password"
+              type="password"
+              fullWidth
+              variant="outlined"
+              value={confirmPassword}
+              required
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           <FormControl fullWidth variant="outlined" margin="dense">
             <InputLabel>Type</InputLabel>
             <Select
@@ -466,16 +500,16 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               required
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* <TextField
+            <TextField
               margin="dense"
-              label="Type"
-              type="text"
+              label="Confirm Password"
+              type="password"
               fullWidth
               variant="outlined"
-              value={type}
+              value={confirmPassword}
               required
-              onChange={(e) => setType(e.target.value)}
-            /> */}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
             <FormControl fullWidth variant="outlined" margin="dense">
               <InputLabel>Type</InputLabel>
               <Select
