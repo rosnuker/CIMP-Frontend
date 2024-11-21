@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, Button, TextField, Typography, Divider,
   InputAdornment,Autocomplete,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import axios from "axios";
@@ -91,7 +93,7 @@ const AddItemModal = ({
         <Divider sx={{ marginBottom: 2 }} />
 
         {/* Accountability Information */}
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
+        {/* <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
           Accountability Information
         </Typography>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -198,7 +200,7 @@ const AddItemModal = ({
           </Grid>
         </Grid>
 
-        <Divider sx={{ my: 3 }} />
+        <Divider sx={{ my: 3 }} /> */}
 
         {/* Location Information */}
         <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -392,6 +394,19 @@ const AddItemModal = ({
               label="Model"
               variant="outlined"
               sx={{ mt: 2 }}
+            />
+          </Grid>
+          <Grid size={2.6}>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        name="isConsumable"
+                        checked={formData.isConsumable}
+                        onChange={handleChange}
+                    />
+                }
+                label="Consumable"
+                sx={{ mt: 2.5 }}
             />
           </Grid>
         </Grid>

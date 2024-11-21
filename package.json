@@ -1,11 +1,12 @@
 {
   "name": "cimp-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "host": "vite --host",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -16,6 +17,7 @@
     "@mui/material": "^6.0.0",
     "axios": "^1.7.5",
     "chart.js": "^4.4.4",
+    "cimp-frontend": "file:",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",

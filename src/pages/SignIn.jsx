@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../components/SnackbarContext';
+import wildcat from '../assets/cat.jpg';
 
 const defaultTheme = createTheme();
 
@@ -115,7 +116,7 @@ export default function SignIn({ user, setUser }) {
             alignItems: 'center',
           }}
         >
-          <Avatar alt="Wildcats Logo" src="./src/assets/cat.jpg" variant="square" sx={{ m: 1, width: 128, height: 128}} />
+          <Avatar alt="Wildcats Logo" src={wildcat} variant="square" sx={{ m: 1, width: 128, height: 128}} />
 
           <Typography component="h1" variant="h5">
             Welcome Back!

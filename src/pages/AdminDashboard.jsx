@@ -1,28 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, IconButton, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider, Snackbar,  MenuItem, Select, InputLabel, FormControl, Switch, FormControlLabel} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Container, Paper, Toolbar, Typography, Button, TableContainer, Table, TableHead, IconButton, TableRow, TableCell, TableBody, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Divider, MenuItem, Select, InputLabel, FormControl, Tabs, Tab } from "@mui/material";
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PersonIcon from '@mui/icons-material/Person';
-import Grid from "@mui/material/Grid2";
 import { useSnackbar } from '../components/SnackbarContext';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://cit.edu/">
-        CIMP
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 export default function AdminDashboard({ user, setUser, data = [] }) {
-  const columns = ["FIRST NAME", "LAST NAME", "USERNAME", "TYPE"];
+  const columns = ["FIRST NAME", "LAST NAME", "DEPARTMENT", "DESIGNATION", "USERNAME", "TYPE"];
   const [users, setUsers] = useState([]);
   const [showDeleted, setShowDeleted] = useState(false);
   // States for form fields
@@ -31,13 +14,13 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [department, setDepartment] = useState('');
+  const [designation, setDesignation] = useState('');
   const [type, setType] = useState('');
   const showSnackbar = useSnackbar();
 
   // State for opening/closing the modal
   const [open, setOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [editOpen, setEditOpen] = useState(false); // For editing user
   const [selectedUserId, setSelectedUserId] = useState(null); // To track which user is selected
 
@@ -49,7 +32,6 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       return indexOfColon !== -1 ? hostname.substring(0, indexOfColon) : hostname;
   }
   
-
   // Fetch data from the backend on component mount
   useEffect(() => {
     fetchData();
@@ -68,6 +50,8 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
     setFirstName('');
     setLastName('');
     setUsername('');
+    setDepartment('');
+    setDesignation('');
     setPassword('');
     setConfirmPassword('');
     setType('');
@@ -79,6 +63,8 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
     setFirstName('');
     setLastName('');
     setUsername('');
+    setDepartment('');
+    setDesignation('');
     setPassword('');
     setConfirmPassword('');
     setType('');
@@ -86,9 +72,8 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
 
   const handleAddUser = async () => {
     // Check if all fields are filled
-    if (!fname || !lname || !username || !password || !confirmPassword || !type) {
-      setSnackbarMessage('All fields must be filled!');
-      setSnackbarOpen(true);
+    if (!fname || !lname || !username || !department || !designation || !password || !confirmPassword || !type) {
+      showSnackbar('All fields must be filled!', 'error');
       return; // Prevent further execution
     }
     if (password !== confirmPassword) {
@@ -101,6 +86,8 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
         fname,
         lname,
         username,
+        department,
+        designation,
         password,
         type
       };
@@ -115,16 +102,17 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       setFirstName('');
       setLastName('');
       setUsername('');
+      setDepartment('');
+      setDesignation('');
       setPassword('');
       setType('');
       handleClose();
+
+      showSnackbar('User added successfully!', 'success');
     } catch (error) {
       console.error("Error adding user:", error);
+      showSnackbar('Error adding user!', 'error');
     }
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -141,6 +129,8 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
     setFirstName(user.fname);
     setLastName(user.lname);
     setUsername(user.username);
+    setDepartment(user.department);
+    setDesignation(user.designation);
     setPassword(user.password);
     setType(user.type);
     setSelectedUserId(user.uid); // Track selected user ID
@@ -153,14 +143,16 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
     setFirstName('');
     setLastName('');
     setUsername('');
+    setDepartment('');
+    setDesignation('');
     setPassword('');
+    setConfirmPassword('');
     setType('');
   };
 
   const handleUpdateUser = async () => {
-    if (!fname || !lname || !username || !password || !confirmPassword || !type) {
-      setSnackbarMessage('All fields must be filled!');
-      setSnackbarOpen(true);
+    if (!fname || !lname || !username || !department || !designation || !password || !confirmPassword || !type) {
+      showSnackbar('All fields must be filled!', 'error');
       return; // Prevent further execution
     }
     if (password !== confirmPassword) {
@@ -173,6 +165,8 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
         fname,
         lname,
         username,
+        department,
+        designation,
         password,
         type
       };
@@ -183,8 +177,11 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       // Fetch updated user list
       fetchData();
       handleEditClose(); // Close edit dialog
+
+      showSnackbar('User updated successfully!', 'success');
     } catch (error) {
       console.error("Error updating user:", error);
+      showSnackbar('Error updating user!', 'error');
     }
   };
 
@@ -197,8 +194,10 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       fetchData();
       handleCloseDialog();
       handleEditClose(); // Close edit dialog
+      showSnackbar('User deleted successfully!', 'success');
     } catch (error) {
       console.error("Error deleting user:", error);
+      showSnackbar('Error deleting user!', 'error');
     }
   };
 
@@ -237,45 +236,36 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
           </Button>
         </div>
 
-        <Grid container alignItems="center" justifyContent="center">
-      {/* Left Icon */}
-      <Grid item>
-      <Typography variant="caption" color="blue">Users</Typography> 
-        <IconButton>
-          <PersonIcon sx={{ color: 'blue' }} />
-        </IconButton>
-      </Grid>
-
-      {/* Switch */}
-      <Grid item>
-        <Switch
-          checked={showDeleted}
-          onChange={() => setShowDeleted(!showDeleted)}
-          sx={{
-            '& .MuiSwitch-switchBase': {
-              color: 'blue',
-            },
-            '& .MuiSwitch-switchBase.Mui-checked': {
-              color: 'red', 
-            },
-            '& .MuiSwitch-switchBase + .MuiSwitch-track': {
-              backgroundColor: 'blue', 
-            },
-            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-              backgroundColor: 'red',
+        <Tabs
+          value={showDeleted ? 'deleted' : 'active'}
+          onChange={(event, newValue) => setShowDeleted(newValue === 'deleted')}
+          textColor="inherit"
+          variant="fullWidth"
+          sx={{ 
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#8a252c',
             },
           }}
-        />
-      </Grid>
+        >
+          <Tab 
+            label={`Active Users (${users.filter(user => !user.deleted && user.uid !== 1).length})`} 
+            value="active"
+            sx={{ 
+              color: '#8a252c',
+              fontWeight: 'bold',
+            }}
+          />
+          <Tab 
+            label={`Inactive Users (${users.filter(user => user.deleted && user.uid !== 1).length})`} 
+            value="deleted"
+            sx={{ 
+              color: '#8a252c',
+              fontWeight: 'bold',
+            }}
+          />
+        </Tabs>
 
-      {/* Right Icon */}
-      <Grid item>
-        <IconButton>
-          <DeleteIcon sx={{ color: 'red' }} />
-        </IconButton>
-        <Typography variant="caption" color="red">Deleted Users</Typography> 
-      </Grid>
-    </Grid>
+        
 
 <TableContainer component={Paper} style={{ maxHeight: '530px', marginLeft: '1px', marginRight: '4px', marginTop: '20px' }}>
   <Table size="small" stickyHeader aria-label="customized table">
@@ -301,6 +291,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       ) : (
         users
           .filter((user) => showDeleted ? user.deleted : !user.deleted) // Filter users based on toggle
+          .filter(user => user.uid !== 1)
           .map((user) => (
             <TableRow
               key={user.uid}
@@ -314,8 +305,10 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
             >
               <TableCell>{user.fname}</TableCell>
               <TableCell>{user.lname}</TableCell>
+              <TableCell>{user.department}</TableCell>
+              <TableCell>{user.designation}</TableCell>
               <TableCell>{user.username}</TableCell>
-              <TableCell>{user.type}</TableCell>
+              <TableCell>{user.type === 'admin' ? 'Admin' : user.type === 'owner' ? 'Owner' : user.type === 'encoder' ? 'Encoder' : user.type === 'acc_person' ? 'Accountable Person' : user.type}</TableCell>
             </TableRow>
           ))
       )}
@@ -372,6 +365,72 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               value={username}
               required
               onChange={(e) => setUsername(e.target.value)}
+            />
+            <FormControl fullWidth variant="outlined" margin="dense">
+              <InputLabel>Department</InputLabel>
+              <Select
+                value={department}
+                required
+                onChange={(e) => setDepartment(e.target.value)}
+                label="Department"
+              >
+                <MenuItem value="Alumni Affairs Office">Alumni Affairs Office</MenuItem>
+                <MenuItem value="CASE-Dean's Office">CASE-Dean's Office</MenuItem>
+                <MenuItem value="CCS-Dean's Office">CCS-Dean's Office</MenuItem>
+                <MenuItem value="CCS-IT / CREATE / NEXUSS">CCS-IT / CREATE / NEXUSS</MenuItem>
+                <MenuItem value="CCS-MakerSpace">CCS-MakerSpace</MenuItem>
+                <MenuItem value="CMBA-Dean's Office">CMBA-Dean's Office</MenuItem>
+                <MenuItem value="CMBA-DHTM">CMBA-DHTM</MenuItem>
+                <MenuItem value="CON">CON</MenuItem>
+                <MenuItem value="CON-Dean's Office">CON-Dean's Office</MenuItem>
+                <MenuItem value="CORE-MARKETING">CORE-MARKETING</MenuItem>
+                <MenuItem value="CEA-ARCH">CEA-ARCH</MenuItem>
+                <MenuItem value="CEA-CE">CEA-CE</MenuItem>
+                <MenuItem value="CEA-CE / PCO">CEA-CE / PCO</MenuItem>
+                <MenuItem value="CEA-CHE">CEA-CHE</MenuItem>
+                <MenuItem value="CEA-DEMP">CEA-DEMP</MenuItem>
+                <MenuItem value="CEA-ECE">CEA-ECE</MenuItem>
+                <MenuItem value="CEA-EE">CEA-EE</MenuItem>
+                <MenuItem value="CEA-EM">CEA-EM</MenuItem>
+                <MenuItem value="CEA-ME">CEA-ME</MenuItem>
+                <MenuItem value="CV-FIC">CV-FIC</MenuItem>
+                <MenuItem value="ETEEAP">ETEEAP</MenuItem>
+                <MenuItem value="Executive Office">Executive Office</MenuItem>
+                <MenuItem value="FAO">FAO</MenuItem>
+                <MenuItem value="GUIDANCE">GUIDANCE</MenuItem>
+                <MenuItem value="HRD">HRD</MenuItem>
+                <MenuItem value="ISD">ISD</MenuItem>
+                <MenuItem value="JHS">JHS</MenuItem>
+                <MenuItem value="LRAC">LRAC</MenuItem>
+                <MenuItem value="MEDICAL-DENTAL CLINIC">MEDICAL-DENTAL CLINIC</MenuItem>
+                <MenuItem value="MIS-ISD">MIS-ISD</MenuItem>
+                <MenuItem value="MSDO">MSDO</MenuItem>
+                <MenuItem value="MSDO - ATO">MSDO - ATO</MenuItem>
+                <MenuItem value="NLO">NLO</MenuItem>
+                <MenuItem value="OAS">OAS</MenuItem>
+                <MenuItem value="OPC">OPC</MenuItem>
+                <MenuItem value="QAO">QAO</MenuItem>
+                <MenuItem value="RDCO">RDCO</MenuItem>
+                <MenuItem value="SAFETY & SECURITY">SAFETY & SECURITY</MenuItem>
+                <MenuItem value="SSO">SSO</MenuItem>
+                <MenuItem value="SHS">SHS</MenuItem>
+                <MenuItem value="TSG">TSG</MenuItem>
+                <MenuItem value="URO">URO</MenuItem>
+                <MenuItem value="URO-College">URO-College</MenuItem>
+                <MenuItem value="URO-ELEM">URO-ELEM</MenuItem>
+                <MenuItem value="URO-HS">URO-HS</MenuItem>
+                <MenuItem value="URO-SHS">URO-SHS</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              margin="dense"
+              label="Designation"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={designation}
+              required
+              onChange={(e) => setDesignation(e.target.value)}
             />
             <TextField
               margin="dense"
@@ -490,6 +549,72 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
               required
               onChange={(e) => setUsername(e.target.value)}
             />
+            <FormControl fullWidth variant="outlined" margin="dense">
+              <InputLabel>Department</InputLabel>
+              <Select
+                value={department}
+                required
+                onChange={(e) => setDepartment(e.target.value)}
+                label="Department"
+              >
+                <MenuItem value="Alumni Affairs Office">Alumni Affairs Office</MenuItem>
+                <MenuItem value="CASE-Dean's Office">CASE-Dean's Office</MenuItem>
+                <MenuItem value="CCS-Dean's Office">CCS-Dean's Office</MenuItem>
+                <MenuItem value="CCS-IT / CREATE / NEXUSS">CCS-IT / CREATE / NEXUSS</MenuItem>
+                <MenuItem value="CCS-MakerSpace">CCS-MakerSpace</MenuItem>
+                <MenuItem value="CMBA-Dean's Office">CMBA-Dean's Office</MenuItem>
+                <MenuItem value="CMBA-DHTM">CMBA-DHTM</MenuItem>
+                <MenuItem value="CON">CON</MenuItem>
+                <MenuItem value="CON-Dean's Office">CON-Dean's Office</MenuItem>
+                <MenuItem value="CORE-MARKETING">CORE-MARKETING</MenuItem>
+                <MenuItem value="CEA-ARCH">CEA-ARCH</MenuItem>
+                <MenuItem value="CEA-CE">CEA-CE</MenuItem>
+                <MenuItem value="CEA-CE / PCO">CEA-CE / PCO</MenuItem>
+                <MenuItem value="CEA-CHE">CEA-CHE</MenuItem>
+                <MenuItem value="CEA-DEMP">CEA-DEMP</MenuItem>
+                <MenuItem value="CEA-ECE">CEA-ECE</MenuItem>
+                <MenuItem value="CEA-EE">CEA-EE</MenuItem>
+                <MenuItem value="CEA-EM">CEA-EM</MenuItem>
+                <MenuItem value="CEA-ME">CEA-ME</MenuItem>
+                <MenuItem value="CV-FIC">CV-FIC</MenuItem>
+                <MenuItem value="ETEEAP">ETEEAP</MenuItem>
+                <MenuItem value="Executive Office">Executive Office</MenuItem>
+                <MenuItem value="FAO">FAO</MenuItem>
+                <MenuItem value="GUIDANCE">GUIDANCE</MenuItem>
+                <MenuItem value="HRD">HRD</MenuItem>
+                <MenuItem value="ISD">ISD</MenuItem>
+                <MenuItem value="JHS">JHS</MenuItem>
+                <MenuItem value="LRAC">LRAC</MenuItem>
+                <MenuItem value="MEDICAL-DENTAL CLINIC">MEDICAL-DENTAL CLINIC</MenuItem>
+                <MenuItem value="MIS-ISD">MIS-ISD</MenuItem>
+                <MenuItem value="MSDO">MSDO</MenuItem>
+                <MenuItem value="MSDO - ATO">MSDO - ATO</MenuItem>
+                <MenuItem value="NLO">NLO</MenuItem>
+                <MenuItem value="OAS">OAS</MenuItem>
+                <MenuItem value="OPC">OPC</MenuItem>
+                <MenuItem value="QAO">QAO</MenuItem>
+                <MenuItem value="RDCO">RDCO</MenuItem>
+                <MenuItem value="SAFETY & SECURITY">SAFETY & SECURITY</MenuItem>
+                <MenuItem value="SSO">SSO</MenuItem>
+                <MenuItem value="SHS">SHS</MenuItem>
+                <MenuItem value="TSG">TSG</MenuItem>
+                <MenuItem value="URO">URO</MenuItem>
+                <MenuItem value="URO-College">URO-College</MenuItem>
+                <MenuItem value="URO-ELEM">URO-ELEM</MenuItem>
+                <MenuItem value="URO-HS">URO-HS</MenuItem>
+                <MenuItem value="URO-SHS">URO-SHS</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              margin="dense"
+              label="Designation"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={designation}
+              required
+              onChange={(e) => setDesignation(e.target.value)}
+            />
             <TextField
               margin="dense"
               label="Password"
@@ -596,16 +721,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
           </Button>
         </DialogActions>
       </Dialog>
-
-        {/* Snackbar for showing messages */}
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={handleSnackbarClose}
-          message={snackbarMessage}
-        />
-
-        <Copyright sx={{ pt: 4 }} />
+        
       </Container>
     </Box>
   );

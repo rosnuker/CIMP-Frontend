@@ -11,7 +11,7 @@ export default function Inventory( { user, setUser } ) {
 	const [id, setId] = useState("");
 	const [queryResults, setQueryResults] = useState([]);
 	const [LqueryResults, setLQueryResults] = useState([]);
-	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DESIGNATION", "DEPARTMENT", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "UNIT OF MEASURE", "LIFESPAN"];
+	const columns = ["PROPERTY TAG", "ACCOUNTABLE PERSON", "DEPARTMENT", "DESIGNATION", "ITEM NAME", "INVOICE NUMBER", "INVOICE DATE", "ISSUE ORDER NUMBER", "QUANTITY", "REMARKS", "STATUS", "SUPPLIER", "TOTAL COST", "UNIT COST", "LIFESPAN", "CONSUMABLE"];
 	
 	const address = getIpAddress();
 	
@@ -38,8 +38,6 @@ export default function Inventory( { user, setUser } ) {
 
 	const [formData, setFormData] = useState({
 		accPerson: "",
-		department: "",
-		designation: "",
 		invoiceNumber: "",
 		invoiceDate: "",
 		issueOrder: "",
@@ -62,107 +60,74 @@ export default function Inventory( { user, setUser } ) {
 			building: "",
 			room: "",
 		},
+		isConsumable: false,
 	});
-
-	// const formatNumber = (num) => {
-	// 	if (!num) return '';
-	// 	const [whole, decimal] = num.toString().split('.');
-	// 	return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimal ? '.' + decimal : '');
-	//   };
-	  
-	//   const handleChange = (event) => {
-	// 	const { name, value } = event.target;
-	  
-	// 	// Check if the field being changed is quantity or unitCost
-	// 	if (name === "quantity" || name === "unitCost") {
-	// 	  // Remove commas for raw value calculations
-	// 	  const rawValue = value.replace(/,/g, '');
-	  
-	// 	  // Calculate total cost using raw values
-	// 	  const quantity = name === "quantity" ? rawValue : formData.quantity;
-	// 	  const unitCost = name === "unitCost" ? rawValue : formData.unitCost;
-	// 	  const totalCost = parseFloat(quantity) * parseFloat(unitCost);
-	  
-	// 	  // Update state for quantity or unitCost only
-	// 	  setFormData((prevState) => ({
-	// 		...prevState,
-	// 		[name]: rawValue, // Store raw value for calculations
-	// 		totalCost: totalCost ? totalCost.toFixed(2) : "0.00", // Ensure two decimal places
-	// 	  }));
-	// 	} else if (name.includes(".")) {
-	// 	  // Handle nested fields (parent.child)
-	// 	  const [parentKey, childKey] = name.split(".");
-	// 	  setFormData((prevState) => ({
-	// 		...prevState,
-	// 		[parentKey]: {
-	// 		  ...prevState[parentKey],
-	// 		  [childKey]: value,
-	// 		},
-	// 	  }));
-	// 	} else {
-	// 	  // Update other fields normally
-	// 	  setFormData((prevState) => ({
-	// 		...prevState,
-	// 		[name]: value,
-	// 	  }));
-	// 	}
-	//   };
 
 	const formatNumber = (num) => {
 		if (!num) return '';
 		const [whole, decimal] = num.toString().split('.');
-		// Format the whole part with commas and keep the decimal part as is
 		return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (decimal ? '.' + decimal : '');
 	};
 	
+	const formatNumberWithCommas = (numberString) => {
+		return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
+	
+	const cleanNumberString = (numberString) => {
+		if (typeof numberString === 'string') {
+			return numberString.replace(/,/g, '');
+		}
+		return numberString;
+	};
+	
 	const handleChange = (event) => {
-		const { name, value } = event.target;
+		const { name, value, type } = event.target;
 	
-		// Remove commas to handle raw value calculations
-		const rawValue = value.replace(/,/g, '');
+		const finalValue = type === 'checkbox' ? event.target.checked : value;
 	
-		// Check if the field being changed is quantity or unitCost
+		const rawValue = typeof finalValue === 'string' ? finalValue.replace(/,/g, '') : finalValue;
+	
 		if (name === "quantity" || name === "unitCost") {
-			// Allow decimal values
-			const quantity = name === "quantity" ? rawValue : formData.quantity;
-			const unitCost = name === "unitCost" ? rawValue : formData.unitCost;
-			const totalCost = parseFloat(quantity) * parseFloat(unitCost);
+			const quantity = name === "quantity" ? rawValue : formData.quantity.replace(/,/g, '');
+			const unitCost = name === "unitCost" ? rawValue : formData.unitCost.replace(/,/g, '');
+	
+			const parsedQuantity = parseFloat(quantity) || 0;
+			const parsedUnitCost = parseFloat(unitCost) || 0;
+			const totalCost = parsedQuantity * parsedUnitCost;
 	
 			setFormData((prevState) => ({
 				...prevState,
-				[name]: rawValue, // Store raw value for calculations
-				totalCost: totalCost.toString(), // Store as raw value for flexibility
+				[name]: formatNumberWithCommas(rawValue),
+				totalCost: totalCost.toFixed(2),
 			}));
 		} else if (name.includes(".")) {
-			// Handle nested fields (parent.child)
 			const [parentKey, childKey] = name.split(".");
 			setFormData((prevState) => ({
 				...prevState,
 				[parentKey]: {
 					...prevState[parentKey],
-					[childKey]: value,
+					[childKey]: rawValue,
 				},
 			}));
 		} else {
 			setFormData((prevState) => ({
 				...prevState,
-				[name]: value,
+				[name]: finalValue,
 			}));
 		}
 	};
+	
 	
 	const handleBlur = (event) => {
 		const { name, value } = event.target;
 	
 		if (name === "unitCost" || name === "quantity") {
-			// Format the input when the field loses focus
 			const formattedValue = formatNumber(value);
 			setFormData((prevState) => ({
 				...prevState,
 				[name]: formattedValue,
 			}));
 		} else if (name === "totalCost") {
-			// Format totalCost when the field loses focus
 			const formattedTotalCost = formatNumber(formData.totalCost);
 			setFormData((prevState) => ({
 				...prevState,
@@ -173,21 +138,22 @@ export default function Inventory( { user, setUser } ) {
 	
 	  
 	const handleSubmit = () => {
-		const totalCost = parseFloat(formData.quantity) * parseFloat(formData.unitCost);
-	
+		const cleanedQuantity = cleanNumberString(formData.quantity);
+		const cleanedUnitCost = cleanNumberString(formData.unitCost);
+		
+		const totalCost = parseFloat(cleanedQuantity) * parseFloat(cleanedUnitCost);
+		
 		axios.post(`http://${address}:8080/item/insertItem?fullName=${formData.accPerson}`, {
-			department: formData.department,
-			designation: formData.designation,
 			invoiceNumber: formData.invoiceNumber,
 			invoiceDate: formData.invoiceDate,
 			issueOrder: formData.issueOrder,
 			lifespan: formData.lifespan,
-			quantity: formData.quantity,
+			quantity: cleanedQuantity,
 			remarks: formData.remarks,
-			status: (formData.accPerson && formData.department && formData.designation) ? "WAITING" : "TO BE ASSIGNED",
+			status: "TO BE ASSIGNED",
 			supplier: formData.supplier,
-			totalCost: totalCost,
-			unitCost: formData.unitCost,
+			totalCost: totalCost.toFixed(2),
+			unitCost: cleanedUnitCost,
 			unitOfMeasurement: formData.unitOfMeasurement,
 			description: {
 				name: formData.description.name,
@@ -200,30 +166,15 @@ export default function Inventory( { user, setUser } ) {
 				building: formData.location.building,
 				room: formData.location.room,
 			},
+			consumable: formData.isConsumable,
 		})
 		.then(response => {
 			const newId = response.data.iid;
 			const newName = response.data.description.name; 
 			setQueryResults(response.data);
 			setId(newId);
-			
-			if(response.data.status !== "WAITING") {
-				showSnackbar('Data added!', 'success');
-			}
 
-			if(response.data.status === "WAITING") {
-				axios.post(`http://${address}:8080/request/add`, {}, {
-					params: {
-						iid: newId,
-					}
-				}).then(response => {
-					console.log(response.data);
-					showSnackbar('Request sent!', 'success');
-				}).catch(error => {
-					console.error("Error sending request:", error);
-					showSnackbar('Error sending request!', 'error');
-				});
-			}
+			showSnackbar('Data added!', 'success');
 
 			axios.post(`http://${address}:8080/addLog`, {
 				description: `Added an Item: [${newId}] - ${newName}`,
@@ -245,8 +196,6 @@ export default function Inventory( { user, setUser } ) {
 
 			setFormData({
 				accPerson: "",
-				department: "",
-				designation: "",
 				invoiceNumber: "",
 				invoiceDate: "",
 				issueOrder: "",
@@ -269,6 +218,7 @@ export default function Inventory( { user, setUser } ) {
 					building: "",
 					room: "",
 				},
+				isConsumable: false,
 			});
 		})
 		.catch(error => {
@@ -278,12 +228,12 @@ export default function Inventory( { user, setUser } ) {
 	};
 
 	const combinedSubmit = (event) => {
-		event.preventDefault(); // Prevent default form submission
+		event.preventDefault();
 		handleSubmit();
 	}
 
 	const [data, setData] = useState([]);
-	const [selectedItem, setSelectedItem] = useState({}); // Initialize with an empty object
+	const [selectedItem, setSelectedItem] = useState({});
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [showAddItemModal, setShowAddItemModal] = useState(false);
 	const [loader, setLoader] = useState(null);
@@ -293,8 +243,6 @@ export default function Inventory( { user, setUser } ) {
 		setShowAddItemModal(false);
 		setFormData({
 			accPerson: "",
-			department: "",
-			designation: "",
 			invoiceNumber: "",
 			invoiceDate: "",
 			issueOrder: "",
@@ -317,6 +265,7 @@ export default function Inventory( { user, setUser } ) {
 				building: "",
 				room: "",
 			},
+			isConsumable: false,
 		});
 	};
 
@@ -337,7 +286,7 @@ export default function Inventory( { user, setUser } ) {
 
 	const handleRowClick = (item) => {
 		setSelectedItem(item);
-		setShowOverlay(true); // Show overlay after clicking on a row
+		setShowOverlay(true);
 	};
 
     const handleDelete = (event) => {
@@ -370,9 +319,6 @@ export default function Inventory( { user, setUser } ) {
 			});
 			
 			console.log('Item deleted successfully');
-			// alert("Item Deleted");
-			// setSnackbarMessage("Item deleted!");
-			// setSnackbarGreenOpen(true);
 			setLoader(Math.random()*1000);
 			handleCloseDialog();
 			handleCloseOverlay();
@@ -395,41 +341,11 @@ export default function Inventory( { user, setUser } ) {
 		try {
 			if (selectedItem) {
 
-				const status = (selectedItem.accPerson && selectedItem.department && selectedItem.designation) 
-                ? "WAITING" 
-                : "TO BE ASSIGNED";
+				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}`;
+				await axios.put(url, selectedItem);
 
-				const fullName = selectedItem.accPerson.fname + " " + selectedItem.accPerson.lname;
-
-				const updatedItem = {
-					...selectedItem,
-					accPerson: null,
-					status: status,
-				};
-
-				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}?fullName=${fullName}`;
-				await axios.put(url, updatedItem);
-
-				if(updatedItem.status === "WAITING") {
-					axios.post(`http://${address}:8080/request/add`, {}, {
-						params: {
-							iid: selectedItem.iid,
-						}
-					}).then(response => {
-						console.log(response.data);
-					}).catch(error => {
-						console.error("Error sending request:", error);
-					});
-				}
-				// alert("Data updated");
-				// setSnackbarMessage("Data updated!");
-				// setSnackbarGreenOpen(true);
-				// console.log("Item updated successfully");
-	
-				// Get the original item from the data or wherever it is stored
 				const originalItem = data.find(item => item.iid === selectedItem.iid);
-	
-				// Compare each property to find changes
+
 				const changedProperties = [];
 				for (const key in selectedItem) {
 					if (selectedItem.hasOwnProperty(key) && selectedItem[key] !== originalItem[key]) {
@@ -437,7 +353,6 @@ export default function Inventory( { user, setUser } ) {
 					}
 				}
 
-				// Construct description based on changed properties
 				let description;
 				if (changedProperties.length > 0) {
 					description = "Updated " + changedProperties.join(", ") + ` of: [${selectedItem.iid}] - ${selectedItem.description.name}`;
@@ -476,26 +391,26 @@ export default function Inventory( { user, setUser } ) {
 	
 	const handleCloseOverlay = () => {
 		setShowOverlay(false);
-		setSelectedItem({}); // Reset selectedItem to an empty object
+		setSelectedItem({});
+		setLoader(Math.random() * 1000);
 	};
 
 	const handleQuantityChange = (e) => {
 		const quantity = e.target.value;
-		const unitCost = selectedItem.unitCost || 0; // Handle cases where unitCost is not set
+		const unitCost = selectedItem.unitCost || 0;
 		const totalCost = quantity * unitCost;
 		setSelectedItem({ ...selectedItem, quantity, totalCost });
 	};
 
 	const handleUnitCostChange = (e) => {
-		const value = e.target.value.replace(/,/g, ''); // Remove commas for calculation
+		const value = e.target.value.replace(/,/g, '');
 		const unitCost = value;
-		const quantity = selectedItem.quantity || 0; // Handle cases where quantity is not set
+		const quantity = selectedItem.quantity || 0;
 		const totalCost = quantity * (unitCost ? parseFloat(unitCost) : 0);
 		
 		setSelectedItem({ ...selectedItem, unitCost, totalCost });
 	};
 	
-
     return(
       <>
         <Box
@@ -554,7 +469,7 @@ export default function Inventory( { user, setUser } ) {
 			<TableBody>
 				{data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length + 1} style={{ textAlign: 'center', padding: '20px' }}>
+                  <TableCell colSpan={columns.length} style={{ textAlign: 'center', padding: '20px' }}>
                     <Typography variant="body1">There are no item(s) to show</Typography>
                   </TableCell>
                 </TableRow>
@@ -571,20 +486,21 @@ export default function Inventory( { user, setUser } ) {
 					onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}
 					>
 					<TableCell>{item.iid}</TableCell>
-					<TableCell>{item.accPerson ? `${item.accPerson.fname} ${item.accPerson.lname}` : ""}</TableCell>
-					<TableCell>{item.designation}</TableCell>
-					<TableCell>{item.department}</TableCell>
+					<TableCell>{item.accPerson ? `${item.accPerson.fname} ${item.accPerson.lname}` : "N/A"}</TableCell>
+					<TableCell>{item.accPerson ? item.accPerson.department : "N/A"}</TableCell>
+					<TableCell>{item.accPerson ? item.accPerson.designation : "N/A"}</TableCell>
+					<TableCell>{item.description.name}</TableCell>
 					<TableCell>{item.invoiceNumber}</TableCell>
 					<TableCell>{item.invoiceDate}</TableCell>
 					<TableCell>{item.issueOrder}</TableCell>
-					<TableCell>{item.quantity}</TableCell>
+					<TableCell>{item.quantity + " " + item.unitOfMeasurement}</TableCell>
 					<TableCell>{item.remarks}</TableCell>
 					<TableCell>{item.status}</TableCell>
 					<TableCell>{item.supplier}</TableCell>
 					<TableCell>₱{item.totalCost.toLocaleString()}</TableCell>
 					<TableCell>₱{item.unitCost.toLocaleString()}</TableCell>
-					<TableCell>{item.unitOfMeasurement}</TableCell>
 					<TableCell>{item.lifespan}</TableCell>
+					<TableCell>{item.consumable ? 'YES' : 'NO'}</TableCell>
 					</TableRow>
 				)
 				))

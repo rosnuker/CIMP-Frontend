@@ -354,21 +354,21 @@ export default function Dashboard({ user, setUser }) {
                   sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black' }}
                 >
                   <strong>
-                    To be assigned: <span style={{ color: 'maroon' }}>{toBeAssigned}</span>
+                    Not Assigned: <span style={{ color: 'maroon' }}>{toBeAssigned}</span>
                   </strong>
                 </Typography>
                 <Typography
                   sx={{ paddingBottom: 1, fontSize: '1rem', color: 'black' }}
                 >
                   <strong>
-                  To be Accepted/Denied: <span style={{ color: 'maroon' }}>{waiting}</span>
+                  Pending Approval / Rejection: <span style={{ color: 'maroon' }}>{waiting}</span>
                   </strong>
                 </Typography>
                 <Typography
                   sx={{ fontSize: '1rem', color: 'black' }}
                 >
                   <strong>
-                    To be returned: <span style={{ color: 'maroon' }}>{returned}</span>
+                    Pending Return: <span style={{ color: 'maroon' }}>{returned}</span>
                   </strong>
                 </Typography>
               </Paper>

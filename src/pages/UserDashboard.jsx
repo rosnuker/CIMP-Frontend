@@ -1,4 +1,4 @@
-import { Box, Container, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Divider } from "@mui/material";
+import { Box, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Divider } from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useEffect, useState } from "react";
@@ -9,8 +9,8 @@ export default function UserDashboard({ user, setUser }) {
   const [loader, setLoader] = useState(null);
 	
   const [openRejectDialog, setOpenRejectDialog] = useState(false); 
-  const [rejectionReason, setRejectionReason] = useState(''); // State to store rejection reason
-  const [selectedRid, setSelectedRid] = useState(null); // State to store the selected rid for rejection
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [selectedRid, setSelectedRid] = useState(null); 
 
 
   const columns = ["PROPERTY TAG", "ITEM NAME", "MODEL", "SERIAL NUMBER", "STATUS", "QUANTITY", "TOTAL COST"];
@@ -129,44 +129,50 @@ export default function UserDashboard({ user, setUser }) {
                   </TableCell>
                 </TableRow>
               ) : (
-                data.map((req) => (
-                  
-                  <TableRow
-                    key={req.rid}
-                    style={{
-                      backgroundColor: 'white',
-                      transition: 'background-color 0.3s ease',
-                    }}
-                  >
-                    <TableCell>{req.itemId}</TableCell>
-                    <TableCell>{req.itemName}</TableCell>
-                    <TableCell>{req.itemModel}</TableCell>
-                    <TableCell>{req.itemSerialNumber}</TableCell>
-                    <TableCell>{req.itemStatus}</TableCell>
-                    <TableCell>{req.itemQuantity} {req.itemUnitOfMeasurement}</TableCell>
-                    <TableCell>₱{req.itemTotalCost.toLocaleString()}</TableCell>
-                    <TableCell style={{ position: 'sticky', right: 0, backgroundColor: 'white', zIndex: 2 }}>
-                      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {req.itemStatus === "WAITING" && (
-                          <>
-                              <Button onClick={() => handleApprove(req.rid)} variant="contained" color="success" startIcon={<CheckCircleOutlineIcon />} sx={{ width: '110px', mr: 1 }}>
-                                  Approve
+                data.map((req) =>
+                  req.itemStatus === 'DISPOSED' || req.itemStatus === 'ADD BACK' ? null : (
+                    <TableRow
+                      key={req.rid}
+                      style={{
+                        backgroundColor: 'white',
+                        transition: 'background-color 0.3s ease',
+                      }}
+                    >
+                      <TableCell>{req.itemId}</TableCell>
+                      <TableCell>{req.itemName}</TableCell>
+                      <TableCell>{req.itemModel}</TableCell>
+                      <TableCell>{req.itemSerialNumber}</TableCell>
+                      <TableCell>{req.itemStatus}</TableCell>
+                      <TableCell>{req.itemQuantity} {req.itemUnitOfMeasurement}</TableCell>
+                      <TableCell>₱{req.itemTotalCost.toLocaleString()}</TableCell>
+                      <TableCell style={{ position: 'sticky', right: 0, backgroundColor: 'white', zIndex: 2 }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                          {req.itemStatus === 'WAITING' && req.status !== 'UNASSIGNED' && (
+                            <>
+                              <Button
+                                onClick={() => handleApprove(req.rid)}
+                                variant="contained"
+                                color="success"
+                                startIcon={<CheckCircleOutlineIcon />}
+                                sx={{ width: '110px', mr: 1 }}
+                              >
+                                Approve
                               </Button>
                               <Button onClick={() => handleOpenRejectDialog(req.rid)} variant="contained" color="error" startIcon={<RemoveCircleOutlineIcon />}>
-                                  Reject
+                                Reject
                               </Button>
-                          </>
-                      )}
-                      {req.itemStatus === "ASSIGNED" && (
-                          <Button onClick={() => handleReturn(req.rid)} variant="contained" color="primary" startIcon={<CheckCircleOutlineIcon />}>
+                            </>
+                          )}
+                          {req.itemStatus === 'ASSIGNED' && req.itemConsumable !== true && req.status !== 'UNASSIGNED' && (
+                            <Button onClick={() => handleReturn(req.rid)} variant="contained" color="primary" startIcon={<CheckCircleOutlineIcon />}>
                               Return
-                          </Button>
-                      )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                  
-                ))
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )
               )}
             </TableBody>
               </Table>

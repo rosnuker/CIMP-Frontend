@@ -24,8 +24,8 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
 import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material';
+import citULogo from '../assets/cit.png';
 
 const drawerWidth = 240;
 
@@ -79,42 +79,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const defaultTheme = createTheme();
 
-// function stringToColor(string) {
-//   let hash = 0;
-//   let i;
-
-//   /* eslint-disable no-bitwise */
-//   for (i = 0; i < string.length; i += 1) {
-//     hash = string.charCodeAt(i) + ((hash << 5) - hash);
-//   }
-
-//   let color = '#';
-
-//   for (i = 0; i < 3; i += 1) {
-//     const value = (hash >> (i * 8)) & 0xff;
-//     color += `00${value.toString(16)}`.slice(-2);
-//   }
-//   /* eslint-enable no-bitwise */
-
-//   return color;
-// }
-
-// function stringAvatar(name) {
-//   return {
-//     sx: {
-//       bgcolor: stringToColor(name),
-//     },
-//     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-//   };
-// }
-
 export default function Dashboard({ user, setUser }) {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [open, setOpen] = React.useState(true);
-
   const [selectedIndex, setSelectedIndex] = React.useState(0); // State for nav
   
+  const drawerRef = React.useRef(null);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -152,6 +124,19 @@ export default function Dashboard({ user, setUser }) {
 
   const filteredItems = items.filter(item => item.roles.includes(user.type));
 
+  const handleClickOutside = (event) => {
+    if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+      setOpen(false); // Close the drawer
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -174,7 +159,7 @@ export default function Dashboard({ user, setUser }) {
             >
               <MenuIcon />
             </IconButton>
-            <Avatar alt="CIT-U Logo" src="./src/assets/cit.png" sx={{ mr: 1 }} />
+            <Avatar alt="CIT-U Logo" src={citULogo} sx={{ mr: 1 }} />
             <Typography
               component="h1"
               variant="h6"
@@ -189,8 +174,7 @@ export default function Dashboard({ user, setUser }) {
               <IconButton color="inherit" onClick={handleOpenUserMenu}>
                 <Avatar alt={ user !== null ? `${user.fname} ${user.lname}` : 'User' } /> 
               </IconButton>
-            </Tooltip> 
-            {/* {...stringAvatar(`${user.fname} ${user.lname}`)} */}
+            </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -213,7 +197,7 @@ export default function Dashboard({ user, setUser }) {
             </Menu>
           </Toolbar>
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer ref={drawerRef} variant="permanent" open={open}>
           <Toolbar
             sx={{
               display: 'flex',
@@ -229,7 +213,30 @@ export default function Dashboard({ user, setUser }) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {filteredItems.map((item, index) => (
+          {filteredItems.map((item, index) => (
+            // Only show the tooltip if the sidebar is closed
+            !open ? (
+              <Tooltip key={item.text} title={item.text} arrow placement='right'>
+                <ListItemButton
+                  key={item.text}
+                  onClick={() => handleNavigate(item.destination, index)}
+                  sx={{
+                    backgroundColor: selectedIndex === index ? '#F4C522' : 'transparent',
+                    color: selectedIndex === index ? '#8A252C' : 'white',
+                    '&:hover': {
+                      backgroundColor: '#F4C522',
+                      color: '#8A252C',
+                    },
+                  }}
+                >
+                  <ListItemIcon sx={{ color: selectedIndex === index ? '#8A252C' : 'white' }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </Tooltip>
+            ) : (
+              // If open, just render the ListItemButton without the tooltip
               <ListItemButton
                 key={item.text}
                 onClick={() => handleNavigate(item.destination, index)}
@@ -247,8 +254,9 @@ export default function Dashboard({ user, setUser }) {
                 </ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
-            ))}
-            <Divider sx={{ my: 1 }} />
+            )
+          ))}
+          <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
         <Outlet />

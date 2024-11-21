@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Box, Typography, TextField, Button, Paper, Divider, InputAdornment, Autocomplete } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Box, Typography, TextField, Button, Paper, Divider, InputAdornment, Autocomplete, FormControlLabel, Checkbox } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import axios from "axios";
+import AssignUserButton from "../components/AssignUserButton";
 
 const OverlayItem = ({
   showOverlay,
@@ -59,6 +60,7 @@ const OverlayItem = ({
       }
 
       nestedObject[keys[keys.length - 1]] = value;
+
       return updatedItem;
     });
   };
@@ -135,7 +137,7 @@ const OverlayItem = ({
             <form onSubmit={handleUpdate}>
               {/* Accountability Information */}
 
-              <Typography
+              {/* <Typography
                 variant="subtitle1"
                 sx={{ fontWeight: "bold", mb: 2 }}
               >
@@ -244,7 +246,7 @@ const OverlayItem = ({
                 </Grid>
               </Grid>
 
-              <Divider sx={{ my: 3 }} />
+              <Divider sx={{ my: 3 }} /> */}
 
               {/* Location Information */}
               <Typography
@@ -441,6 +443,19 @@ const OverlayItem = ({
                     sx={{ mt: 2 }}
                   />
                 </Grid>
+                <Grid size={2.6}>
+                  <FormControlLabel
+                      control={
+                          <Checkbox
+                              name="isConsumable"
+                              checked={selectedItem.consumable || false} // Default to false if undefined
+                              onChange={(e) => handleInputChange("consumable", e.target.checked)}
+                          />
+                      }
+                      label="Consumable"
+                      sx={{ mt: 2.5 }}
+                  />
+                </Grid>
               </Grid>
 
               <Divider sx={{ my: 3 }} />
@@ -555,6 +570,7 @@ const OverlayItem = ({
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
+                  alignItems: "center", // Align items vertically centered
                   marginTop: 3,
                 }}
               >
@@ -574,21 +590,26 @@ const OverlayItem = ({
                     Cancel
                   </Button>
                   <Button
-                  type="button"
-                  onClick={handleOpenDialog}
-                  variant="contained"
-                  color="error"
-                >
-                  Delete
-                </Button>
+                    type="button"
+                    onClick={handleOpenDialog}
+                    variant="contained"
+                    color="error"
+                  >
+                    Delete
+                  </Button>
                 </Box>
-                <Button
+
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <AssignUserButton item={selectedItem} accPerson={selectedItem.accPerson} handleCloseOverlay={handleCloseOverlay} />
+                  <Button
                     type="submit"
                     variant="contained"
                     color="primary"
+                    sx={{ marginLeft: 2 }} // Add margin to the left of the Update button
                   >
                     Update
                   </Button>
+                </Box>
               </Box>
             </form>
           </Paper>

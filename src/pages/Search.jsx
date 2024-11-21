@@ -330,7 +330,7 @@ export default function Search( {user, setUser} ) {
           },
         }}
       />
-      {/*}<Button 
+      {/* <Button 
         variant="contained"
         sx={{
             bgcolor: '#ffc107',
@@ -355,7 +355,7 @@ export default function Search( {user, setUser} ) {
         onClick={handlePrintTable}
         >
           Print <PrintIcon />
-        </Button>{*/}
+        </Button> */}
         
     <TableContainer component={Paper} style={{ maxHeight: '340px', marginLeft: '1px', marginRight: '4px', marginTop: '30px' }}>
         <Table size="small" stickyHeader aria-label="logs table">
