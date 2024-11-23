@@ -74,7 +74,7 @@ const handleBackdropClick = (e) => {
                   }}
                 />
               </Grid>
-              <Grid size={2.6}>
+              {/* <Grid size={2.6}>
                 <TextField
                   label="Department"
                   value={selectedItem.department || ''}
@@ -84,8 +84,8 @@ const handleBackdropClick = (e) => {
                     },
                   }}
                 />
-              </Grid>
-              <Grid size={2.6}>
+              </Grid> */}
+              {/* <Grid size={2.6}>
                 <TextField
                   label="Designation"
                   value={selectedItem.designation || ''}
@@ -95,7 +95,7 @@ const handleBackdropClick = (e) => {
                     },
                   }}
                 />
-              </Grid>
+              </Grid> */}
               </Grid>
 
               <Divider sx={{ my: 3 }} />

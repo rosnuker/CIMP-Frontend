@@ -553,13 +553,11 @@ export default function Filter( {user, setUser} ) {
         <style>
     table {
         border-collapse: collapse;
-        width: 100%;
+        width: 100%; 
     }
 
     th, td {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
+        border: 1px solid #dddddd;  
     }
 
     th {
@@ -720,7 +718,7 @@ export default function Filter( {user, setUser} ) {
         Listed below:</span>
     </div>
     <div class="no-section">
-        NO.&nbsp${queryResults[0].issueOrder}
+        NO.&nbsp${queryResults[0].issueOrder} 
         <br />
         <br />
          <span>Date: ${currentDate}</span>
@@ -730,14 +728,14 @@ export default function Filter( {user, setUser} ) {
 <div class="issued-section">
     <div class="issued-left">Issued by: TINA</div>
     <div class="department-container">
-    <div>${queryResults[0].department}</div>
+    <div>${queryResults[0].accPerson ? queryResults[0].accPerson.department : "N/A"}</div>
         <div class="department-line"></div>
         <div class="department-text">Department</div>
     </div>
 </div>
 
 <div class="details-section">
-    <div class="details-item">Purchased From:</div> 
+    <div class="details-item">Purchased From:&nbsp${queryResults[0].supplier}</div> 
     <div class="details-item">Invoice Date:&nbsp${queryResults[0].invoiceDate}</div>
     <div class="details-item">Inv No.&nbsp&nbsp&nbsp&nbsp${queryResults[0].invoiceNumber}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div> <!-- Display only one invoice number --> 
 </div>
@@ -764,28 +762,25 @@ export default function Filter( {user, setUser} ) {
         `;
     });
     printableContent += `
-            <tr style ="height:29px">
-              <td></td><td></td><td></td><td></td>
-            </tr>
             <tr>
               <td></td>
               <td>>>>nothing follows<<<  </td>
               <td></td><td></td>
             </tr>
-            <tr style ="height:30px">
+            <tr style ="height:20px">
               <td></td><td></td><td></td><td></td>
             </tr>
-            <tr style ="height:30px">
+            <tr>
               <td></td>
               <td colspan="2">I/We acknowledge to have received from the Property Custodian's Office</td>
               <td></td>
             </tr>
-            <tr style ="height:30px">
+            <tr>
               <td></td>
               <td colspan="2"> the above listed property which will be used for the &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FAO    </td>
               <td></td>
             </tr>
-            <tr style ="height:30px">
+            <tr>
               <td></td>
               <td colspan="2">and for which I/We am/ are accountable</td>
              <td>${O_sum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>

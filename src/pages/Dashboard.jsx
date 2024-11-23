@@ -274,6 +274,12 @@ export default function Dashboard({ user, setUser }) {
               backgroundColor: '#f9f9f9',
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
               borderRadius: '12px',
+              overflowY: 'auto', 
+              overflowX: 'hidden', 
+              scrollbarWidth: 'none', // For Firefox
+              '&::-webkit-scrollbar': {
+                display: 'none', // For Chrome, Edge, and Safari
+              },
             }}
           >
             <Typography
@@ -521,8 +527,8 @@ export default function Dashboard({ user, setUser }) {
                     >
                       <TableCell>{selectedItem.iid || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.accPerson ? `${selectedItem.accPerson.fname} ${selectedItem.accPerson.lname}` : "N/A"}</TableCell>
-                      <TableCell>{selectedItem.designation || 'N/A'}</TableCell>
-                      <TableCell>{selectedItem.department || 'N/A'}</TableCell>
+                      <TableCell>{selectedItem.accPerson ? selectedItem.accPerson.department : "N/A"}</TableCell>
+                      <TableCell>{selectedItem.accPerson ? selectedItem.accPerson.designation : "N/A"}</TableCell>
                       <TableCell>{selectedItem.invoiceNumber || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.invoiceDate || 'N/A'}</TableCell>
                       <TableCell>{selectedItem.issueOrder || 'N/A'}</TableCell>
