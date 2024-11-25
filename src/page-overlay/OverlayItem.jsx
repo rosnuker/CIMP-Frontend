@@ -605,6 +605,7 @@ const OverlayItem = ({
                     type="submit"
                     variant="contained"
                     color="primary"
+                    disabled={selectedItem.status !== "TO BE ASSIGNED"}
                     sx={{ marginLeft: 2 }} // Add margin to the left of the Update button
                   >
                     Update

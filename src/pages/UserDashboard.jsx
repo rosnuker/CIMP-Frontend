@@ -130,7 +130,7 @@ export default function UserDashboard({ user, setUser }) {
                 </TableRow>
               ) : (
                 data.map((req) =>
-                  req.itemStatus === 'DISPOSED' || req.itemStatus === 'ADD BACK' ? null : (
+                  req.itemStatus === 'DISPOSED' || req.itemStatus === 'ADD BACK' || req.deleted ? null : (
                     <TableRow
                       key={req.rid}
                       style={{
