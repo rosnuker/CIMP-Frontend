@@ -39,11 +39,11 @@ const AssignUserButton = ({ item, handleCloseOverlay }) => {
 
     const handleSelectUser = async (fullName) => {
         try {
-            await axios.post(`http://${address}:8080/item/assignUser/${item.iid}`, null, {
+            await axios.post(`http://${address}:42069/item/assignUser/${item.iid}`, null, {
                 params: { fullName },
             });
 
-            await axios.post(`http://${address}:8080/request/add`, {}, {
+            await axios.post(`http://${address}:42069/request/add`, {}, {
                 params: {
                     iid: item.iid,
                 }
@@ -64,9 +64,9 @@ const AssignUserButton = ({ item, handleCloseOverlay }) => {
 
     const handleConfirmUnassign = async () => {
         try {
-            await axios.post(`http://${address}:8080/item/unassignUser/${item.iid}`);
+            await axios.post(`http://${address}:42069/item/unassignUser/${item.iid}`);
 
-            // const request = await axios.get(`http://${address}:8080/request/find`, {
+            // const request = await axios.get(`http://${address}:42069/request/find`, {
             //                 params: {
             //                     itemAccPerId: item.accPerson.uid,
             //                     itemId: item.iid,
@@ -84,7 +84,7 @@ const AssignUserButton = ({ item, handleCloseOverlay }) => {
             
             // console.log(request.data);
 
-            // await axios.post(`http://${address}:8080/item/unassignUserFromRequest/${request.rid}`);
+            // await axios.post(`http://${address}:42069/item/unassignUserFromRequest/${request.rid}`);
 
             showSnackbar('User unassigned successfully!', 'success');
             setHasUser(false);

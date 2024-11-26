@@ -30,7 +30,7 @@ export default function Request2() {
     }
 
     const handleFetchSearch = () => {
-        axios.get(`http://${address}:8080/item/search`, {
+        axios.get(`http://${address}:42069/item/search`, {
             params: { search }
         })
             .then(result => setQueryResults(result.data))
@@ -43,7 +43,7 @@ export default function Request2() {
     useEffect(() => {
         const fetchItemsData = async () => {
             try {
-                const response = await axios.get(`http://${address}:8080/item/getAllItems`);
+                const response = await axios.get(`http://${address}:42069/item/getAllItems`);
                 setQueryResults(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);

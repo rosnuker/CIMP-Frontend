@@ -61,7 +61,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
 
     const handleLog = (item) =>{
         if(type === "REQUEST"){
-            axios.post(`http://${address}:8080/addLog`, {
+            axios.post(`http://${address}:42069/addLog`, {
             type: type,
             description: "Requested " + number +`x of: "[${item.iid}] - ${item.description.name}" By: ` + remarks
         }, {
@@ -79,7 +79,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
 				console.error("Error adding log:", error);
 			});
         }else if(type === "BORROW"){
-            axios.post(`http://${address}:8080/addLog`, {
+            axios.post(`http://${address}:42069/addLog`, {
             type: type,
             description: `Borrowed "[${item.iid}] - ${item.description.name}" By: ` + remarks
         }, {
@@ -97,7 +97,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
 				console.error("Error adding log:", error);
 			});
         }else if(type === "REPAIR") {
-            axios.post(`http://${address}:8080/addLog`, {
+            axios.post(`http://${address}:42069/addLog`, {
             type: type,
             description: `"[${item.iid}] - ${item.description.name}" sent for repairs By: ` + remarks
         }, {
@@ -115,7 +115,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
 				console.error("Error adding log:", error);
 			});
         }else if(type === "DISPOSAL") {
-            axios.post(`http://${address}:8080/addLog`, {
+            axios.post(`http://${address}:42069/addLog`, {
             type: type,
             description: `"[${item.iid}] - ${item.description.name}" sent for disposal By: ` + remarks
         }, {
@@ -137,7 +137,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
     }
 
     const handleQuanti = () =>{
-        axios.get(`http://${address}:8080/item/quantiLog`,{
+        axios.get(`http://${address}:42069/item/quantiLog`,{
             params: {
                 num: id
             }
@@ -146,7 +146,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
             console.log(result.data);
 
                 if(result.data >= parseInt(number)){
-                    axios.put(`http://${address}:8080/item/requestItem`, null, {
+                    axios.put(`http://${address}:42069/item/requestItem`, null, {
                         params: {
                             number: parseInt(number),
                             itemId: id
@@ -174,7 +174,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
     }
 
     const handleStatus = () =>{
-        axios.get(`http://${address}:8080/item/statusLog`, {
+        axios.get(`http://${address}:42069/item/statusLog`, {
             params: {
                 type: id
             }
@@ -184,7 +184,7 @@ export default function Request( { user, setUser, setSnackbarGreenOpen, setSnack
             setStat(result.data);
             
             if(result.data === "AVAILABLE"){
-                axios.put(`http://${address}:8080/item/updateStatus`, null, {
+                axios.put(`http://${address}:42069/item/updateStatus`, null, {
                     params: {
                         iid: id,
                         status: type

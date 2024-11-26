@@ -34,7 +34,7 @@ export default function Search( {user, setUser} ) {
     }
 
     const handleFetchSearch = () =>{
-        axios.get(`http://${address}:8080/item/search`,{
+        axios.get(`http://${address}:42069/item/search`,{
             params: {
                 search: search
             }
@@ -52,7 +52,7 @@ export default function Search( {user, setUser} ) {
         const fetchItemsData = async () => {
             try {
                 const response = await axios.get(
-                    `http://${address}:8080/item/getAllItems`
+                    `http://${address}:42069/item/getAllItems`
                 );
                 setQueryResults(response.data);
             } catch (error) {

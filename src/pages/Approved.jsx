@@ -15,7 +15,7 @@ export default function Approved() {
 
   const fetchApproved = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/request/getApproved`);
+      const response = await axios.get(`http://${address}:42069/request/getApproved`);
       setAppr(response.data); 
       console.log(response.data); // Log the response data directly
     } catch (error) {

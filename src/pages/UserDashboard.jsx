@@ -32,7 +32,7 @@ export default function UserDashboard({ user, setUser }) {
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					`http://${address}:8080/request/user/${user.uid}`
+					`http://${address}:42069/request/user/${user.uid}`
 				);
 				setData(response.data);
 			} catch (error) {
@@ -45,7 +45,7 @@ export default function UserDashboard({ user, setUser }) {
 
   const handleApprove = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/approve/${rid}`);
+      await axios.put(`http://${address}:42069/request/approve/${rid}`);
       setLoader(Math.random() * 1000);
     } catch(error) {
       console.error(error);
@@ -54,7 +54,7 @@ export default function UserDashboard({ user, setUser }) {
 
   const handleReject = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/reject/${rid}`, {}, {
+      await axios.put(`http://${address}:42069/request/reject/${rid}`, {}, {
         params: {
           reason: rejectionReason
         }
@@ -69,7 +69,7 @@ export default function UserDashboard({ user, setUser }) {
 
   const handleReturn = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/return/${rid}`);
+      await axios.put(`http://${address}:42069/request/return/${rid}`);
       setLoader(Math.random() * 1000);
     } catch(error) {
       console.error(error);

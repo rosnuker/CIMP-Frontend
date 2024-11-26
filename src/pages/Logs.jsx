@@ -46,7 +46,7 @@ export default function LogsHistory({ user, setUser }) {
   useEffect(() => {
     const fetchLogsData = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/getAllLogs`);
+        const response = await axios.get(`http://${address}:42069/getAllLogs`);
         setQueryResults(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -57,7 +57,7 @@ export default function LogsHistory({ user, setUser }) {
 
   const fetchType = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/logstype`);
+      const response = await axios.get(`http://${address}:42069/item/logstype`);
       const uniqueOptions_type = [...new Set(response.data)];
       setOType(uniqueOptions_type);
     } catch (error) {
@@ -67,7 +67,7 @@ export default function LogsHistory({ user, setUser }) {
 
   const fetchYear = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/logsyear`);
+      const response = await axios.get(`http://${address}:42069/item/logsyear`);
         const uniqueOptions_year = [...new Set(response.data)];
       setOYear(uniqueOptions_year);
     } catch (error) {
@@ -85,7 +85,7 @@ export default function LogsHistory({ user, setUser }) {
 
   const handleFilter = () => {
     axios
-      .get(`http://${address}:8080/item/searchLogs`, {
+      .get(`http://${address}:42069/item/searchLogs`, {
         params: { month, year, day, type, bef, aft }
       })
       .then(result => {
@@ -102,7 +102,7 @@ export default function LogsHistory({ user, setUser }) {
       alert("Empty textfield");
     } else {
       axios
-        .get(`http://${address}:8080/item/logsSpeci`, {
+        .get(`http://${address}:42069/item/logsSpeci`, {
           params: { num: specific }
         })
         .then(result => {

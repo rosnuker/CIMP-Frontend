@@ -26,7 +26,7 @@ export default function Pending() {
 
   const fetchFullName = async (uid) => {
     try {
-        const response = await fetch(`http://${address}:8080/${uid}/full-name`);
+        const response = await fetch(`http://${address}:42069/${uid}/full-name`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -40,7 +40,7 @@ export default function Pending() {
 
   const fetchReturn = async (status) => {
     try {
-      const response = await axios.get(`http://${address}:8080/request/byItemStatus`, {
+      const response = await axios.get(`http://${address}:42069/request/byItemStatus`, {
         params: { status }
       });
       setPends(response.data);
@@ -68,7 +68,7 @@ export default function Pending() {
 
   const handleApproving = async (rid) => {
     try {
-      await axios.put(`http://${address}:8080/request/approve-return/${rid}`);
+      await axios.put(`http://${address}:42069/request/approve-return/${rid}`);
       setLoader(Math.random() * 1000);
     } catch (error) {
       console.log(error);

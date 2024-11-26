@@ -31,7 +31,7 @@ const UserSelectionModal = ({ open, onClose, onSelectUser }) => {
         const fetchUsers = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://${address}:8080/fetchAccPers`);
+                const response = await axios.get(`http://${address}:42069/fetchAccPers`);
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);

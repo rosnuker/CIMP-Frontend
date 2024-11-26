@@ -48,7 +48,7 @@ export default function Request3({ user, setUser }) {
 
   const fetchFullName = async (uid) => {
     try {
-      const response = await fetch(`http://${address}:8080/${uid}/full-name`);
+      const response = await fetch(`http://${address}:42069/${uid}/full-name`);
       if (!response.ok) throw new Error('Network response was not ok');
       return await response.text();
     } catch (error) {
@@ -60,7 +60,7 @@ export default function Request3({ user, setUser }) {
   const fetchReturn = async () => {
     try {
       const responses = await Promise.all(statuses.map(status => 
-        axios.get(`http://${address}:8080/request/byItemStatus`, { params: { status } })
+        axios.get(`http://${address}:42069/request/byItemStatus`, { params: { status } })
       ));
 
       const allData = responses.flatMap(response => response.data);
@@ -113,10 +113,10 @@ export default function Request3({ user, setUser }) {
 
   const handleApproving = async (rid, fullName, accPerId, itemId, itemName) => {
     try {
-      await axios.put(`http://${address}:8080/request/approve-return/${rid}`);
+      await axios.put(`http://${address}:42069/request/approve-return/${rid}`);
       showSnackbar('Item return approved successfully!', 'success');
       
-      axios.post(`http://${address}:8080/addLog`, {
+      axios.post(`http://${address}:42069/addLog`, {
         description: `Approved the return request of ${fullName}: [${itemId}] - ${itemName}`,
         type: "REQUEST - RETURN (APPROVED)"
       }, {
@@ -145,14 +145,14 @@ export default function Request3({ user, setUser }) {
   //   }
 
   //   try {
-  //     await axios.put(`http://${address}:8080/request/add-back/${rid}`, null, {
+  //     await axios.put(`http://${address}:42069/request/add-back/${rid}`, null, {
   //       params: { quantity }
   //     });
   //     setLoader(Math.random() * 1000);
   //     showSnackbar('Item added back to inventory!', 'success');
   //     handleClose();
 
-  //     axios.post(`http://${address}:8080/addLog`, {
+  //     axios.post(`http://${address}:42069/addLog`, {
   //       description: `Added the item back to inventory: [${itemId}] - ${itemName}`,
   //       type: "REQUEST - ADDED BACK TO INVENTORY)"
   //     }, {
@@ -176,12 +176,12 @@ export default function Request3({ user, setUser }) {
 
   const handleAddBack = async (rid, accPerId, itemId, itemName) => {
     try {
-      await axios.put(`http://${address}:8080/request/add-back/${rid}`);
+      await axios.put(`http://${address}:42069/request/add-back/${rid}`);
       setLoader(Math.random() * 1000);
       showSnackbar('Item added back to inventory!', 'success');
       handleClose();
 
-      axios.post(`http://${address}:8080/addLog`, {
+      axios.post(`http://${address}:42069/addLog`, {
         description: `Added the item back to inventory: [${itemId}] - ${itemName}`,
         type: "REQUEST - ADDED BACK TO INVENTORY)"
       }, {
@@ -205,11 +205,11 @@ export default function Request3({ user, setUser }) {
 
   const handleDisposing = async (rid, accPerId, itemId, itemName) => {
     try {
-      await axios.put(`http://${address}:8080/request/dispose/${rid}`);
+      await axios.put(`http://${address}:42069/request/dispose/${rid}`);
       setLoader(Math.random() * 1000);
       showSnackbar('Item successfully disposed!', 'success');
 
-      axios.post(`http://${address}:8080/addLog`, {
+      axios.post(`http://${address}:42069/addLog`, {
         description: `Disposed the item: [${itemId}] - ${itemName}`,
         type: "REQUEST - DISPOSAL"
       }, {

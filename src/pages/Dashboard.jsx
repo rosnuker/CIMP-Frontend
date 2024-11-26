@@ -34,7 +34,7 @@ export default function Dashboard({ user, setUser }) {
     const [toBeAssigned, setToBeAssigned] = useState("");
     const fetchToBeAssigned = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/getToBeAssigned`);
+        const response = await axios.get(`http://${address}:42069/item/getToBeAssigned`);
         setToBeAssigned(response.data);
         
       } catch (error) {
@@ -49,7 +49,7 @@ export default function Dashboard({ user, setUser }) {
     const [frequent, setFrequent] = useState([]);
     const fetchFrequent = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/frequentlyOrdered`);
+        const response = await axios.get(`http://${address}:42069/item/frequentlyOrdered`);
         setFrequent(response.data);
         
       } catch (error) {
@@ -64,7 +64,7 @@ export default function Dashboard({ user, setUser }) {
     const [waiting, setWaiting] = useState([]);
     const fetchWaiting = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/waiting`);
+        const response = await axios.get(`http://${address}:42069/item/waiting`);
         setWaiting(response.data);
         
       } catch (error) {
@@ -79,7 +79,7 @@ export default function Dashboard({ user, setUser }) {
     const [returned, setReturned] = useState([]);
     const fetchReturned = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/toBeReturned`);
+        const response = await axios.get(`http://${address}:42069/item/toBeReturned`);
         setReturned(response.data);
         
       } catch (error) {
@@ -95,7 +95,7 @@ export default function Dashboard({ user, setUser }) {
 
     const fetchStats = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/request/getStats`);
+      const response = await axios.get(`http://${address}:42069/request/getStats`);
       setStat1(response.data);
       if (response.data.length > 0) {
         setSelectedYear(response.data[0][0]); // Set initial selected year
@@ -111,7 +111,7 @@ export default function Dashboard({ user, setUser }) {
 
   const fetchDepartment = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/dep`);
+      const response = await axios.get(`http://${address}:42069/item/dep`);
       const uniqueOptions_department = [...new Set(response.data)];
       setDepartments(uniqueOptions_department);
     } catch (error) {
@@ -126,7 +126,7 @@ export default function Dashboard({ user, setUser }) {
   const handleDepItems = async (item) => {
     try {
       setLoading(true);
-      const result = await axios.get(`http://${address}:8080/item/getByDep`, {
+      const result = await axios.get(`http://${address}:42069/item/getByDep`, {
         params: {
           depa: item
         }

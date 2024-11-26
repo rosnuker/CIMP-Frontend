@@ -143,7 +143,7 @@ export default function Inventory( { user, setUser } ) {
 		
 		const totalCost = parseFloat(cleanedQuantity) * parseFloat(cleanedUnitCost);
 		
-		axios.post(`http://${address}:8080/item/insertItem?fullName=${formData.accPerson}`, {
+		axios.post(`http://${address}:42069/item/insertItem?fullName=${formData.accPerson}`, {
 			invoiceNumber: formData.invoiceNumber,
 			invoiceDate: formData.invoiceDate,
 			issueOrder: formData.issueOrder,
@@ -176,7 +176,7 @@ export default function Inventory( { user, setUser } ) {
 
 			showSnackbar('Data added!', 'success');
 
-			axios.post(`http://${address}:8080/addLog`, {
+			axios.post(`http://${address}:42069/addLog`, {
 				description: `Added an Item: [${newId}] - ${newName}`,
 				type: "ADD"
 			}, {
@@ -273,7 +273,7 @@ export default function Inventory( { user, setUser } ) {
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					`http://${address}:8080/item/getAllItems`
+					`http://${address}:42069/item/getAllItems`
 				);
 				setData(response.data);
 			} catch (error) {
@@ -297,11 +297,11 @@ export default function Inventory( { user, setUser } ) {
 		  return;
 		}
 	
-		axios.delete(`http://${address}:8080/item/deleteItem/${itemId}`)
+		axios.delete(`http://${address}:42069/item/deleteItem/${itemId}`)
 		.then(response => {
 			if (response.status === 200) {
 
-			axios.post(`http://${address}:8080/addLog`, {
+			axios.post(`http://${address}:42069/addLog`, {
 				type: "DELETE",
 				description: `Deleted an Item: [${selectedItem.iid}] - ${selectedItem.description.name}`
 			}, {
@@ -341,7 +341,7 @@ export default function Inventory( { user, setUser } ) {
 		try {
 			if (selectedItem) {
 
-				const url = `http://${address}:8080/item/updateItem/${selectedItem.iid}`;
+				const url = `http://${address}:42069/item/updateItem/${selectedItem.iid}`;
 				await axios.put(url, selectedItem);
 
 				const originalItem = data.find(item => item.iid === selectedItem.iid);
@@ -360,7 +360,7 @@ export default function Inventory( { user, setUser } ) {
 					description = "Updated nothing";
 				}
 	
-				await axios.post(`http://${address}:8080/addLog`, {
+				await axios.post(`http://${address}:42069/addLog`, {
 					type: "UPDATE",
 					description: description
 				}, {
@@ -378,7 +378,7 @@ export default function Inventory( { user, setUser } ) {
 	
 				setShowOverlay(false);
 				const response = await axios.get(
-					`http://${address}:8080/item/getAllItems`
+					`http://${address}:42069/item/getAllItems`
 				);
 				setData(response.data);
 	

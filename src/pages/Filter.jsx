@@ -71,7 +71,7 @@ export default function Filter( {user, setUser} ) {
       const fetchItemsData = async () => {
           try {
               const response = await axios.get(
-                  `http://${address}:8080/item/getAllItems`
+                  `http://${address}:42069/item/getAllItems`
               );
               setQueryResults(response.data);
           } catch (error) {
@@ -161,7 +161,7 @@ export default function Filter( {user, setUser} ) {
       };
   
       axios
-      .get(`http://${address}:8080/item/filter`, { params })
+      .get(`http://${address}:42069/item/filter`, { params })
       .then(result => {
           setQueryResults(result.data);
       })
@@ -177,7 +177,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_accPer = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/accPer`) 
+        const response = await axios.get(`http://${address}:42069/item/accPer`) 
         const uniqueOptions_accPer = [...new Set(response.data)] // Remove duplicates
         setO_accPer(uniqueOptions_accPer)
       } catch (error) {
@@ -191,7 +191,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_dep = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/dep`) 
+      const response = await axios.get(`http://${address}:42069/item/dep`) 
       const uniqueOptions_dep = [...new Set(response.data)] // Remove duplicates
       setO_dep(uniqueOptions_dep)
     } catch (error) {
@@ -205,7 +205,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_des = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/des`) 
+      const response = await axios.get(`http://${address}:42069/item/des`) 
       const uniqueOptions_des = [...new Set(response.data)] // Remove duplicates
       setO_des(uniqueOptions_des)
     } catch (error) {
@@ -219,7 +219,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_uom = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/uom`) 
+      const response = await axios.get(`http://${address}:42069/item/uom`) 
       const uniqueOptions_uom = [...new Set(response.data)] // Remove duplicates
       setO_uom(uniqueOptions_uom)
     } catch (error) {
@@ -233,7 +233,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_stat = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/status`) 
+      const response = await axios.get(`http://${address}:42069/item/status`) 
       const uniqueOptions_stat = [...new Set(response.data)] // Remove duplicates
       setO_status(uniqueOptions_stat)
     } catch (error) {
@@ -247,7 +247,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_supp = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/supplier`) 
+      const response = await axios.get(`http://${address}:42069/item/supplier`) 
       const uniqueOptions_suppp = [...new Set(response.data)] // Remove duplicates
       setO_supp(uniqueOptions_suppp)
     } catch (error) {
@@ -261,7 +261,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_building = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/building`) 
+      const response = await axios.get(`http://${address}:42069/item/building`) 
       const uniqueOptions_building = [...new Set(response.data)] // Remove duplicates
       setO_building(uniqueOptions_building)
     } catch (error) {
@@ -275,7 +275,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_room = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/room`) 
+      const response = await axios.get(`http://${address}:42069/item/room`) 
       const uniqueOptions_room = [...new Set(response.data)] // Remove duplicates
       setO_room(uniqueOptions_room)
     } catch (error) {
@@ -289,7 +289,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_name = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/name`) 
+      const response = await axios.get(`http://${address}:42069/item/name`) 
       const uniqueOptions_name = [...new Set(response.data)] // Remove duplicates
       setO_name(uniqueOptions_name)
     } catch (error) {
@@ -303,7 +303,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_model = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/model`) 
+      const response = await axios.get(`http://${address}:42069/item/model`) 
       const uniqueOptions_model = [...new Set(response.data)] // Remove duplicates
       setO_model(uniqueOptions_model)
     } catch (error) {
@@ -317,7 +317,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_type = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/type`) 
+      const response = await axios.get(`http://${address}:42069/item/type`) 
       const uniqueOptions_type = [...new Set(response.data)] // Remove duplicates
       setO_type(uniqueOptions_type)
     } catch (error) {
@@ -331,7 +331,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_invoice = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/item/invoice`) 
+      const response = await axios.get(`http://${address}:42069/item/invoice`) 
       const uniqueOptions_invoice = [...new Set(response.data)] // Remove duplicates
       setO_invoicedate(uniqueOptions_invoice)
     } catch (error) {
@@ -345,7 +345,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_lifespan = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/lifespan`) 
+        const response = await axios.get(`http://${address}:42069/item/lifespan`) 
         const uniqueOptions_lifespan = [...new Set(response.data)] // Remove duplicates
         setO_lifespan(uniqueOptions_lifespan)
       } catch (error) {
@@ -359,7 +359,7 @@ export default function Filter( {user, setUser} ) {
   
     const fetchO_issueOrder = async () => {
       try {
-        const response = await axios.get(`http://${address}:8080/item/issueOrder`) 
+        const response = await axios.get(`http://${address}:42069/item/issueOrder`) 
         const uniqueOptions_issueOrder = [...new Set(response.data)] // Remove duplicates
         setO_issueOrder(uniqueOptions_issueOrder)
       } catch (error) {
@@ -391,7 +391,7 @@ export default function Filter( {user, setUser} ) {
       };
 
       axios
-      .get(`http://${address}:8080/item/sum`, { params })
+      .get(`http://${address}:42069/item/sum`, { params })
       .then(result => {
         setO_sum(result.data)
       })

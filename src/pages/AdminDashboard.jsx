@@ -39,7 +39,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://${address}:8080/getAllUsers`);
+      const response = await axios.get(`http://${address}:42069/getAllUsers`);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -93,7 +93,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       };
 
       // Make a POST request to register a new user
-      await axios.post(`http://${address}:8080/register`, newUser);
+      await axios.post(`http://${address}:42069/register`, newUser);
 
       // Fetch updated user list
       fetchData();
@@ -172,7 +172,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
       };
 
       // Make a PUT request to update the user
-      await axios.put(`http://${address}:8080/updateUser/${selectedUserId}`, updatedUser);
+      await axios.put(`http://${address}:42069/updateUser/${selectedUserId}`, updatedUser);
 
       // Fetch updated user list
       fetchData();
@@ -188,7 +188,7 @@ export default function AdminDashboard({ user, setUser, data = [] }) {
   const handleDeleteUser = async () => {
     try {
       // Make a DELETE request to delete the user
-      await axios.delete(`http://${address}:8080/deleteUser/${selectedUserId}`);
+      await axios.delete(`http://${address}:42069/deleteUser/${selectedUserId}`);
 
       // Fetch updated user list
       fetchData();

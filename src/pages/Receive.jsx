@@ -51,7 +51,7 @@ export default function Receive( {user, setUser, setSnackbarGreenOpen, setSnackb
 
 
     const handleReceive = () => {
-        axios.put(`http://${address}:8080/item/updateStatus`, null, {
+        axios.put(`http://${address}:42069/item/updateStatus`, null, {
             params: {
                 iid: id,
                 status: "AVAILABLE"
@@ -73,7 +73,7 @@ export default function Receive( {user, setUser, setSnackbarGreenOpen, setSnackb
     }
 
     const handleLog = (item) => {
-        axios.post(`http://${address}:8080/addLog`, {
+        axios.post(`http://${address}:42069/addLog`, {
             type: "RECEIVE",
             description: `Received "[${item.iid}] - ${item.description.name}" From: ` + remarks + " | Remarks: " + other
         }, {
