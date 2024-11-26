@@ -26,6 +26,7 @@ import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Avatar, Menu, MenuItem, Tooltip } from '@mui/material';
 import citULogo from '../assets/cit.png';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -87,6 +88,14 @@ export default function Dashboard({ user, setUser }) {
   
   const drawerRef = React.useRef(null);
 
+  const address = getIpAddress();
+
+  function getIpAddress() {
+      const hostname = window.location.hostname;
+      const indexOfColon = hostname.indexOf(':');
+      return indexOfColon !== -1 ? hostname.substring(0, indexOfColon) : hostname;
+  }
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -103,10 +112,28 @@ export default function Dashboard({ user, setUser }) {
     setSelectedIndex(index);  // Set the selected index on nav
   };
 
+  // const logout = () => {
+  //   setUser(null);
+  //   handleCloseUserMenu();
+  // };
+
   const logout = () => {
-    setUser(null);
-    handleCloseUserMenu();
-  };
+    return axios.post(`http://${address}:42069/logout`, { username: user.username })
+        .then(response => {
+          setUser(null);
+          handleCloseUserMenu();
+          console.log(response.data);
+        })
+        .catch(error => {
+            if (error.response) {
+                return { success: false, message: error.response.data };
+            } else if (error.request) {
+                return { success: false, message: 'No response from server.' };
+            } else {
+                return { success: false, message: error.message };
+            }
+        });
+  }
 
   const items = [
     { text: 'Dashboard', icon: <DashboardIcon style={{ color: 'white' }} />, destination: "", roles: ['acc_person', 'encoder', 'owner'] },

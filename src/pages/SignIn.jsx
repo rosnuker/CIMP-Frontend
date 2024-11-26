@@ -40,7 +40,13 @@ export default function SignIn({ user, setUser }) {
 
   useEffect(() => {
     if (user) {
-      navigate('/app', { replace: true });
+      if(!user.loggedIn) {
+        setLoggedIn(user.username);
+        navigate('/app', { replace: true });
+      } else {
+        showSnackbar('This account is logged in another device.', 'error');
+        setUser(null);
+      }
     }
   }, [user, navigate]);
 
@@ -70,10 +76,9 @@ export default function SignIn({ user, setUser }) {
         }
 
         if (response.data !== '') {
-            // Check if the user is marked as deleted
             if (response.data.deleted) {
                 showSnackbar('This account has been deleted. Please contact the admin.', 'error');
-                return; // Stop the login process
+                return;
             }
 
             setUser({
@@ -82,6 +87,7 @@ export default function SignIn({ user, setUser }) {
                 lname: response.data.lname,
                 username: response.data.username,
                 type: response.data.type,
+                loggedIn: response.data.loggedIn,
             });
 
             setLoginData({
@@ -89,6 +95,7 @@ export default function SignIn({ user, setUser }) {
                 password: '',
             });
 
+            console.log(response.data);
             showSnackbar('Login success!', 'success');
         }
     }).catch(error => {
@@ -101,6 +108,30 @@ export default function SignIn({ user, setUser }) {
         }
         console.log('There was a problem with the fetch operation:', error);
     });
+};
+
+const setLoggedIn = async (username) => {
+  try {
+      const response = await axios.post(`http://${address}:42069/setLoggedIn`, null, {
+          params: { username }
+      });
+
+      // Handle successful response
+      console.log("User logged in successfully:", response.data);
+      return response.data;
+  } catch (error) {
+      // Handle error
+      if (error.response) {
+          console.error("Error from server:", error.response.data);
+          return { success: false, message: error.response.data };
+      } else if (error.request) {
+          console.error("No response from server.");
+          return { success: false, message: 'No response from server.' };
+      } else {
+          console.error("Error message:", error.message);
+          return { success: false, message: error.message };
+      }
+  }
 };
 
 
